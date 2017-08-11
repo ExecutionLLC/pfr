@@ -1,7 +1,7 @@
 pragma solidity ^0.4.15;
 
 contract Pfr {
-    public address owner;
+    address public owner;
 
     struct PersonInfo {
         string snils;
@@ -83,8 +83,8 @@ contract Pfr {
         address _npf, 
         uint16 _tariff
     ) ownerOnly {
-        require(_owner != 0);
-        require(snilsMapping[_snils] == 0);
+        require(_owner != 0 && !isRegisteredPerson(_owner));
+        require(!isRegisteredSnils(_snils));
         require(isActiveNpf(_npf));
         require(isValidTariff(_tariff));
         
@@ -96,8 +96,7 @@ contract Pfr {
     }
 
     function createNpf(address _owner, string _name, bool _isActive) ownerOnly {
-        require(_owner != 0 && !isEmptyString(_name));
-        require(!isRegisteredNpf(_owner));
+        require(_owner != 0 && !isRegisteredNpf(_owner) && !isEmptyString(_name));
 
         npfMapping[_owner].name = _name;
         npfMapping[_owner].isActive = _isActive;
@@ -105,9 +104,8 @@ contract Pfr {
     }
 
     function createBank(address _owner, string _name, bool _isActive) ownerOnly {
-        require(_owner != 0 && !isEmptyString(_name));
-        require(!isRegisteredBank(_owner));
-        
+        require(_owner != 0 && !isRegisteredBank(_owner) && !isEmptyString(_name));
+
         bankMapping[_owner].name = _name;
         bankMapping[_owner].isActive = _isActive;
         EventNewBank(_owner, _name, _isActive);
@@ -120,16 +118,14 @@ contract Pfr {
     }
     
     function changeNpf(address _newNpf) {
-        require(isActiveNpf(_newNpf));
-        require(isRegisteredPerson(msg.sender));
+        require(isRegisteredPerson(msg.sender) && isActiveNpf(_newNpf));
         
         personMapping[msg.sender].npf = _newNpf;
     }
     
     function changeTariff(uint16 _newTariff) {
-        require(isValidTariff(_newTariff));
-        require(isRegisteredPerson(msg.sender));
-
+        require(isRegisteredPerson(msg.sender) && isValidTariff(_newTariff));
+        
         personMapping[msg.sender].tariff = _newTariff;
     }
     
