@@ -434,6 +434,7 @@ function onload() {
                             info,
                             gasPrice
                         };
+                        debugger;
                         return currentWallet;
                     });
             });

@@ -1,5 +1,5 @@
 const CONTRACT = {
-    ID: '0x520bc5af0805c6886b6feb02d82522b1eb234c2a',
+    ID: '0x870ca1c5179b5113b189d9d20d0b5c6b82333c86',
     ABI: [{
         "constant": false,
         "inputs": [{"name": "_owner", "type": "address"}, {"name": "_snils", "type": "string"}, {
@@ -101,6 +101,13 @@ const CONTRACT = {
         }, {"name": "_operationComment", "type": "string"}],
         "name": "addOperationHistory",
         "outputs": [],
+        "payable": false,
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [{"name": "_account", "type": "address"}],
+        "name": "accountType",
+        "outputs": [{"name": "", "type": "string"}],
         "payable": false,
         "type": "function"
     }, {
