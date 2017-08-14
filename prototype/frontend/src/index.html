@@ -100,8 +100,8 @@
             <ul class="nav nav-tabs">
                 <li id="pfr" role="presentation" class="active"><a href="#pfr-add-worker" data-toggle="tab">Add
                     worker</a></li>
-                <!--<li role="presentation"><a href="#alter-wallet-file" data-toggle="tab">By keystore file (UTC/JSON)</a>-->
-                <!--</li>-->
+                <li role="presentation"><a href="#pfr-info-worker" data-toggle="tab">Get worker info</a>
+                </li>
             </ul>
 
                 <div class="tab-content">
@@ -120,6 +120,30 @@
                                     <span id="add-worker-transaction-completed" data-template="Transaction % was successfully completed"></span>
                                     <span id="add-worker-transaction-failed" data-template="Transaction % failed"></span>
                                     <span id="add-worker-error" class="help-block"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="pfr-info-worker">
+                        <div class="container">
+                            <form>
+                                <div id="info-worker-group" class="form-group form-inline">
+                                    <input id="info-worker-snils" class="form-control" placeholder="snils..."/>
+                                    <button id="info-worker-button" class="btn btn-default">Get worker info</button>
+                                    <span id="info-worker-wait"
+                                          class="glyphicon glyphicon-refresh rotating"></span>
+                                    <span id="info-worker-transaction-waiting" data-template="Transaction running % ..."></span>
+                                    <span id="info-worker-transaction-completed" data-template="Transaction % was successfully completed"></span>
+                                    <span id="info-worker-transaction-failed" data-template="Transaction % failed"></span>
+                                    <span id="info-worker-error" class="help-block"></span>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        NPF: <span id="info-worker-npf"></span>
+                                    </div>
+                                    <div>
+                                        Tariff: <span id="info-worker-tariff"></span>
+                                    </div>
                                 </div>
                             </form>
                         </div>

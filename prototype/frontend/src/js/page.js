@@ -61,6 +61,18 @@ const Page = {
                 TRANSACTION_COMPLETE: 'add-worker-transaction-completed',
                 TRANSACTION_FAILED: 'add-worker-transaction-failed'
             },
+            INFO_WORKER: {
+                GROUP: 'info-worker-group',
+                NPF: 'info-worker-npf',
+                SNILS: 'info-worker-snils',
+                TARIFF: 'info-worker-tariff',
+                BUTTON: 'info-worker-button',
+                WAIT: 'info-worker-wait',
+                ERROR: 'info-worker-error',
+                TRANSACTION_WAIT: 'info-worker-transaction-waiting',
+                TRANSACTION_COMPLETE: 'info-worker-transaction-completed',
+                TRANSACTION_FAILED: 'info-worker-transaction-failed'
+            }
         }
     },
     $id(id) {
@@ -168,7 +180,7 @@ const Page = {
     },
     showCurrentWallet(walletInfo) {
         if(!walletInfo){
-            Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(false)
+            Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(false);
             return
         }
         Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(walletInfo.info.accountType ==='PFR');
@@ -228,6 +240,33 @@ const Page = {
     },
     showAddWorkerTransaction(id, complete, fail) {
         Page.showTransaction(Page.ELEMENT_ID.PFR.ADD_WORKER, id, complete, fail);
+    },
+
+    infoWorkerState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.infoWorkerState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.SNILS).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.infoWorkerState._isWaiting = false;
+            Page.infoWorkerState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.infoWorkerState._isWaiting = isWait;
+            Page.infoWorkerState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.infoWorkerState._isValid = isValid;
+            Page.infoWorkerState._showCurrentState();
+        }
+    },
+    showInfoWorkerError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.ERROR)
+            .text(error)
+            .toggle(error != null);
     },
 
     init() {
@@ -406,6 +445,28 @@ const Page = {
             }
             return false;
         });
+
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.BUTTON).click(() => {
+            Page.showInfoWorkerError();
+            Page.infoWorkerState.toggleWait(true);
+            const snils = Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.SNILS).val();
+            try {
+
+                Page.onInfoWorkerAsync(snils)
+                    .then(() => {
+                        Page.infoWorkerState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showInfoWorkerError(err);
+                        Page.infoWorkerState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showInfoWorkerError(e);
+                Page.infoWorkerState.toggleWait(false);
+            }
+            return false;
+        });
     },
     onNodeAdd() {},
     onNodeRemove() {},
@@ -547,7 +608,6 @@ function onload() {
 
     Page.onAddWorkerAsync = (address, npf, snils, tariff, onTransaction) => {
         const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        debugger;
         tariff = tariff * 100;
         return contract.createPerson(address,snils, npf, tariff)
             .then((buyTransaction) => {
@@ -571,6 +631,35 @@ function onload() {
                     info,
                     gasPrice
                 };
+                Page.showCurrentWallet(currentWallet);
+            });
+    };
+
+    Page.setUpWorkerInfo = (npf, tariff) => {
+        function strNull(s) {
+            return s == null ? '...' : s;
+        }
+
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.TARIFF).text(strNull(tariff));
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.NPF).text(strNull(npf));
+    };
+
+    Page.onInfoWorkerAsync = (snils, ) => {
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
+        return contract.personInfo(snils)
+            .then((personInfo) => {
+                const {npf, tariff} = personInfo;
+                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
+                const gasPrice = currentWallet.wallet.provider.getGasPrice();
+                return Promise.all([info,gasPrice, npf, tariff]);
+            })
+            .then(([info, gasPrice, npf, tariff]) => {
+                currentWallet = {
+                    wallet: currentWallet.wallet,
+                    info,
+                    gasPrice
+                };
+                Page.setUpWorkerInfo(npf, tariff);
                 Page.showCurrentWallet(currentWallet);
             });
     };
