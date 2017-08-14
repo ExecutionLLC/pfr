@@ -77,6 +77,26 @@ contract Pfr {
         return !isEmptyString(bankMapping[_bank].name);
     }
     
+    function accountType(address _account) constant returns (string) {
+        if (_account == owner) {
+            return "PFR";
+        }
+        
+        if (isRegisteredPerson(_account)) {
+            return "WORKER";
+        }
+        
+        if (isRegisteredNpf(_account)) {
+            return "NPF";
+        }
+        
+        if (isRegisteredBank(_account)) {
+            return "BANK";
+        }
+        
+        return "UNREGISTERED";
+    }
+    
     function createPerson(
         address _owner, 
         string _snils, 
