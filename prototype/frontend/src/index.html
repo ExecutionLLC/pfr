@@ -43,6 +43,51 @@
         </div>
     </div>
 </div>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Purchase tokens</h3>
+        </div>
+        <div class="panel-body">
+            <ul class="nav nav-tabs">
+                <li id="" role="presentation" class="active"><a href="#alter-wallet-key" data-toggle="tab">By private
+                    key</a></li>
+                <li role="presentation"><a href="#alter-wallet-file" data-toggle="tab">By keystore file (UTC/JSON)</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="alter-wallet-key">
+                    <div class="container">
+                        <form>
+                            <div id="add-wallet-private-key-group" class="form-group form-inline">
+                                <input id="add-wallet-private-key" class="form-control" placeholder="Private key..."/>
+                                <button id="add-wallet-private-key-button" class="btn btn-default">Set wallet</button>
+                                <span id="add-wallet-private-key-wait"
+                                      class="glyphicon glyphicon-refresh rotating"></span>
+                                <span id="add-wallet-private-key-error" class="help-block"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane" id="alter-wallet-file">
+                    <div class="container">
+                        <form>
+                            <div id="add-wallet-file-group" class="form-group form-inline">
+                                <input id="add-wallet-file" type="file" class="form-control"/>
+                                <label class="control-label">Password:</label>
+                                <input id="add-wallet-file-password" type="password" class="form-control"/>
+                                <button id="add-wallet-file-button" class="btn btn-default">Set wallet</button>
+                                <span id="add-wallet-file-wait" class="glyphicon glyphicon-refresh rotating"></span>
+                                <span id="add-wallet-file-error" class="help-block"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 <script src="js/pfr.js"></script>
 </body>
 </html>
