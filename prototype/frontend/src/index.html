@@ -46,7 +46,7 @@
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Purchase tokens</h3>
+            <h3 class="panel-title">Auth</h3>
         </div>
         <div class="panel-body">
             <ul class="nav nav-tabs">
@@ -84,6 +84,47 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+
+    <div id="pfr-ops">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">PFR</h3>
+        </div>
+
+        <div class="panel-body">
+            <ul class="nav nav-tabs">
+                <li id="pfr" role="presentation" class="active"><a href="#pfr-add-worker" data-toggle="tab">Add
+                    worker</a></li>
+                <!--<li role="presentation"><a href="#alter-wallet-file" data-toggle="tab">By keystore file (UTC/JSON)</a>-->
+                <!--</li>-->
+            </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="pfr-add-worker">
+                        <div class="container">
+                            <form>
+                                <div id="add-worker-group" class="form-group form-inline">
+                                    <input id="add-worker-address" class="form-control" placeholder="address..."/>
+                                    <input id="add-worker-snils" class="form-control" placeholder="snils..."/>
+                                    <select id="add-worker-select-npf" class="form-control"></select>
+                                    <input id="add-worker-tariff" class="form-control" type="number" min ="0" max="6" step="0.01" placeholder="tarrif..."/>
+                                    <button id="add-worker-button" class="btn btn-default">Add worker</button>
+                                    <span id="add-worker-wait"
+                                          class="glyphicon glyphicon-refresh rotating"></span>
+                                    <span id="add-worker-transaction-waiting" data-template="Transaction running % ..."></span>
+                                    <span id="add-worker-transaction-completed" data-template="Transaction % was successfully completed"></span>
+                                    <span id="add-worker-transaction-failed" data-template="Transaction % failed"></span>
+                                    <span id="add-worker-error" class="help-block"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

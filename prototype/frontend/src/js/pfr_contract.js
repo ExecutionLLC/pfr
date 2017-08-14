@@ -2,7 +2,9 @@ const CONTRACT = {
     ID: '0x870ca1c5179b5113b189d9d20d0b5c6b82333c86',
     ABI: [{
         "constant": false,
-        "inputs": [{"name": "_owner", "type": "address"}, {"name": "_snils", "type": "string"}, {
+        "inputs": [{"name": "_owner", "type": "address"},
+            {"name": "_snils", "type": "string"},
+            {
             "name": "_npf",
             "type": "address"
         }, {"name": "_tariff", "type": "uint16"}],

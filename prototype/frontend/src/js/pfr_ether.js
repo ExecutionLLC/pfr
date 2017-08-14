@@ -10,6 +10,7 @@ const Web3_require = ((require) => {
 
 const Web3 = Web3_require('web3');
 const web3 = new Web3();
+const BigNumber = Web3_require('bignumber.js');
 
 const Ether = {
     getWalletInfoAsync(wallet) {
@@ -17,8 +18,41 @@ const Ether = {
             .contract(CONTRACT.ABI)
             .at(CONTRACT.ID);
         const walletId = wallet.address;
-        return new Promise(resolve => {
-            resolve(web3contract.accountType(walletId));
+        return Ether.getNpfs()
+            .then((logs) => {
+                return new Promise(resolve => {
+                    const accountType = web3contract.accountType(walletId);
+                    resolve({
+                        npfs:logs,
+                        accountType
+                    });
+                });
+            });
+
+    },
+    getNpfs() {
+        return new Promise((resolve, reject )=> {
+            const web3contract = web3.eth
+                .contract(CONTRACT.ABI)
+                .at(CONTRACT.ID);
+            const npfEvent = web3contract.EventNewNpf({}, {
+                fromBlock: 0,
+                toBlock: 'latest'
+            });
+            npfEvent.get((error, logs) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    const npfArray = logs.map(log => {
+                        const {_name:name, _owner:owner} = log.args;
+                       return {
+                           name,
+                           owner
+                       }
+                    });
+                    resolve(npfArray)
+                }
+            });
         });
     }
 };

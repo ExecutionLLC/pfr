@@ -45,6 +45,22 @@ const Page = {
                 WAIT: 'add-wallet-file-wait',
                 ERROR: 'add-wallet-file-error'
             }
+        },
+        PFR: {
+            CONTAINER: 'pfr-ops',
+            ADD_WORKER: {
+                GROUP: 'add-worker-group',
+                NPF_SELECT: 'add-worker-select-npf',
+                ADDRESS: 'add-worker-address',
+                SNILS: 'add-worker-snils',
+                TARIFF: 'add-worker-tariff',
+                BUTTON: 'add-worker-button',
+                WAIT: 'add-worker-wait',
+                ERROR: 'add-worker-error',
+                TRANSACTION_WAIT: 'add-worker-transaction-waiting',
+                TRANSACTION_COMPLETE: 'add-worker-transaction-completed',
+                TRANSACTION_FAILED: 'add-worker-transaction-failed'
+            },
         }
     },
     $id(id) {
@@ -139,23 +155,79 @@ const Page = {
         Page.$id(Page.ELEMENT_ID.ALTER_WALLET.FILE.FILE).toggleClass('alert-danger', !fileValid);
         Page.$id(Page.ELEMENT_ID.ALTER_WALLET.FILE.PASSWORD).toggleClass('alert-danger', !filePasswordValid);
     },
+    setNpfs(npfs){
+        $.each(npfs, (i, {name,owner}) => {
+            Page.appendNpf(owner, name);
+        });
+    },
+    appendNpf(value, name) {
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT)
+            .append($('<option></option>')
+                .attr("value", value)
+                .text(name));
+    },
     showCurrentWallet(walletInfo) {
-        console.log(walletInfo);
-        // Page.$id(Page.ELEMENT_ID.ALTER_WALLET.OPERATIONS.CONTAINER).toggle(!!walletInfo);
-        // if (!walletInfo) {
-        //     return;
-        // }
-        // const {wallet, info, gasPrice} = walletInfo;
-        // Page.$id(Page.ELEMENT_ID.ALTER_WALLET.OPERATIONS.WALLET_ADDRESS).text(wallet.address);
-        // const INFO_IDS = Page.ELEMENT_ID.ALTER_WALLET.INFO;
-        // Page.$id(INFO_IDS.BALANCE).text(info.balance);
-        // Page.$id(INFO_IDS.WITHDRAWALS).text(info.withdrawals);
-        // Page.$id(INFO_IDS.PRICE).text(info.price);
-        // Page.$id(INFO_IDS.CAN_BE_BOUGHT).text(info.canBeBought);
-        // Page.$id(INFO_IDS.TOKENS_LEFT).text(info.tokensLeft);
-        // Page.$id(INFO_IDS.WALLET_TOKENS).text(info.walletTokens);
-        //
-        // Page.$id(Page.ELEMENT_ID.ALTER_WALLET.OPERATIONS.BUY.GAS_PRICE).val(gasPrice);
+        if(!walletInfo){
+            Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(false)
+            return
+        }
+        Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(walletInfo.info.accountType ==='PFR');
+        Page.setNpfs(walletInfo.info.npfs);
+    },
+    addWorkerState: {
+        _isValid: false,
+        _isWaiting: false,
+        _showCurrentState() {
+            const isValid = Page.addWorkerState._isValid;
+            const isWaiting = Page.addWorkerState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.GROUP).toggleClass('has-error', !isValid);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.ADDRESS).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.TARIFF).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.SNILS).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.BUTTON).prop('disabled', !isValid || isWaiting);
+        },
+        init() {
+            Page.addWorkerState._isValid = false;
+            Page.addWorkerState._isWaiting = false;
+            Page.addWorkerState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.addWorkerState._isWaiting = isWait;
+            Page.addWorkerState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.addWorkerState._isValid = isValid;
+            Page.addWorkerState._showCurrentState();
+        }
+    },
+    showTransaction(ids, id, complete, fail) {
+        const $wait = Page.$id(ids.TRANSACTION_WAIT);
+        const $complete = Page.$id(ids.TRANSACTION_COMPLETE);
+        const $failed = Page.$id(ids.TRANSACTION_FAILED);
+        $wait.hide();
+        $complete.hide();
+        $failed.hide();
+        if (id == null) {
+            return;
+        }
+        const $caption = complete ?
+            fail ?
+                $failed :
+                $complete :
+            $wait;
+        const templateText = $caption.data('template');
+        const text = templateText.replace('%', id);
+        $caption.text(text).show();
+    },
+    showAddWorkerError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showAddWorkerTransaction(id, complete, fail) {
+        Page.showTransaction(Page.ELEMENT_ID.PFR.ADD_WORKER, id, complete, fail);
     },
 
     init() {
@@ -165,6 +237,7 @@ const Page = {
         Page.showAlterWalletFileWait(false);
         Page.showAlterWalletPrivateKeyError();
         Page.showAlterWalletFileError();
+        Page.showCurrentWallet();
         Page.nodesState.init();
 
         Page.$id(Page.ELEMENT_ID.NODES.ADD_NODE_SHOW_BUTTON).click(() => {
@@ -297,6 +370,39 @@ const Page = {
             catch (e) {
                 Page.showAlterWalletFileError(e);
                 Page.showAlterWalletFileWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.BUTTON).click(() => {
+            Page.showAddWorkerError();
+            Page.showAddWorkerTransaction();
+            Page.addWorkerState.toggleWait(true);
+            const address = Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.ADDRESS).val();
+            const npf = Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT).val();
+            const tariff = +Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.TARIFF).val();
+            const snils = Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.SNILS).val();
+            try {
+                let transactionId;
+                function onTransactionId(id) {
+                    transactionId = id;
+                    Page.showAddWorkerTransaction(id, false);
+                }
+
+                Page.onAddWorkerAsync(address,npf, snils, tariff, onTransactionId)
+                    .then(() => {
+                        Page.addWorkerState.toggleWait(false);
+                        Page.showAddWorkerTransaction(transactionId, true);
+                    })
+                    .catch((err) => {
+                        Page.showAddWorkerError(err);
+                        Page.addWorkerState.toggleWait(false);
+                        Page.showAddWorkerTransaction(transactionId, true, true);
+                    })
+            }
+            catch (e) {
+                Page.showAddWorkerError(e);
+                Page.addWorkerState.toggleWait(false);
             }
             return false;
         });
@@ -434,9 +540,38 @@ function onload() {
                             info,
                             gasPrice
                         };
-                        debugger;
                         return currentWallet;
                     });
+            });
+    };
+
+    Page.onAddWorkerAsync = (address, npf, snils, tariff, onTransaction) => {
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
+        debugger;
+        tariff = tariff * 100;
+        return contract.createPerson(address,snils, npf, tariff)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    currentWallet.wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve();
+                    });
+                });
+            })
+            .then(() => {
+                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
+                const gasPrice = currentWallet.wallet.provider.getGasPrice();
+                return Promise.all([info,gasPrice]);
+            })
+            .then(([info, gasPrice]) => {
+                currentWallet = {
+                    wallet: currentWallet.wallet,
+                    info,
+                    gasPrice
+                };
+                Page.showCurrentWallet(currentWallet);
             });
     };
 }
