@@ -72,6 +72,28 @@ const Page = {
                 TRANSACTION_WAIT: 'info-worker-transaction-waiting',
                 TRANSACTION_COMPLETE: 'info-worker-transaction-completed',
                 TRANSACTION_FAILED: 'info-worker-transaction-failed'
+            },
+            ADD_NPF: {
+                GROUP: 'add-npf-group',
+                NAME: 'add-npf-name',
+                ADDRESS: 'add-npf-address',
+                BUTTON: 'add-npf-button',
+                WAIT: 'add-npf-wait',
+                ERROR: 'add-npf-error',
+                TRANSACTION_WAIT: 'add-npf-transaction-waiting',
+                TRANSACTION_COMPLETE: 'add-npf-transaction-completed',
+                TRANSACTION_FAILED: 'add-npf-transaction-failed'
+            },
+            ADD_BANK: {
+                GROUP: 'add-bank-group',
+                NAME: 'add-bank-name',
+                ADDRESS: 'add-bank-address',
+                BUTTON: 'add-bank-button',
+                WAIT: 'add-bank-wait',
+                ERROR: 'add-bank-error',
+                TRANSACTION_WAIT: 'add-bank-transaction-waiting',
+                TRANSACTION_COMPLETE: 'add-bank-transaction-completed',
+                TRANSACTION_FAILED: 'add-bank-transaction-failed'
             }
         }
     },
@@ -167,10 +189,17 @@ const Page = {
         Page.$id(Page.ELEMENT_ID.ALTER_WALLET.FILE.FILE).toggleClass('alert-danger', !fileValid);
         Page.$id(Page.ELEMENT_ID.ALTER_WALLET.FILE.PASSWORD).toggleClass('alert-danger', !filePasswordValid);
     },
-    setNpfs(npfs){
-        $.each(npfs, (i, {name,owner}) => {
+    setNpfs(npfs) {
+        $.each(npfs, (i, {name, owner}) => {
             Page.appendNpf(owner, name);
         });
+    },
+    clearNpfs() {
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT)
+            .find('option')
+            .each(
+                (_, $el,) => $el.remove()
+            );
     },
     appendNpf(value, name) {
         Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT)
@@ -179,29 +208,26 @@ const Page = {
                 .text(name));
     },
     showCurrentWallet(walletInfo) {
-        if(!walletInfo){
+        if (!walletInfo) {
             Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(false);
             return
         }
-        Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(walletInfo.info.accountType ==='PFR');
+        Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(walletInfo.info.accountType === 'PFR');
+        Page.clearNpfs();
         Page.setNpfs(walletInfo.info.npfs);
     },
     addWorkerState: {
-        _isValid: false,
         _isWaiting: false,
         _showCurrentState() {
-            const isValid = Page.addWorkerState._isValid;
             const isWaiting = Page.addWorkerState._isWaiting;
-            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.GROUP).toggleClass('has-error', !isValid);
             Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.ADDRESS).prop('disabled', isWaiting);
             Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT).prop('disabled', isWaiting);
             Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.TARIFF).prop('disabled', isWaiting);
             Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.SNILS).prop('disabled', isWaiting);
             Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
-            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.BUTTON).prop('disabled', !isValid || isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.BUTTON).prop('disabled', isWaiting);
         },
         init() {
-            Page.addWorkerState._isValid = false;
             Page.addWorkerState._isWaiting = false;
             Page.addWorkerState._showCurrentState();
         },
@@ -210,7 +236,6 @@ const Page = {
             Page.addWorkerState._showCurrentState();
         },
         toggleValid(isValid) {
-            Page.addWorkerState._isValid = isValid;
             Page.addWorkerState._showCurrentState();
         }
     },
@@ -259,7 +284,6 @@ const Page = {
             Page.infoWorkerState._showCurrentState();
         },
         toggleValid(isValid) {
-            Page.infoWorkerState._isValid = isValid;
             Page.infoWorkerState._showCurrentState();
         }
     },
@@ -268,6 +292,67 @@ const Page = {
             .text(error)
             .toggle(error != null);
     },
+    addNpfState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.addNpfState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.ADDRESS).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.NAME).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.addNpfState._isWaiting = false;
+            Page.addNpfState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.addNpfState._isWaiting = isWait;
+            Page.addNpfState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.addNpfState._showCurrentState();
+        }
+    }
+    ,
+    showAddNpfError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showAddNpfTransaction(id, complete, fail) {
+        Page.showTransaction(Page.ELEMENT_ID.PFR.ADD_NPF, id, complete, fail);
+    },
+    addBankState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.addNpfState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.ADDRESS).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.NAME).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.addBankState._isWaiting = false;
+            Page.addBankState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.addBankState._isWaiting = isWait;
+            Page.addBankState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.addBankState._showCurrentState();
+        }
+    }
+    ,
+    showAddBankError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showAddBankTransaction(id, complete, fail) {
+        Page.showTransaction(Page.ELEMENT_ID.PFR.ADD_BANK, id, complete, fail);
+    },
+
 
     init() {
         Page.showNodeError();
@@ -340,6 +425,7 @@ const Page = {
         // Add node validation >>>
 
         Page.showAddNodeValid(false);
+
         function calcAndShowAddNodeValid() {
             const {nameValid, urlValid, chainIdValid} = Page.onAddNodeValidation(
                 Page.$id(Page.ELEMENT_ID.NODES.NAME).val(),
@@ -413,6 +499,12 @@ const Page = {
             return false;
         });
 
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.TARIFF).on('input', (e) => {
+            if (e.target.value.indexOf(".") != '-1') {
+                e.target.value=e.target.value.substring(0, e.target.value.indexOf(".") + 3);
+            }
+        });
+
         Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.BUTTON).click(() => {
             Page.showAddWorkerError();
             Page.showAddWorkerTransaction();
@@ -423,12 +515,13 @@ const Page = {
             const snils = Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.SNILS).val();
             try {
                 let transactionId;
+
                 function onTransactionId(id) {
                     transactionId = id;
                     Page.showAddWorkerTransaction(id, false);
                 }
 
-                Page.onAddWorkerAsync(address,npf, snils, tariff, onTransactionId)
+                Page.onAddWorkerAsync(address, npf, snils, tariff, onTransactionId)
                     .then(() => {
                         Page.addWorkerState.toggleWait(false);
                         Page.showAddWorkerTransaction(transactionId, true);
@@ -467,10 +560,77 @@ const Page = {
             }
             return false;
         });
+
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.BUTTON).click(() => {
+            Page.showAddNpfError();
+            Page.showAddNpfTransaction();
+            Page.addNpfState.toggleWait(true);
+            const address = Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.ADDRESS).val();
+            const name = Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.NAME).val();
+            try {
+                let transactionId;
+
+                function onTransactionId(id) {
+                    transactionId = id;
+                    Page.showAddNpfTransaction(id, false);
+                }
+
+                Page.onAddNpfAsync(address, name, onTransactionId)
+                    .then(() => {
+                        Page.addNpfState.toggleWait(false);
+                        Page.showAddNpfTransaction(transactionId, true);
+                    })
+                    .catch((err) => {
+                        Page.showAddNpfError(err);
+                        Page.addNpfState.toggleWait(false);
+                        Page.showAddNpfTransaction(transactionId, true, true);
+                    })
+            }
+            catch (e) {
+                Page.showAddNpfError(e);
+                Page.addNpfState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.BUTTON).click(() => {
+            Page.showAddBankError();
+            Page.showAddBankTransaction();
+            Page.addBankState.toggleWait(true);
+            const address = Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.ADDRESS).val();
+            const name = Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.NAME).val();
+            try {
+                let transactionId;
+
+                function onTransactionId(id) {
+                    transactionId = id;
+                    Page.showAddBankTransaction(id, false);
+                }
+
+                Page.onAddBankAsync(address, name, onTransactionId)
+                    .then(() => {
+                        Page.addBankState.toggleWait(false);
+                        Page.showAddBankTransaction(transactionId, true);
+                    })
+                    .catch((err) => {
+                        Page.showAddBankError(err);
+                        Page.addBankState.toggleWait(false);
+                        Page.showAddBankTransaction(transactionId, true, true);
+                    })
+            }
+            catch (e) {
+                Page.showAddBankError(e);
+                Page.addNpfState.toggleWait(false);
+            }
+            return false;
+        });
     },
-    onNodeAdd() {},
-    onNodeRemove() {},
-    onNodeChange() {}
+    onNodeAdd() {
+    },
+    onNodeRemove() {
+    },
+    onNodeChange() {
+    }
 };
 
 const Validator = {
@@ -492,7 +652,7 @@ const Validator = {
     privateKey(key) {
         const prefixLength = key.substring(0, 2) === '0x' ? 2 : 0;
         const keyDigits = key.length - prefixLength;
-        return keyDigits === 64 || keyDigits ===128 || keyDigits === 132;
+        return keyDigits === 64 || keyDigits === 128 || keyDigits === 132;
     },
     tokenCount(count) {
         return /^\d+$/.test(count);
@@ -594,7 +754,7 @@ function onload() {
                 wallet.provider = new ethers.providers.JsonRpcProvider(currentNode.url, false, currentNode.chainId);
                 const info = Ether.getWalletInfoAsync(wallet);
                 const gasPrice = wallet.provider.getGasPrice();
-                return Promise.all([info,gasPrice])
+                return Promise.all([info, gasPrice])
                     .then(([info, gasPrice]) => {
                         currentWallet = {
                             wallet,
@@ -608,8 +768,8 @@ function onload() {
 
     Page.onAddWorkerAsync = (address, npf, snils, tariff, onTransaction) => {
         const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        tariff = tariff * 100;
-        return contract.createPerson(address,snils, npf, tariff)
+        const convert_tariff = tariff * 100;
+        return contract.createPerson(address, snils, npf, convert_tariff)
             .then((buyTransaction) => {
                 const {hash} = buyTransaction;
                 onTransaction(hash);
@@ -623,7 +783,7 @@ function onload() {
             .then(() => {
                 const info = Ether.getWalletInfoAsync(currentWallet.wallet);
                 const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                return Promise.all([info,gasPrice]);
+                return Promise.all([info, gasPrice]);
             })
             .then(([info, gasPrice]) => {
                 currentWallet = {
@@ -644,14 +804,14 @@ function onload() {
         Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.NPF).text(strNull(npf));
     };
 
-    Page.onInfoWorkerAsync = (snils, ) => {
+    Page.onInfoWorkerAsync = (snils,) => {
         const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
         return contract.personInfo(snils)
             .then((personInfo) => {
                 const {npf, tariff} = personInfo;
                 const info = Ether.getWalletInfoAsync(currentWallet.wallet);
                 const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                return Promise.all([info,gasPrice, npf, tariff]);
+                return Promise.all([info, gasPrice, npf, tariff]);
             })
             .then(([info, gasPrice, npf, tariff]) => {
                 currentWallet = {
@@ -660,6 +820,64 @@ function onload() {
                     gasPrice
                 };
                 Page.setUpWorkerInfo(npf, tariff);
+                Page.showCurrentWallet(currentWallet);
+            });
+    };
+
+    Page.onAddNpfAsync = (address, name, onTransaction) => {
+        const isActive = true;
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
+        return contract.createNpf(address, name, isActive)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    currentWallet.wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve();
+                    });
+                });
+            })
+            .then(() => {
+                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
+                const gasPrice = currentWallet.wallet.provider.getGasPrice();
+                return Promise.all([info, gasPrice]);
+            })
+            .then(([info, gasPrice]) => {
+                currentWallet = {
+                    wallet: currentWallet.wallet,
+                    info,
+                    gasPrice
+                };
+                Page.showCurrentWallet(currentWallet);
+            });
+    };
+
+    Page.onAddBankAsync = (address, name, onTransaction) => {
+        const isActive = true;
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
+        return contract.createBank(address, name, isActive)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    currentWallet.wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve();
+                    });
+                });
+            })
+            .then(() => {
+                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
+                const gasPrice = currentWallet.wallet.provider.getGasPrice();
+                return Promise.all([info, gasPrice]);
+            })
+            .then(([info, gasPrice]) => {
+                currentWallet = {
+                    wallet: currentWallet.wallet,
+                    info,
+                    gasPrice
+                };
                 Page.showCurrentWallet(currentWallet);
             });
     };

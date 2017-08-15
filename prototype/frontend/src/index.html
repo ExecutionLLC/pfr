@@ -102,6 +102,8 @@
                     worker</a></li>
                 <li role="presentation"><a href="#pfr-info-worker" data-toggle="tab">Get worker info</a>
                 </li>
+                <li role="presentation"><a href="#pfr-add-npf" data-toggle="tab">Add npf</a>
+                </li>
             </ul>
 
                 <div class="tab-content">
@@ -144,6 +146,34 @@
                                     <div>
                                         Tariff: <span id="info-worker-tariff"></span>
                                     </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="pfr-add-npf">
+                        <div class="container">
+                            <form>
+                                <div id="add-npf-group" class="form-group form-inline">
+                                    <input id="add-npf-address" class="form-control" placeholder="address..."/>
+                                    <input id="add-npf-name" class="form-control" placeholder="name..."/>
+                                    <button id="add-npf-button" class="btn btn-default">Add npf</button>
+                                    <span id="add-npf-wait"
+                                          class="glyphicon glyphicon-refresh rotating"></span>
+                                    <span id="add-npf-transaction-waiting" data-template="Transaction running % ..."></span>
+                                    <span id="add-npf-transaction-completed" data-template="Transaction % was successfully completed"></span>
+                                    <span id="add-npf-transaction-failed" data-template="Transaction % failed"></span>
+                                    <span id="add-npf-error" class="help-block"></span>
+                                </div>
+                                <div id="add-bank-group" class="form-group form-inline">
+                                    <input id="add-bank-address" class="form-control" placeholder="address..."/>
+                                    <input id="add-bank-name" class="form-control" placeholder="name..."/>
+                                    <button id="add-bank-button" class="btn btn-default">Add bank</button>
+                                    <span id="add-bank-wait"
+                                          class="glyphicon glyphicon-refresh rotating"></span>
+                                    <span id="add-bank-transaction-waiting" data-template="Transaction running % ..."></span>
+                                    <span id="add-bank-transaction-completed" data-template="Transaction % was successfully completed"></span>
+                                    <span id="add-bank-transaction-failed" data-template="Transaction % failed"></span>
+                                    <span id="add-bank-error" class="help-block"></span>
                                 </div>
                             </form>
                         </div>
