@@ -290,7 +290,7 @@
 
             <div class="panel-body">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#worker-npf-tarif" data-toggle="tab">Change
+                    <li id="worker-npf-change"role="presentation" class="active"><a href="#worker-npf-tarif" data-toggle="tab">Change
                         NPF/tariff</a></li>
                     <li role="presentation"><a href="#worker-op-history" data-toggle="tab">Operations
                         history</a></li>
@@ -299,6 +299,32 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="worker-npf-tarif">
                         <div class="container">
+                            <form>
+                                <div id="worker-npf-tarif-group" class="form-group form-inline">
+                                    <input id="worker-npf-tarif-set-tarif-tarif" class="form-control" type="number" min="0" max="6"
+                                           step="0.01" placeholder="tarrif..."/>
+                                    <button id="worker-npf-tarif-set-tarif-button" class="btn btn-default">Set tariff</button>
+                                    <span id=worker-npf-tarif-set-tarif-wait"
+                                          class="glyphicon glyphicon-refresh rotating"></span>
+                                    <span id="worker-npf-tarif-set-tarifwaiting"
+                                          data-template="Transaction running % ..."></span>
+                                    <span id="worker-npf-tarif-set-tarif-completed"
+                                          data-template="Transaction % was successfully completed"></span>
+                                    <span id="worker-npf-tarif-set-tarif-failed"
+                                          data-template="Transaction % failed"></span>
+                                    <span id="worker-npf-tarif-set-tarif-error" class="help-block"></span>
+                                    <!--<select id="worker-npf-tarif-select-npf" class="form-control"></select>-->
+                                    <!--<button id="worker-npf-tarif-npf-button" class="btn btn-default">Set Npf</button>-->
+                                    <div class="form-group">
+                                        <div>
+                                            NPF: <span id="worker-npf-tarif-current-npf"></span>
+                                        </div>
+                                        <div>
+                                            Tariff: <span id="worker-npf-tarif-current-tarif"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <div class="tab-pane" id="worker-op-history">

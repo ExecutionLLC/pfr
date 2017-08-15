@@ -1,4 +1,5 @@
 let currentWallet = null;
+let currentPerson = null;
 
 function readFileContentAsync(file) {
     if (file.size > 102400) { // 100K JSON wallet will be our limit
@@ -131,9 +132,24 @@ const Page = {
         },
         WORKER: {
             CONTAINER: 'worker-ops',
+            TAB: 'worker-npf-change',
             SHOW_HISTORY: {
                 BUTTON: 'worker-history-button',
                 LIST: 'worker-history-list'
+            },
+            SET_TARIFF: {
+                GROUP: 'worker-npf-tarif-group',
+                TARIFF: 'worker-npf-tarif-set-tarif-tariff',
+                BUTTON: 'worker-npf-tarif-set-tarif-button',
+                WAIT: 'worker-npf-tarif-set-tarif-wait',
+                ERROR: 'worker-npf-tarif-set-tarif-error',
+                TRANSACTION_WAIT: 'worker-npf-tarif-set-tarif-transaction-waiting',
+                TRANSACTION_COMPLETE: 'worker-npf-tarif-set-tarif-transaction-completed',
+                TRANSACTION_FAILED: 'worker-npf-tarif-set-tarif-transaction-failed'
+            },
+            CURRENT_TARIFF: {
+                TARIFF: 'worker-npf-tarif-current-tarif',
+                NPF: 'worker-npf-tarif-current-npf',
             }
         },
         EMPLOYER: {
@@ -861,6 +877,27 @@ const Page = {
             return false;
         });
 
+        Page.$id(Page.ELEMENT_ID.WORKER.TAB).click(() => {
+            const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
+            const personInfo = contract.personInfoByAddress(currentWallet.wallet.address);
+            const npfs = Ether.getNpfs();
+            Promise.all([personInfo, npfs])
+                .then(([personInfo, npfs]) => {
+                    const {npf, tariff} = personInfo;
+                    currentPerson = {
+                        npf, tariff ,npfs
+                    };
+                    const curNpf = npfs.filter((item) => {
+                        return item.owner.toLowerCase() == npf.toLowerCase();
+                    })[0];
+                    Page.$id(Page.ELEMENT_ID.WORKER.CURRENT_TARIFF.TARIFF).text(currentPerson.tariff);
+                    Page.$id(Page.ELEMENT_ID.WORKER.CURRENT_TARIFF.NPF).text(curNpf.name);
+                });
+
+
+            return false;
+        });
+
     },
     onNodeAdd() {
     },
@@ -1135,6 +1172,34 @@ function onload() {
         const isActive = true;
         const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
         return contract.createBank(address, name, isActive)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    currentWallet.wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve();
+                    });
+                });
+            })
+            .then(() => {
+                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
+                const gasPrice = currentWallet.wallet.provider.getGasPrice();
+                return Promise.all([info, gasPrice]);
+            })
+            .then(([info, gasPrice]) => {
+                currentWallet = {
+                    wallet: currentWallet.wallet,
+                    info,
+                    gasPrice
+                };
+                Page.showCurrentWallet(currentWallet);
+            });
+    };
+
+    Page.onNpfAddOperationAsync = (tariff, onTransaction) => {
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
+        return contract.changeTariff(tariff)
             .then((buyTransaction) => {
                 const {hash} = buyTransaction;
                 onTransaction(hash);
