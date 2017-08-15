@@ -363,6 +363,10 @@ const Page = {
         Page.showAlterWalletFileError();
         Page.showCurrentWallet();
         Page.nodesState.init();
+        Page.addWorkerState.init();
+        Page.infoWorkerState.init();
+        Page.addBankState.init();
+        Page.addNpfState.init();
 
         Page.$id(Page.ELEMENT_ID.NODES.ADD_NODE_SHOW_BUTTON).click(() => {
             Page.nodesState.toggleNodeAdding(true);
