@@ -95,6 +95,18 @@ const Page = {
                 TRANSACTION_COMPLETE: 'add-bank-transaction-completed',
                 TRANSACTION_FAILED: 'add-bank-transaction-failed'
             }
+        },
+        NPF: {
+            CONTAINER: 'npf-ops'
+        },
+        BANK: {
+            CONTAINER: 'bank-ops'
+        },
+        WORKER: {
+            CONTAINER: 'worker-ops'
+        },
+        EMPLOYER: {
+            CONTAINER: 'employer-ops'
         }
     },
     $id(id) {
@@ -210,9 +222,25 @@ const Page = {
     showCurrentWallet(walletInfo) {
         if (!walletInfo) {
             Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(false);
+            Page.$id(Page.ELEMENT_ID.NPF.CONTAINER).toggle(false);
+            Page.$id(Page.ELEMENT_ID.BANK.CONTAINER).toggle(false);
+            Page.$id(Page.ELEMENT_ID.WORKER.CONTAINER).toggle(false);
+            Page.$id(Page.ELEMENT_ID.EMPLOYER.CONTAINER).toggle(false);
             return
         }
-        Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(walletInfo.info.accountType === 'PFR');
+        
+        if (walletInfo.info.accountType === 'PFR') {
+            Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(true);
+        } else if (walletInfo.info.accountType === 'NPF') {
+            Page.$id(Page.ELEMENT_ID.NPF.CONTAINER).toggle(true);
+        } else if (walletInfo.info.accountType === 'BANK') {
+            Page.$id(Page.ELEMENT_ID.BANK.CONTAINER).toggle(true);
+        } else if (walletInfo.info.accountType === 'WORKER') {
+            Page.$id(Page.ELEMENT_ID.WORKER.CONTAINER).toggle(true);
+        } else {
+            Page.$id(Page.ELEMENT_ID.EMPLOYER.CONTAINER).toggle(true);
+        }
+        
         Page.clearNpfs();
         Page.setNpfs(walletInfo.info.npfs);
     },
