@@ -771,7 +771,7 @@ const Page = {
                             Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
                                 .append($('<li></li>')
                                     .addClass("list-group-item")
-                                    .text(`${timestamp} ; ${npf} ; ${amount} ; ${comment}`));
+                                    .text(`${moment(timestamp * 1000).format('DD.MM.YY HH:mm:ss')} ; ${npf} ; ${amount} ; ${comment}`));
                         });
                         resolve();
                     });
