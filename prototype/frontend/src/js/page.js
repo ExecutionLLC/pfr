@@ -773,15 +773,18 @@ const Page = {
                             const npfList = npfs.filter((item) => {
                                 return item.owner.toLowerCase() == npf.toLowerCase();
                             });
-                            if (npfList.length){
+                            if (npfList.length) {
                                 const npfItem = npfList[0];
                                 Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
                                     .append($('<li></li>')
                                         .addClass("list-group-item")
                                         .text(`${moment(timestamp * 1000).format('DD.MM.YY HH:mm:ss')} ; ${npfItem.name}(${npfItem.owner}) ; ${amount} ; ${comment}`));
                             }
-
                         });
+                        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
+                            .append($('<li></li>')
+                                .addClass("list-group-item")
+                                .text("END"));
                         resolve();
                     });
                 });
