@@ -111,7 +111,11 @@ const Page = {
             CONTAINER: 'bank-ops'
         },
         WORKER: {
-            CONTAINER: 'worker-ops'
+            CONTAINER: 'worker-ops',
+            SHOW_HISTORY: {
+                BUTTON: 'worker-history-button',
+                LIST: 'worker-history-list'
+            }
         },
         EMPLOYER: {
             CONTAINER: 'employer-ops'
@@ -700,6 +704,24 @@ const Page = {
                                 .append($('<li></li>')
                                     .addClass("list-group-item")
                                     .text(`${name}(${owner})`));
+                        });
+                        resolve();
+                    });
+                });
+            return false;
+        });
+        
+        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.BUTTON).click(() => {
+
+            Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST).empty();
+            Ether.getWorkerHistory()
+                .then((history) => {
+                    return new Promise(resolve => {
+                        $.each(history, (i, {owner, npf, timestamp, amount, comment}) => {
+                            Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
+                                .append($('<li></li>')
+                                    .addClass("list-group-item")
+                                    .text(`${timestamp} ; ${npf} ; ${amount} ; ${comment}`));
                         });
                         resolve();
                     });

@@ -56,28 +56,56 @@ const Ether = {
         });
     },
     getBanks() {
-    return new Promise((resolve, reject )=> {
-        const web3contract = web3.eth
-            .contract(CONTRACT.ABI)
-            .at(CONTRACT.ID);
-        const npfEvent = web3contract.EventNewBank({}, {
-            fromBlock: 0,
-            toBlock: 'latest'
+        return new Promise((resolve, reject )=> {
+            const web3contract = web3.eth
+                .contract(CONTRACT.ABI)
+                .at(CONTRACT.ID);
+            const npfEvent = web3contract.EventNewBank({}, {
+                fromBlock: 0,
+                toBlock: 'latest'
+            });
+            npfEvent.get((error, logs) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    const npfArray = logs.map(log => {
+                        const {_name:name, _owner:owner} = log.args;
+                        return {
+                            name,
+                            owner
+                        }
+                    });
+                    resolve(npfArray)
+                }
+            });
         });
-        npfEvent.get((error, logs) => {
-            if (error) {
-                reject(error);
-            } else {
-                const npfArray = logs.map(log => {
-                    const {_name:name, _owner:owner} = log.args;
-                    return {
-                        name,
-                        owner
-                    }
-                });
-                resolve(npfArray)
-            }
+    },
+    getWorkerHistory() {
+        return new Promise((resolve, reject )=> {
+            const web3contract = web3.eth
+                .contract(CONTRACT.ABI)
+                .at(CONTRACT.ID);
+            const opHistoryEvent = web3contract.EventOperation({}, {
+                fromBlock: 0,
+                toBlock: 'latest'
+            });
+            opHistoryEvent.get((error, logs) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    const historyArray = logs.map(log => {
+                        const {_owner: owner, _npf: npf, _timestamp: timestamp, _amount: amount, _comment: comment} = log.args;
+                        return {
+                            owner,
+                            npf,
+                            timestamp,
+                            amount,
+                            comment
+                        }
+                    });
+                    resolve(historyArray)
+                }
+            });
         });
-    });
-}
+    }
 };
