@@ -211,69 +211,119 @@
 </div>
 <div class="container">
     <div id="npf-ops">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">NPF</h3>
-        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">NPF</h3>
+            </div>
+            <div class="panel-body">
+                <ul class="nav nav-tabs">
+                    <li id="npf" role="presentation" class="active"><a href="#npf-get-tariff" data-toggle="tab">Get
+                        tariff</a></li>
+                    <li role="presentation"><a href="#npf-add-operation" data-toggle="tab">Add operation</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="npf-get-tariff">
+                        <div class="container">
+                            <form>
+                                <div id="npf-get-tariff-group" class="form-group form-inline">
+                                    <input id="npf-get-tariff-snils" class="form-control" placeholder="snils..."/>
+                                    <button id="npf-get-tariff-button" class="btn btn-default">Get tariff</button>
+                                </div>
+                                <div class="form-group">
 
-        <div class="panel-body">
-        </div>
-    </div>
-    </div>
-</div>
-<div class="container">
-    <div id="bank-ops">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">BANK</h3>
-        </div>
-
-        <div class="panel-body">
-        </div>
-    </div>
-    </div>
-</div>
-<div class="container">
-    <div id="worker-ops">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">WORKER</h3>
-        </div>
-
-        <div class="panel-body">
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#worker-npf-tarif" data-toggle="tab">Change NPF/tariff</a></li>
-                <li role="presentation"><a href="#worker-op-history" data-toggle="tab">Operations history</a></li>
-            </ul>
-            
-            <div class="tab-content">
-                <div class="tab-pane active" id="worker-npf-tarif">
-                    <div class="container">
+                                    <div>
+                                        <span id="npf-get-tariff-tariff"></span>
+                                    </div>
+                                    <div>
+                                        <span id="npf-get-tariff-error"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <div class="tab-pane" id="worker-op-history">
-                    <div class="container-fluid">
-                        <div id="worker-history-group" class="col-md-12">
-                            <button id="worker-history-button" class="btn btn-default">Show history</button>
-                            <ul id="worker-history-list" class="list-group"></ul>
+                    <div class="tab-pane" id="npf-add-operation">
+                        <div class="container">
+                            <form>
+                                <div id="npf-add-operation-group" class="form-group form-inline">
+                                    <input id="npf-add-operation-snils" class="form-control" placeholder="snils..."/>
+                                    <input id="npf-add-operation-count" class="form-control" placeholder="amount..."/>
+                                    <input id="npf-add-operation-comment" class="form-control" placeholder="coment..."/>
+                                    <button id="npf-add-operation-button" class="btn btn-default">Add operation
+                                        history
+                                    </button>
+                                    <span id="npf-add-operation-wait"
+                                          class="glyphicon glyphicon-refresh rotating"></span>
+                                    <span id="npf-add-operation-transaction-waiting"
+                                          data-template="Transaction running % ..."></span>
+                                    <span id="npf-add-operation-transaction-completed"
+                                          data-template="Transaction % was successfully completed"></span>
+                                    <span id="npf-add-operation-transaction-failed"
+                                          data-template="Transaction % failed"></span>
+                                    <span id="npf-add-operation-error" class="help-block"></span>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="container">
+    <div id="bank-ops">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">BANK</h3>
+            </div>
+
+            <div class="panel-body">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div id="worker-ops">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">WORKER</h3>
+            </div>
+
+            <div class="panel-body">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active"><a href="#worker-npf-tarif" data-toggle="tab">Change
+                        NPF/tariff</a></li>
+                    <li role="presentation"><a href="#worker-op-history" data-toggle="tab">Operations
+                        history</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="worker-npf-tarif">
+                        <div class="container">
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="worker-op-history">
+                        <div class="container-fluid">
+                            <div id="worker-history-group" class="col-md-12">
+                                <button id="worker-history-button" class="btn btn-default">Show history</button>
+                                <ul id="worker-history-list" class="list-group"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="container">
     <div id="employer-ops">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">EMPLOYER</h3>
-        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">EMPLOYER</h3>
+            </div>
 
-        <div class="panel-body">
+            <div class="panel-body">
+            </div>
         </div>
-    </div>
     </div>
 </div>
 <script src="js/pfr.js"></script>
