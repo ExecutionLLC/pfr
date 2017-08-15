@@ -764,14 +764,23 @@ const Page = {
         Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.BUTTON).click(() => {
 
             Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST).empty();
-            Ether.getWorkerHistory()
-                .then((history) => {
+            const history =  Ether.getWorkerHistory();
+            const npfs = Ether.getNpfs();
+            Promise.all([history, npfs])
+                .then(([history, npfs]) => {
                     return new Promise(resolve => {
                         $.each(history, (i, {owner, npf, timestamp, amount, comment}) => {
-                            Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
-                                .append($('<li></li>')
-                                    .addClass("list-group-item")
-                                    .text(`${moment(timestamp * 1000).format('DD.MM.YY HH:mm:ss')} ; ${npf} ; ${amount} ; ${comment}`));
+                            const npfList = npfs.filter((item) => {
+                                return item.owner.toLowerCase() == npf.toLowerCase();
+                            });
+                            if (npfList.length){
+                                const npfItem = npfList[0];
+                                Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
+                                    .append($('<li></li>')
+                                        .addClass("list-group-item")
+                                        .text(`${moment(timestamp * 1000).format('DD.MM.YY HH:mm:ss')} ; ${npfItem.name}(${npfItem.owner}) ; ${amount} ; ${comment}`));
+                            }
+
                         });
                         resolve();
                     });
@@ -1022,7 +1031,6 @@ function onload() {
 
     Page.onNpfAddOperationAsync = (snils, count, comment, onTransaction) => {
         const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        debugger;
         return contract.addOperationHistory(snils, count, comment)
             .then((buyTransaction) => {
                 const {hash} = buyTransaction;

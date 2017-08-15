@@ -85,7 +85,7 @@ const Ether = {
             const web3contract = web3.eth
                 .contract(CONTRACT.ABI)
                 .at(CONTRACT.ID);
-            const opHistoryEvent = web3contract.EventOperation({}, {
+            const opHistoryEvent = web3contract.EventOperation({_owner:currentWallet.wallet.address}, {
                 fromBlock: 0,
                 toBlock: 'latest'
             });
