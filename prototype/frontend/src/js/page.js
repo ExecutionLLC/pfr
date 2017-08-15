@@ -94,6 +94,14 @@ const Page = {
                 TRANSACTION_WAIT: 'add-bank-transaction-waiting',
                 TRANSACTION_COMPLETE: 'add-bank-transaction-completed',
                 TRANSACTION_FAILED: 'add-bank-transaction-failed'
+            },
+            SHOW_NPF: {
+                BUTTON: 'info-npf-button',
+                LIST: 'info-npf-list'
+            },
+            SHOW_BANK: {
+                BUTTON: 'info-bank-button',
+                LIST: 'info-bank-list'
             }
         },
         NPF: {
@@ -535,6 +543,13 @@ const Page = {
             if (e.target.value.indexOf(".") != '-1') {
                 e.target.value=e.target.value.substring(0, e.target.value.indexOf(".") + 3);
             }
+            const parsedValue = parseFloat(e.target.value)
+            if(parsedValue>6){
+                e.target.value="6";
+            }
+            if(parsedValue<0){
+                e.target.value="0";
+            }
         });
 
         Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.BUTTON).click(() => {
@@ -654,6 +669,42 @@ const Page = {
                 Page.showAddBankError(e);
                 Page.addNpfState.toggleWait(false);
             }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.BUTTON).click(() => {
+
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.LIST).empty();
+            Ether.getNpfs()
+                .then((npfs) => {
+                    return new Promise(resolve => {
+                        $.each(npfs, (i, {name, owner}) => {
+                            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.LIST)
+                                .append($('<li></li>')
+                                    .addClass("list-group-item")
+                                    .text(`${name}(${owner})`));
+                        });
+                        resolve();
+                    });
+                });
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.BUTTON).click(() => {
+
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.LIST).empty();
+            Ether.getBanks()
+                .then((banks) => {
+                    return new Promise(resolve => {
+                        $.each(banks, (i, {name, owner}) => {
+                            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.LIST)
+                                .append($('<li></li>')
+                                    .addClass("list-group-item")
+                                    .text(`${name}(${owner})`));
+                        });
+                        resolve();
+                    });
+                });
             return false;
         });
     },

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>PFR prototype</title>
 
     <!-- Bootstrap -->
     <link href="css/pfr.css" rel="stylesheet">
@@ -90,20 +90,22 @@
 </div>
 <div class="container">
     <div id="pfr-ops">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">PFR</h3>
-        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">PFR</h3>
+            </div>
 
-        <div class="panel-body">
-            <ul class="nav nav-tabs">
-                <li id="pfr" role="presentation" class="active"><a href="#pfr-add-worker" data-toggle="tab">Add
-                    worker</a></li>
-                <li role="presentation"><a href="#pfr-info-worker" data-toggle="tab">Get worker info</a>
-                </li>
-                <li role="presentation"><a href="#pfr-add-npf" data-toggle="tab">Add npf</a>
-                </li>
-            </ul>
+            <div class="panel-body">
+                <ul class="nav nav-tabs">
+                    <li id="pfr" role="presentation" class="active"><a href="#pfr-add-worker" data-toggle="tab">Add
+                        worker</a></li>
+                    <li role="presentation"><a href="#pfr-info-worker" data-toggle="tab">Get worker info</a>
+                    </li>
+                    <li role="presentation"><a href="#pfr-add-npf" data-toggle="tab">Add npf/bank</a>
+                    </li>
+                    <li role="presentation"><a href="#pfr-npf-bank-info" data-toggle="tab">Bank/NPF info</a>
+                    </li>
+                </ul>
 
                 <div class="tab-content">
                     <div class="tab-pane active" id="pfr-add-worker">
@@ -113,13 +115,17 @@
                                     <input id="add-worker-address" class="form-control" placeholder="address..."/>
                                     <input id="add-worker-snils" class="form-control" placeholder="snils..."/>
                                     <select id="add-worker-select-npf" class="form-control"></select>
-                                    <input id="add-worker-tariff" class="form-control" type="number" min ="0" max="6" step="0.01" placeholder="tarrif..."/>
+                                    <input id="add-worker-tariff" class="form-control" type="number" min="0" max="6"
+                                           step="0.01" placeholder="tarrif..."/>
                                     <button id="add-worker-button" class="btn btn-default">Add worker</button>
                                     <span id="add-worker-wait"
                                           class="glyphicon glyphicon-refresh rotating"></span>
-                                    <span id="add-worker-transaction-waiting" data-template="Transaction running % ..."></span>
-                                    <span id="add-worker-transaction-completed" data-template="Transaction % was successfully completed"></span>
-                                    <span id="add-worker-transaction-failed" data-template="Transaction % failed"></span>
+                                    <span id="add-worker-transaction-waiting"
+                                          data-template="Transaction running % ..."></span>
+                                    <span id="add-worker-transaction-completed"
+                                          data-template="Transaction % was successfully completed"></span>
+                                    <span id="add-worker-transaction-failed"
+                                          data-template="Transaction % failed"></span>
                                     <span id="add-worker-error" class="help-block"></span>
                                 </div>
                             </form>
@@ -133,9 +139,12 @@
                                     <button id="info-worker-button" class="btn btn-default">Get worker info</button>
                                     <span id="info-worker-wait"
                                           class="glyphicon glyphicon-refresh rotating"></span>
-                                    <span id="info-worker-transaction-waiting" data-template="Transaction running % ..."></span>
-                                    <span id="info-worker-transaction-completed" data-template="Transaction % was successfully completed"></span>
-                                    <span id="info-worker-transaction-failed" data-template="Transaction % failed"></span>
+                                    <span id="info-worker-transaction-waiting"
+                                          data-template="Transaction running % ..."></span>
+                                    <span id="info-worker-transaction-completed"
+                                          data-template="Transaction % was successfully completed"></span>
+                                    <span id="info-worker-transaction-failed"
+                                          data-template="Transaction % failed"></span>
                                     <span id="info-worker-error" class="help-block"></span>
                                 </div>
                                 <div class="form-group">
@@ -158,8 +167,10 @@
                                     <button id="add-npf-button" class="btn btn-default">Add npf</button>
                                     <span id="add-npf-wait"
                                           class="glyphicon glyphicon-refresh rotating"></span>
-                                    <span id="add-npf-transaction-waiting" data-template="Transaction running % ..."></span>
-                                    <span id="add-npf-transaction-completed" data-template="Transaction % was successfully completed"></span>
+                                    <span id="add-npf-transaction-waiting"
+                                          data-template="Transaction running % ..."></span>
+                                    <span id="add-npf-transaction-completed"
+                                          data-template="Transaction % was successfully completed"></span>
                                     <span id="add-npf-transaction-failed" data-template="Transaction % failed"></span>
                                     <span id="add-npf-error" class="help-block"></span>
                                 </div>
@@ -169,12 +180,28 @@
                                     <button id="add-bank-button" class="btn btn-default">Add bank</button>
                                     <span id="add-bank-wait"
                                           class="glyphicon glyphicon-refresh rotating"></span>
-                                    <span id="add-bank-transaction-waiting" data-template="Transaction running % ..."></span>
-                                    <span id="add-bank-transaction-completed" data-template="Transaction % was successfully completed"></span>
+                                    <span id="add-bank-transaction-waiting"
+                                          data-template="Transaction running % ..."></span>
+                                    <span id="add-bank-transaction-completed"
+                                          data-template="Transaction % was successfully completed"></span>
                                     <span id="add-bank-transaction-failed" data-template="Transaction % failed"></span>
                                     <span id="add-bank-error" class="help-block"></span>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="pfr-npf-bank-info">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div id="info-npf-group" class="col-md-6">
+                                    <button id="info-npf-button" class="btn btn-default">Show npfs</button>
+                                    <ul id="info-npf-list" class="list-group"></ul>
+                                </div>
+                                <div id="info-bank-group" class="col-md-6">
+                                    <button id="info-bank-button" class="btn btn-default">Show banks</button>
+                                    <ul id="info-bank-list" class="list-group"></ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

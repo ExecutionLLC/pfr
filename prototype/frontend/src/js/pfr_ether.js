@@ -54,5 +54,30 @@ const Ether = {
                 }
             });
         });
-    }
+    },
+    getBanks() {
+    return new Promise((resolve, reject )=> {
+        const web3contract = web3.eth
+            .contract(CONTRACT.ABI)
+            .at(CONTRACT.ID);
+        const npfEvent = web3contract.EventNewBank({}, {
+            fromBlock: 0,
+            toBlock: 'latest'
+        });
+        npfEvent.get((error, logs) => {
+            if (error) {
+                reject(error);
+            } else {
+                const npfArray = logs.map(log => {
+                    const {_name:name, _owner:owner} = log.args;
+                    return {
+                        name,
+                        owner
+                    }
+                });
+                resolve(npfArray)
+            }
+        });
+    });
+}
 };
