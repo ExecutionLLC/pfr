@@ -131,10 +131,23 @@ contract Pfr {
         EventNewBank(_owner, _name, _isActive);
     }
     
+    function personAddressBySnils(string _snils) constant returns (address) {
+        return snilsMapping[_snils];
+    }
+
+    function personSnilsByAddress(address _address) constant returns (string) {
+        return personMapping[_address].snils;
+    }
+    
     function personInfo(string _snils) constant returns (address npf, uint16 tariff) {
         address _snilsOwner = snilsMapping[_snils];
         npf = personMapping[_snilsOwner].npf;
         tariff = personMapping[_snilsOwner].tariff;
+    }
+    
+    function personInfoByAddress(address _address) constant returns (address npf, uint16 tariff) {
+        npf = personMapping[_address].npf;
+        tariff = personMapping[_address].tariff;
     }
     
     function changeNpf(address _newNpf) {
