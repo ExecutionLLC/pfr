@@ -361,7 +361,7 @@ const Page = {
     addBankState: {
         _isWaiting: false,
         _showCurrentState() {
-            const isWaiting = Page.addNpfState._isWaiting;
+            const isWaiting = Page.addBankState._isWaiting;
             Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.ADDRESS).prop('disabled', isWaiting);
             Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.NAME).prop('disabled', isWaiting);
             Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
@@ -378,8 +378,7 @@ const Page = {
         toggleValid(isValid) {
             Page.addBankState._showCurrentState();
         }
-    }
-    ,
+    },
     showAddBankError(error) {
         Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.ERROR)
             .text(error)
@@ -667,7 +666,7 @@ const Page = {
             }
             catch (e) {
                 Page.showAddBankError(e);
-                Page.addNpfState.toggleWait(false);
+                Page.addBankState.toggleWait(false);
             }
             return false;
         });
