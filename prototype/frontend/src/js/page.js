@@ -878,12 +878,24 @@ function onload() {
     };
 
     Page.setUpWorkerInfo = (npf, tariff) => {
-        function strNull(s) {
-            return s == null ? '...' : s;
-        }
+        Ether.getNpfs()
+            .then((npfs) => {
+                const npfList = npfs.filter((item) => {
+                    return item.owner.toLowerCase() == npf.toLowerCase();
+                });
+                function strNullPersent(s) {
+                    return `${s == null ? '...' : parseFloat(s)/100} %`;
+                }
 
-        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.TARIFF).text(strNull(tariff));
-        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.NPF).text(strNull(npf));
+                function strNullNpf(s) {
+                    return s == null ? '...' : `${s.name} (${s.owner})`;
+                }
+
+                Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.TARIFF).text(strNullPersent(tariff));
+                Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.NPF).text(strNullNpf(npfList[0]));
+            });
+
+
     };
 
     Page.onInfoWorkerAsync = (snils,) => {
@@ -893,15 +905,16 @@ function onload() {
                 const {npf, tariff} = personInfo;
                 const info = Ether.getWalletInfoAsync(currentWallet.wallet);
                 const gasPrice = currentWallet.wallet.provider.getGasPrice();
+                const setupInfo = Page.setUpWorkerInfo(npf, tariff);
                 return Promise.all([info, gasPrice, npf, tariff]);
             })
-            .then(([info, gasPrice, npf, tariff]) => {
+            .then(([info, gasPrice, setupInfo]) => {
                 currentWallet = {
                     wallet: currentWallet.wallet,
                     info,
                     gasPrice
                 };
-                Page.setUpWorkerInfo(npf, tariff);
+                // Page.setUpWorkerInfo(npf, tariff);
                 Page.showCurrentWallet(currentWallet);
             });
     };
