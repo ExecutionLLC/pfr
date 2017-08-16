@@ -1,10 +1,15 @@
 const CONTRACT = {
-    ID: '0x870ca1c5179b5113b189d9d20d0b5c6b82333c86',
+    ID: '0xf21d90e56665654dd1d811930f304f9fedc97e2e',
     ABI: [{
+        "constant": true,
+        "inputs": [{"name": "_address", "type": "address"}],
+        "name": "personSnilsByAddress",
+        "outputs": [{"name": "", "type": "string"}],
+        "payable": false,
+        "type": "function"
+    }, {
         "constant": false,
-        "inputs": [{"name": "_owner", "type": "address"},
-            {"name": "_snils", "type": "string"},
-            {
+        "inputs": [{"name": "_owner", "type": "address"}, {"name": "_snils", "type": "string"}, {
             "name": "_npf",
             "type": "address"
         }, {"name": "_tariff", "type": "uint16"}],
@@ -69,6 +74,13 @@ const CONTRACT = {
         }],
         "name": "createNpf",
         "outputs": [],
+        "payable": false,
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [{"name": "_address", "type": "address"}],
+        "name": "personInfoByAddress",
+        "outputs": [{"name": "npf", "type": "address"}, {"name": "tariff", "type": "uint16"}],
         "payable": false,
         "type": "function"
     }, {
@@ -152,6 +164,13 @@ const CONTRACT = {
         "inputs": [{"name": "_bank", "type": "address"}],
         "name": "isRegisteredBank",
         "outputs": [{"name": "", "type": "bool"}],
+        "payable": false,
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [{"name": "_snils", "type": "string"}],
+        "name": "personAddressBySnils",
+        "outputs": [{"name": "", "type": "address"}],
         "payable": false,
         "type": "function"
     }, {"inputs": [{"name": "_owner", "type": "address"}], "payable": false, "type": "constructor"}, {
