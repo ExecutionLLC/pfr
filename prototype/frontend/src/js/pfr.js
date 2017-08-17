@@ -11,7 +11,9 @@
 /*
 Custom
  */
+//= utils.js
 //= nodes.js
 //= pfr_contract.js
-//= pfr_ether.js
-//= page.js
+//= api.js
+//= model.js
+//= view.js

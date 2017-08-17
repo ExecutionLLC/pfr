@@ -6,44 +6,46 @@ const Web3_require = ((require) => {
         return require(moduleKey == null ? moduleName : moduleKey);
     }
 })(require);
-// delete require;
 
 const Web3 = Web3_require('web3');
 const web3 = new Web3();
-const BigNumber = Web3_require('bignumber.js');
 
-const Ether = {
-    getWalletInfoAsync(wallet) {
-        const web3contract = web3.eth
-            .contract(CONTRACT.ABI)
-            .at(CONTRACT.ID);
-        const walletId = wallet.address;
-        return Ether.getNpfs()
-            .then((logs) => {
-                const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
-                return contract.accountType(wallet.address)
-                    .then((accountType) =>{
-                        debugger;
-                        return new Promise(resolve => {
-                                // const accountType = web3contract.accountType(walletId);
-                                resolve({
-                                    npfs:logs,
-                                    accountType
-                                });
-                            });
-                    })
-                // return new Promise(resolve => {
-                //     const accountType = web3contract.accountType(walletId);
-                //     resolve({
-                //         npfs:logs,
-                //         accountType
-                //     });
-                // });
+const Api = {
+    init(node) {
+        try {
+            web3.setProvider(new web3.providers.HttpProvider(node.url));
+            web3.eth.defaultAccount = web3.eth.coinbase;
+        }
+        catch (e) {
+            console.error(e);
+        }
+    },
+    createWalletByPrivateKey(privateKey0x, url, chainId){
+        const provider = new ethers.providers.JsonRpcProvider(url, false, chainId);
+        return new ethers.Wallet(privateKey0x, provider);
+    },
+    createWalletByFilePassword(file, password, url, chainId){
+        return readFileContentAsync(file)
+            .then((content) => {
+                return ethers.Wallet.fromEncryptedWallet(content, password);
+            })
+            .then((wallet) => {
+                wallet.provider = new ethers.providers.JsonRpcProvider(url, false, chainId);
+                return wallet;
             });
-
+    },
+    setWeb3Provider(url){
+        web3.setProvider(new web3.providers.HttpProvider(url));
+    },
+    getWalletType(wallet) {
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
+        return contract.accountType(wallet.address)
+            .then((accountTypes) => {
+                return accountTypes[0];
+            })
     },
     getNpfs() {
-        return new Promise((resolve, reject )=> {
+        return new Promise((resolve, reject) => {
             const web3contract = web3.eth
                 .contract(CONTRACT.ABI)
                 .at(CONTRACT.ID);
@@ -56,11 +58,11 @@ const Ether = {
                     reject(error);
                 } else {
                     const npfArray = logs.map(log => {
-                        const {_name:name, _owner:owner} = log.args;
-                       return {
-                           name,
-                           owner
-                       }
+                        const {_name: name, _owner: owner} = log.args;
+                        return {
+                            name,
+                            owner
+                        }
                     });
                     resolve(npfArray)
                 }
@@ -68,7 +70,7 @@ const Ether = {
         });
     },
     getBanks() {
-        return new Promise((resolve, reject )=> {
+        return new Promise((resolve, reject) => {
             const web3contract = web3.eth
                 .contract(CONTRACT.ABI)
                 .at(CONTRACT.ID);
@@ -81,7 +83,7 @@ const Ether = {
                     reject(error);
                 } else {
                     const npfArray = logs.map(log => {
-                        const {_name:name, _owner:owner} = log.args;
+                        const {_name: name, _owner: owner} = log.args;
                         return {
                             name,
                             owner
@@ -93,11 +95,11 @@ const Ether = {
         });
     },
     getWorkerHistory() {
-        return new Promise((resolve, reject )=> {
+        return new Promise((resolve, reject) => {
             const web3contract = web3.eth
                 .contract(CONTRACT.ABI)
                 .at(CONTRACT.ID);
-            const opHistoryEvent = web3contract.EventOperation({_owner:currentWallet.wallet.address}, {
+            const opHistoryEvent = web3contract.EventOperation({_owner: currentWallet.wallet.address}, {
                 fromBlock: 0,
                 toBlock: 'latest'
             });
