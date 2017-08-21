@@ -1,20 +1,3 @@
-let currentWallet = null;
-let currentPerson = null;
-
-function readFileContentAsync(file) {
-    if (file.size > 102400) { // 100K JSON wallet will be our limit
-        return Promise.reject(`JSON file too big (${file.size} bytes)`);
-    } else {
-        return new Promise((resolve) => {
-            const fr = new FileReader();
-            fr.onload = function () {
-                resolve(fr.result);
-            };
-            fr.readAsText(file);
-        });
-    }
-}
-
 const Page = {
     ELEMENT_ID: {
         NODES: {
@@ -98,11 +81,15 @@ const Page = {
             },
             SHOW_NPF: {
                 BUTTON: 'info-npf-button',
-                LIST: 'info-npf-list'
+                LIST: 'info-npf-list',
+                WAIT: 'info-npf-wait',
+                ERROR: 'info-npf-error'
             },
             SHOW_BANK: {
                 BUTTON: 'info-bank-button',
-                LIST: 'info-bank-list'
+                LIST: 'info-bank-list',
+                WAIT: 'info-bank-wait',
+                ERROR: 'info-bank-error'
             }
         },
         NPF: {
@@ -112,7 +99,8 @@ const Page = {
                 SNILS: 'npf-get-tariff-snils',
                 TARIFF: 'npf-get-tariff-tariff',
                 BUTTON: 'npf-get-tariff-button',
-                ERROR: 'npf-get-tariff-error'
+                ERROR: 'npf-get-tariff-error',
+                WAIT: 'npf-get-tariff-wait'
             },
             ADD_OPERATION: {
                 GROUP: 'npf-add-operation-group',
@@ -135,7 +123,9 @@ const Page = {
             TAB: 'worker-npf-change',
             SHOW_HISTORY: {
                 BUTTON: 'worker-history-button',
-                LIST: 'worker-history-list'
+                LIST: 'worker-history-list',
+                WAIT: 'worker-history-wait',
+                ERROR: 'worker-history-error'
             },
             SET_TARIFF: {
                 GROUP: 'worker-npf-tarif-set-tarif-group',
@@ -187,6 +177,11 @@ const Page = {
             .find(`[value="${value}"]`)
             .remove();
     },
+    showNodeError(error) {
+        Page.$id(Page.ELEMENT_ID.NODES.NODE_ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
     showAddNodeValid(nameValid, urlValid, chainIdValid) {
         const allValid = nameValid && urlValid && chainIdValid;
         Page.$id(Page.ELEMENT_ID.NODES.ADD_NODE_GROUP).toggleClass('has-error', !allValid);
@@ -194,11 +189,6 @@ const Page = {
         Page.$id(Page.ELEMENT_ID.NODES.NAME).toggleClass('alert-danger', !nameValid);
         Page.$id(Page.ELEMENT_ID.NODES.URL).toggleClass('alert-danger', !urlValid);
         Page.$id(Page.ELEMENT_ID.NODES.CHAIN_ID).toggleClass('alert-danger', !chainIdValid);
-    },
-    showNodeError(error) {
-        Page.$id(Page.ELEMENT_ID.NODES.NODE_ERROR)
-            .text(error)
-            .toggle(error != null);
     },
     showAddNodeError(error) {
         Page.$id(Page.ELEMENT_ID.NODES.ADD_ERROR)
@@ -258,35 +248,8 @@ const Page = {
         Page.$id(Page.ELEMENT_ID.ALTER_WALLET.FILE.FILE).toggleClass('alert-danger', !fileValid);
         Page.$id(Page.ELEMENT_ID.ALTER_WALLET.FILE.PASSWORD).toggleClass('alert-danger', !filePasswordValid);
     },
-    setNpfs(npfs) {
-        $.each(npfs, (i, {name, owner}) => {
-            Page.appendNpf(owner, name);
-        });
-    },
-    clearNpfs() {
-        Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT)
-            .find('option')
-            .each(
-                (_, $el,) => $el.remove()
-            );
-        Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.NPF)
-            .find('option')
-            .each(
-                (_, $el,) => $el.remove()
-            );
-    },
-    appendNpf(value, name) {
-        Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT)
-            .append($('<option></option>')
-                .attr("value", value)
-                .text(name));
-        Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.NPF)
-            .append($('<option></option>')
-                .attr("value", value)
-                .text(name));
-    },
-    showCurrentWallet(walletInfo) {
-        if (!walletInfo) {
+    showCurrentWallet(walletType) {
+        if (!walletType) {
             Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(false);
             Page.$id(Page.ELEMENT_ID.NPF.CONTAINER).toggle(false);
             Page.$id(Page.ELEMENT_ID.BANK.CONTAINER).toggle(false);
@@ -296,17 +259,20 @@ const Page = {
         }
 
         function showInfo() {
-            if (walletInfo.info.accountType === 'PFR') {
+            if (walletType === 'PFR') {
+                Page.setPfrNpfs(AppState.getNpfs());
                 Page.$id(Page.ELEMENT_ID.PFR.CONTAINER).toggle(true);
                 return Promise.resolve();
-            } else if (walletInfo.info.accountType === 'NPF') {
+            } else if (walletType === 'NPF') {
                 Page.$id(Page.ELEMENT_ID.NPF.CONTAINER).toggle(true);
+
                 return Promise.resolve();
-            } else if (walletInfo.info.accountType === 'BANK') {
+            } else if (walletType === 'BANK') {
                 Page.$id(Page.ELEMENT_ID.BANK.CONTAINER).toggle(true);
                 return Promise.resolve();
-            } else if (walletInfo.info.accountType === 'WORKER') {
-                return Page.setUpCurrentPerson()
+            } else if (walletType === 'WORKER') {
+                Page.setWorkerNpfs(AppState.getNpfs());
+                return Page.setCurrentWorker()
                     .then(() => {
                         Page.$id(Page.ELEMENT_ID.WORKER.CONTAINER).toggle(true);
                     });
@@ -317,11 +283,84 @@ const Page = {
         }
 
         return showInfo()
-            .then(() => {
-                Page.clearNpfs();
-                Page.setNpfs(walletInfo.info.npfs);
-            });
     },
+    setCurrentWorker(){
+        return Api.personInfoByAddress(AppState.getWallet(), AppState.getWallet().address)
+            .then((personInfo) => {
+                const {npf, tariff} = personInfo;
+                AppState.setPerson({
+                    npf, tariff
+                });
+                const curNpf = AppState.getNpfs().filter((item) => {
+                    return item.owner.toLowerCase() == npf.toLowerCase();
+                })[0];
+                function strNullPersent(s) {
+                    return `${s == null ? '...' : parseFloat(s) / 100} %`;
+                }
+                Page.$id(Page.ELEMENT_ID.WORKER.CURRENT_TARIFF.TARIFF).text(strNullPersent(AppState.getPerson().tariff));
+                Page.$id(Page.ELEMENT_ID.WORKER.CURRENT_TARIFF.NPF).text(curNpf.name);
+            })
+    },
+    setPfrNpfs(npfs) {
+        $.each(npfs, (i, npf) => {
+            Page.addPfrNpf(npf);
+        });
+    },
+    setPfrNpfsInfo(npfs) {
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.LIST).empty();
+        $.each(npfs, (i, {name, owner}) => {
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.LIST)
+                .append($('<li></li>')
+                    .addClass("list-group-item")
+                    .text(`${name}(${owner})`));
+        });
+    },
+    setPfrBanksInfo(banks) {
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.LIST).empty();
+        $.each(banks, (i, {name, owner}) => {
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.LIST)
+                .append($('<li></li>')
+                    .addClass("list-group-item")
+                    .text(`${name}(${owner})`));
+        });
+    },
+    addPfrNpf(npf) {
+        const {name, owner} = npf;
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT)
+            .append($('<option></option>')
+                .attr("value", owner)
+                .text(name));
+    },
+
+    setWorkerNpfs(npfs) {
+        $.each(npfs, (i, npf) => {
+            Page.addWorkerNpf(npf);
+        });
+    },
+    addWorkerNpf(npf) {
+        const {name, owner} = npf;
+        Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.NPF)
+            .append($('<option></option>')
+                .attr("value", owner)
+                .text(name));
+    },
+    setUpWorkerInfo(npf, tariff) {
+        const npfList = AppState.getNpfs().filter((item) => {
+            return item.owner.toLowerCase() == npf.toLowerCase();
+        });
+
+        function strNullPersent(s) {
+            return `${s == null ? '...' : parseFloat(s) / 100} %`;
+        }
+
+        function strNullNpf(s) {
+            return s == null ? '...' : `${s.name} (${s.owner})`;
+        }
+
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.TARIFF).text(strNullPersent(tariff));
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.NPF).text(strNullNpf(npfList[0]))
+    },
+
     addWorkerState: {
         _isWaiting: false,
         _showCurrentState() {
@@ -339,9 +378,6 @@ const Page = {
         },
         toggleWait(isWait) {
             Page.addWorkerState._isWaiting = isWait;
-            Page.addWorkerState._showCurrentState();
-        },
-        toggleValid(isValid) {
             Page.addWorkerState._showCurrentState();
         }
     },
@@ -388,9 +424,6 @@ const Page = {
         toggleWait(isWait) {
             Page.infoWorkerState._isWaiting = isWait;
             Page.infoWorkerState._showCurrentState();
-        },
-        toggleValid(isValid) {
-            Page.infoWorkerState._showCurrentState();
         }
     },
     showInfoWorkerError(error) {
@@ -413,9 +446,6 @@ const Page = {
         },
         toggleWait(isWait) {
             Page.addNpfState._isWaiting = isWait;
-            Page.addNpfState._showCurrentState();
-        },
-        toggleValid(isValid) {
             Page.addNpfState._showCurrentState();
         }
     }
@@ -444,9 +474,6 @@ const Page = {
         toggleWait(isWait) {
             Page.addBankState._isWaiting = isWait;
             Page.addBankState._showCurrentState();
-        },
-        toggleValid(isValid) {
-            Page.addBankState._showCurrentState();
         }
     },
     showAddBankError(error) {
@@ -456,6 +483,83 @@ const Page = {
     },
     showAddBankTransaction(id, complete, fail) {
         Page.showTransaction(Page.ELEMENT_ID.PFR.ADD_BANK, id, complete, fail);
+    },
+
+    infoNpfState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.infoNpfState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.infoNpfState._isWaiting = false;
+            Page.infoNpfState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.infoNpfState._isWaiting = isWait;
+            Page.infoNpfState._showCurrentState();
+        }
+    },
+    showInfNpfError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    infoBankState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.infoBankState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.infoBankState._isWaiting = false;
+            Page.infoBankState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.infoBankState._isWaiting = isWait;
+            Page.infoBankState._showCurrentState();
+        }
+    },
+    showInfBankError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    npfGetTariffState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.npfGetTariffState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.BUTTON).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.SNILS).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.npfGetTariffState._isWaiting = false;
+            Page.npfGetTariffState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.npfGetTariffState._isWaiting = isWait;
+            Page.npfGetTariffState._showCurrentState();
+        }
+    },
+    showNpfGetTariffError(error) {
+        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.TARIFF)
+            .toggle(error == null);
+        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showNpfGetTariffTariff(tariff) {
+        function strNullPersent(s) {
+            return `${s == null ? '...' : 'Tariff:  ' + parseFloat(s) / 100} %`;
+        }
+        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.TARIFF)
+            .text(strNullPersent(tariff))
+            .toggle(tariff != null);
+        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.ERROR)
+            .toggle(tariff == null);
     },
     npfAddOperationState: {
         _isWaiting: false,
@@ -474,9 +578,6 @@ const Page = {
         toggleWait(isWait) {
             Page.npfAddOperationState._isWaiting = isWait;
             Page.npfAddOperationState._showCurrentState();
-        },
-        toggleValid(isValid) {
-            Page.npfAddOperationState._showCurrentState();
         }
     },
     showNpfAddOperationError(error) {
@@ -487,28 +588,6 @@ const Page = {
     showNpfAddOperationTransaction(id, complete, fail) {
         Page.showTransaction(Page.ELEMENT_ID.NPF.ADD_OPERATION, id, complete, fail);
     },
-    setUpCurrentPerson(){
-        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        const personInfo = contract.personInfoByAddress(currentWallet.wallet.address);
-        const npfs = Ether.getNpfs();
-        return Promise.all([personInfo, npfs])
-            .then(([personInfo, npfs]) => {
-                const {npf, tariff} = personInfo;
-                currentPerson = {
-                    npf, tariff ,npfs
-                };
-                const curNpf = npfs.filter((item) => {
-                    return item.owner.toLowerCase() == npf.toLowerCase();
-                })[0];
-
-                function strNullPersent(s) {
-                    return `${s == null ? '...' : parseFloat(s) / 100} %`;
-                }
-                Page.$id(Page.ELEMENT_ID.WORKER.CURRENT_TARIFF.TARIFF).text(strNullPersent(currentPerson.tariff));
-                Page.$id(Page.ELEMENT_ID.WORKER.CURRENT_TARIFF.NPF).text(curNpf.name);
-            });
-    },
-
     workerSetTariffState: {
         _isWaiting: false,
         _showCurrentState() {
@@ -523,9 +602,6 @@ const Page = {
         },
         toggleWait(isWait) {
             Page.workerSetTariffState._isWaiting = isWait;
-            Page.workerSetTariffState._showCurrentState();
-        },
-        toggleValid(isValid) {
             Page.workerSetTariffState._showCurrentState();
         }
     },
@@ -566,6 +642,27 @@ const Page = {
     showSetNpfTransaction(id, complete, fail) {
         Page.showTransaction(Page.ELEMENT_ID.WORKER.SET_NPF, id, complete, fail);
     },
+    workerHistoryState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.workerHistoryState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.BUTTON).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+        },
+        init() {
+            Page.workerHistoryState._isWaiting = false;
+            Page.workerHistoryState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.workerHistoryState._isWaiting = isWait;
+            Page.workerHistoryState._showCurrentState();
+        }
+    },
+    showWorkerHistoryError(error) {
+        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
 
     init() {
         Page.showNodeError();
@@ -579,9 +676,13 @@ const Page = {
         Page.infoWorkerState.init();
         Page.addBankState.init();
         Page.addNpfState.init();
+        Page.infoNpfState.init();
+        Page.infoBankState.init();
+        Page.npfGetTariffState.init();
         Page.npfAddOperationState.init();
         Page.workerSetTariffState.init();
         Page.workerSetNpfState.init();
+        Page.workerHistoryState.init();
 
         Page.$id(Page.ELEMENT_ID.NODES.ADD_NODE_SHOW_BUTTON).click(() => {
             Page.nodesState.toggleNodeAdding(true);
@@ -670,17 +771,27 @@ const Page = {
 
         Page.$id(Page.ELEMENT_ID.ALTER_WALLET.PRIVATE_KEY.BUTTON).click(() => {
             Page.showCurrentWallet()
-                .then(()=> {
+                .then(() => {
                     Page.showAlterWalletPrivateKeyError();
                     Page.showAlterWalletFileError();
                     Page.showAlterWalletPrivateKeyWait(true);
                     const privateKey = Page.$id(Page.ELEMENT_ID.ALTER_WALLET.PRIVATE_KEY.KEY).val();
                     const privateKey0x = /^0x/.test(privateKey) ? privateKey : `0x${privateKey}`;
+                    const {url, chainId} = Nodes.getCurrentNode();
                     try {
-                        Page.onAlterWalletPrivateKeyAsync(privateKey0x)
-                            .then((walletInfo) => {
-                                Page.showCurrentWallet(walletInfo);
-                                Page.showAlterWalletPrivateKeyWait(false);
+                        const wallet = Api.createWalletByPrivateKey(privateKey0x, url, chainId);
+                        AppState.setWallet(wallet);
+                        return Api.getNpfs(0)
+                            .then((npfs) => {
+                                AppState.setNpfs(npfs);
+                                return Api.getWalletType(wallet)
+                            })
+                            .then((walletType) => {
+                                return Page.showCurrentWallet(walletType)
+                                    .then(() => {
+                                        Page.showAlterWalletPrivateKeyWait(false)
+
+                                    });
                             })
                             .catch((err) => {
                                 Page.showAlterWalletPrivateKeyError(err);
@@ -704,11 +815,23 @@ const Page = {
                     Page.showAlterWalletFileWait(true);
                     const file = Page.$id(Page.ELEMENT_ID.ALTER_WALLET.FILE.FILE)[0].files[0];
                     const password = Page.$id(Page.ELEMENT_ID.ALTER_WALLET.FILE.PASSWORD).val();
+                    const {url, chainId} = Nodes.getCurrentNode();
                     try {
-                        Page.onAlterWalletFileAsync(file, password)
-                            .then((walletInfo) => {
-                                Page.showCurrentWallet(walletInfo);
-                                Page.showAlterWalletFileWait(false);
+                        Api.createWalletByFilePassword(file, password, url, chainId)
+                            .then((wallet) => {
+                                AppState.setWallet(wallet);
+                                return Api.getNpfs(0)
+                                    .then((npfs) => {
+                                        AppState.setNpfs(npfs);
+                                        return Api.getWalletType(wallet)
+                                    })
+                            })
+                            .then((walletType) => {
+                                return Page.showCurrentWallet(walletType)
+                                    .then(() => {
+                                        Page.showAlterWalletFileWait(false)
+
+                                    });
                             })
                             .catch((err) => {
                                 Page.showAlterWalletFileError(err);
@@ -728,7 +851,7 @@ const Page = {
             if (e.target.value.indexOf(".") != '-1') {
                 e.target.value = e.target.value.substring(0, e.target.value.indexOf(".") + 3);
             }
-            const parsedValue = parseFloat(e.target.value)
+            const parsedValue = parseFloat(e.target.value);
             if (parsedValue > 6) {
                 e.target.value = "6";
             }
@@ -753,7 +876,8 @@ const Page = {
                     Page.showAddWorkerTransaction(id, false);
                 }
 
-                Page.onAddWorkerAsync(address, npf, snils, tariff, onTransactionId)
+                const api_tariff = tariff * 100;
+                Api.createPerson(AppState.getWallet(), address, npf, snils, api_tariff, onTransactionId)
                     .then(() => {
                         Page.addWorkerState.toggleWait(false);
                         Page.showAddWorkerTransaction(transactionId, true);
@@ -777,7 +901,11 @@ const Page = {
             const snils = Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.SNILS).val();
             try {
 
-                Page.onInfoWorkerAsync(snils)
+                Api.personInfo(AppState.getWallet(), snils)
+                    .then((personInfo) => {
+                        const {npf, tariff} = personInfo;
+                        return Page.setUpWorkerInfo(npf, tariff);
+                    })
                     .then(() => {
                         Page.infoWorkerState.toggleWait(false);
                     })
@@ -807,8 +935,12 @@ const Page = {
                     Page.showAddNpfTransaction(id, false);
                 }
 
-                Page.onAddNpfAsync(address, name, onTransactionId)
-                    .then(() => {
+                Api.createNpf(AppState.getWallet(), address, name, onTransactionId)
+                    .then((createdNpfs) => {
+                        createdNpfs.forEach(npf => {
+                           AppState.addNpf(npf);
+                           Page.addPfrNpf(npf);
+                        });
                         Page.addNpfState.toggleWait(false);
                         Page.showAddNpfTransaction(transactionId, true);
                     })
@@ -839,7 +971,7 @@ const Page = {
                     Page.showAddBankTransaction(id, false);
                 }
 
-                Page.onAddBankAsync(address, name, onTransactionId)
+                Api.createBank(AppState.getWallet(), address, name, onTransactionId)
                     .then(() => {
                         Page.addBankState.toggleWait(false);
                         Page.showAddBankTransaction(transactionId, true);
@@ -858,105 +990,82 @@ const Page = {
         });
 
         Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.BUTTON).click(() => {
+            Page.showInfNpfError();
+            Page.infoNpfState.toggleWait(true);
+            try {
 
-            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.LIST).empty();
-            Ether.getNpfs()
-                .then((npfs) => {
-                    return new Promise(resolve => {
-                        $.each(npfs, (i, {name, owner}) => {
-                            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.LIST)
-                                .append($('<li></li>')
-                                    .addClass("list-group-item")
-                                    .text(`${name}(${owner})`));
-                        });
-                        resolve();
-                    });
-                });
+                Api.getNpfs(0)
+                    .then((npfs) => {
+                        AppState.setNpfs(npfs);
+                        Page.setPfrNpfsInfo(npfs);
+                    })
+                    .then(() => {
+                        Page.infoNpfState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showInfNpfError(err);
+                        Page.infoNpfState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showInfNpfError(e);
+                Page.infoNpfState.toggleWait(false);
+            }
             return false;
         });
 
         Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.BUTTON).click(() => {
+            Page.showInfBankError();
+            Page.infoBankState.toggleWait(true);
+            try {
 
-            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.LIST).empty();
-            Ether.getBanks()
-                .then((banks) => {
-                    return new Promise(resolve => {
-                        $.each(banks, (i, {name, owner}) => {
-                            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.LIST)
-                                .append($('<li></li>')
-                                    .addClass("list-group-item")
-                                    .text(`${name}(${owner})`));
-                        });
-                        resolve();
-                    });
-                });
+                Api.getBanks(0)
+                    .then((banks) => {
+                        Page.setPfrBanksInfo(banks);
+                    })
+                    .then(() => {
+                        Page.infoBankState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showInfBankError(err);
+                        Page.infoBankState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showInfBankError(e);
+                Page.infoBankState.toggleWait(false);
+            }
             return false;
         });
-        
-        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.BUTTON).click(() => {
 
-            Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST).empty();
-            const history =  Ether.getWorkerHistory();
-            const npfs = Ether.getNpfs();
-            Promise.all([history, npfs])
-                .then(([history, npfs]) => {
-                    return new Promise(resolve => {
-                        $.each(history, (i, {owner, npf, timestamp, amount, comment}) => {
-                            const npfList = npfs.filter((item) => {
-                                return item.owner.toLowerCase() == npf.toLowerCase();
-                            });
-                            if (npfList.length) {
-                                const npfItem = npfList[0];
-                                Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
-                                    .append($('<li></li>')
-                                        .addClass("list-group-item")
-                                        .text(`${moment(timestamp * 1000).format('DD.MM.YY HH:mm:ss')} ; ${npfItem.name}(${npfItem.owner}) ; ${amount} ; ${comment}`));
-                            }
-                        });
-                        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
-                            .append($('<li></li>')
-                                .addClass("list-group-item")
-                                .text("END"));
-                        resolve();
-                    });
-                });
-            return false;
-        });
-        
         Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.BUTTON).click(() => {
-            const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
+            Page.showNpfGetTariffError();
+            Page.npfGetTariffState.toggleWait(true);
             const snils = Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.SNILS).val();
-            contract.personInfo(snils)
-                .then((personInfo) => {
-                    const {npf, tariff} = personInfo;
-                    const info = Ether.getWalletInfoAsync(currentWallet.wallet);
-                    const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                    function strNullPersent(s) {
-                        return `${s == null ? '...' : 'Tariff:  ' + parseFloat(s) / 100} %`;
-                    }
+            try {
 
-                    const isCurrentNpf = npf == currentWallet.wallet.address;
-                    Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.TARIFF).css('visibility', isCurrentNpf ? 'visible' : 'hidden');
-                    Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.ERROR).css('visibility', !isCurrentNpf ? 'visible' : 'hidden');
-                    if (isCurrentNpf) {
-                        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.TARIFF).text(strNullPersent(tariff));
-                        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.ERROR).text('');
-                    }else {
-                        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.TARIFF).text('');
-                        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.ERROR).text('Error: Snils doesn\'t belongs to this npf');
-                    }
-                    return Promise.all([info, gasPrice]);
-                })
-                .then(([info, gasPrice]) => {
-                    currentWallet = {
-                        wallet: currentWallet.wallet,
-                        info,
-                        gasPrice
-                    };
-                    return Page.showCurrentWallet(currentWallet);
-                });
-
-
+                Api.personInfo(AppState.getWallet(), snils)
+                    .then((personInfo) => {
+                        const {npf, tariff} = personInfo;
+                        const isCurrentNpf = npf == AppState.getWallet().address;
+                        if (isCurrentNpf) {
+                            Page.showNpfGetTariffTariff(tariff)
+                        }else {
+                            Page.showNpfGetTariffError('Snils doesn\'t belongs to this npf');
+                        }
+                    })
+                    .then(() => {
+                        Page.npfGetTariffState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showNpfGetTariffError(err);
+                        Page.npfGetTariffState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showNpfGetTariffError(e);
+                Page.npfGetTariffState.toggleWait(false);
+            }
             return false;
         });
 
@@ -975,7 +1084,7 @@ const Page = {
                     Page.showNpfAddOperationTransaction(id, false);
                 }
 
-                Page.onNpfAddOperationAsync(snils, count, comment, onTransactionId)
+                Api.addOperationHistory(AppState.getWallet(),snils, count, comment, onTransactionId)
                     .then(() => {
                         Page.npfAddOperationState.toggleWait(false);
                         Page.showNpfAddOperationTransaction(transactionId, true);
@@ -1006,7 +1115,8 @@ const Page = {
                     Page.showSetTariffTransaction(id, false);
                 }
 
-                Page.onWorkerSetTariffAsync(tariff, onTransactionId)
+                Api.changeTariff(AppState.getWallet(), tariff, onTransactionId)
+                    .then(() => Page.setCurrentWorker())
                     .then(() => {
                         Page.workerSetTariffState.toggleWait(false);
                         Page.showSetTariffTransaction(transactionId, true);
@@ -1028,7 +1138,7 @@ const Page = {
             if (e.target.value.indexOf(".") != '-1') {
                 e.target.value = e.target.value.substring(0, e.target.value.indexOf(".") + 3);
             }
-            const parsedValue = parseFloat(e.target.value)
+            const parsedValue = parseFloat(e.target.value);
             if (parsedValue > 6) {
                 e.target.value = "6";
             }
@@ -1049,8 +1159,8 @@ const Page = {
                     transactionId = id;
                     Page.showSetNpfTransaction(id, false);
                 }
-
-                Page.onWorkerSetNpfAsync(npf, onTransactionId)
+                Api.changeNpf(AppState.getWallet(), npf, onTransactionId)
+                    .then(() => Page.setCurrentWorker())
                     .then(() => {
                         Page.workerSetNpfState.toggleWait(false);
                         Page.showSetNpfTransaction(transactionId, true);
@@ -1068,364 +1178,111 @@ const Page = {
             return false;
         });
 
-        return Page.showCurrentWallet();
-    },
-    onNodeAdd() {
-    },
-    onNodeRemove() {
-    },
-    onNodeChange() {
-    }
-};
+        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.BUTTON).click(() => {
+            Page.showWorkerHistoryError();
+            Page.workerHistoryState.toggleWait(true);
+            try {
 
-const Validator = {
-    walletId(address) {
-        if (address.substring(0, 2) !== '0x') {
+                Api.getWorkerHistory(AppState.getWallet())
+                    .then((history) => {
+                        $.each(history, (i, {owner, npf, timestamp, amount, comment}) => {
+                            const npfList = AppState.getNpfs().filter((item) => {
+                                return item.owner.toLowerCase() == npf.toLowerCase();
+                            });
+                            if (npfList.length) {
+                                const npfItem = npfList[0];
+                                Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
+                                    .append($('<li></li>')
+                                        .addClass("list-group-item")
+                                        .text(`${moment(timestamp * 1000).format('DD.MM.YY HH:mm:ss')} ; ${npfItem.name}(${npfItem.owner}) ; ${amount} ; ${comment}`));
+                            }
+                        });
+                        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
+                            .append($('<li></li>')
+                                .addClass("list-group-item")
+                                .text("END"));
+                    })
+                    .then(() => {
+                        Page.workerHistoryState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showWorkerHistoryError(err);
+                        Page.workerHistoryState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showWorkerHistoryError(e);
+                Page.workerHistoryState.toggleWait(false);
+            }
             return false;
-        } else if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
-            return false;
-        } else {
-            return true;
-        }
-    },
-    url(url) {
-        return /^https?:\/\/[^/]+/.test(url);
-    },
-    chainId(chainId) {
-        return /^\d+$/.test(chainId);
-    },
-    privateKey(key) {
-        const prefixLength = key.substring(0, 2) === '0x' ? 2 : 0;
-        const keyDigits = key.length - prefixLength;
-        return keyDigits === 64 || keyDigits === 128 || keyDigits === 132;
-    },
-    tokenCount(count) {
-        return /^\d+$/.test(count);
+        });
+
+        return Page.showCurrentWallet();
     }
 };
 
 function onload() {
-    function initNode() {
-        const currentNode = Nodes.getCurrentNode();
-        web3.setProvider(new web3.providers.HttpProvider(currentNode.url));
-        web3.eth.defaultAccount = web3.eth.coinbase;
-    }
+    const currentNode = Nodes.getCurrentNode();
+    Api.init(currentNode);
+    Page.init()
+        .then(() => {
+            Page.setNodes(
+                Nodes.getNodesNames(),
+                Nodes.getCurrentNodeId(),
+                Nodes.canRemoveNode(Nodes.getCurrentNodeId())
+            );
 
-    try {
-        initNode();
-    }
-    catch (e) {
-        console.error(e);
-    }
-    Page.init();
-    Page.setNodes(
-        Nodes.getNodesNames(),
-        Nodes.getCurrentNodeId(),
-        Nodes.canRemoveNode(Nodes.getCurrentNodeId())
-    );
-
-    Page.onAddNodeValidation = (name, url, chainId) => {
-        return {
-            nameValid: !!name,
-            urlValid: Validator.url(url),
-            chainIdValid: Validator.chainId(chainId)
-        };
-    };
-
-    Page.onNodeAdd = ({name, url, chainId: chainIdStr}) => {
-        if (name && url && chainIdStr) {
-            const chainId = +chainIdStr;
-            const newNode = {
-                name,
-                url,
-                chainId
+            Page.onAddNodeValidation = (name, url, chainId) => {
+                return {
+                    nameValid: !!name,
+                    urlValid: Validator.url(url),
+                    chainIdValid: Validator.chainId(chainId)
+                };
             };
-            const newNodeId = Nodes.addNode(newNode);
-            web3.setProvider(new web3.providers.HttpProvider(url));
-            return {
-                id: newNodeId,
-                node: newNode,
-                canRemoveNode: Nodes.canRemoveNode(newNodeId)
+
+            Page.onNodeAdd = ({name, url, chainId: chainIdStr}) => {
+                if (name && url && chainIdStr) {
+                    const chainId = +chainIdStr;
+                    const newNode = {
+                        name,
+                        url,
+                        chainId
+                    };
+                    const newNodeId = Nodes.addNode(newNode);
+                    Api.setWeb3Provider(url);
+                    return {
+                        id: newNodeId,
+                        node: newNode,
+                        canRemoveNode: Nodes.canRemoveNode(newNodeId)
+                    };
+                } else {
+                    throw 'Fail to add node';
+                }
             };
-        } else {
-            throw 'Fail to add node';
-        }
-    };
 
-    Page.onNodeRemove = (idToRemove) => {
-        const {id, node} = Nodes.removeNode(idToRemove);
-        web3.setProvider(new web3.providers.HttpProvider(node.url));
-        return {
-            id,
-            canRemoveNode: Nodes.canRemoveNode(id)
-        };
-    };
-
-    Page.onNodeChange = (id) => {
-        const currentNode = Nodes.setCurrentNodeId(id);
-        web3.setProvider(new web3.providers.HttpProvider(currentNode.url));
-        return Nodes.canRemoveNode(id);
-    };
-
-    Page.onAlterWalletValidation = (key, file) => {
-        return {
-            keyValid: Validator.privateKey(key),
-            fileValid: !!file
-        };
-    };
-
-    Page.onAlterWalletPrivateKeyAsync = (privateKey0x) => {
-        currentWallet = null;
-        const Wallet = ethers.Wallet;
-        const currentNode = Nodes.getCurrentNode();
-        const wallet = new Wallet(privateKey0x, new ethers.providers.JsonRpcProvider(currentNode.url, false, currentNode.chainId));
-        return Ether.getWalletInfoAsync(wallet).then((info) => {
-            currentWallet = {
-                wallet,
-                info
+            Page.onNodeRemove = (idToRemove) => {
+                const {id, node} = Nodes.removeNode(idToRemove);
+                Api.setWeb3Provider(url);
+                return {
+                    id,
+                    canRemoveNode: Nodes.canRemoveNode(id)
+                };
             };
-            return currentWallet;
+
+            Page.onNodeChange = (id) => {
+                const currentNode = Nodes.setCurrentNodeId(id);
+                Api.setWeb3Provider(currentNode.url);
+                return Nodes.canRemoveNode(id);
+            };
+
+            Page.onAlterWalletValidation = (key, file) => {
+                return {
+                    keyValid: Validator.privateKey(key),
+                    fileValid: !!file
+                };
+            };
         });
-    };
 
-    Page.onAlterWalletFileAsync = (file, password) => {
-        return readFileContentAsync(file)
-            .then((content) => {
-                const Wallet = ethers.Wallet;
-                return Wallet.fromEncryptedWallet(content, password);
-            })
-            .then((wallet) => {
-                const currentNode = Nodes.getCurrentNode();
-                wallet.provider = new ethers.providers.JsonRpcProvider(currentNode.url, false, currentNode.chainId);
-                const info = Ether.getWalletInfoAsync(wallet);
-                const gasPrice = wallet.provider.getGasPrice();
-                return Promise.all([info, gasPrice])
-                    .then(([info, gasPrice]) => {
-                        currentWallet = {
-                            wallet,
-                            info,
-                            gasPrice
-                        };
-                        return currentWallet;
-                    });
-            });
-    };
-
-    Page.onAddWorkerAsync = (address, npf, snils, tariff, onTransaction) => {
-        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        const convert_tariff = tariff * 100;
-        return contract.createPerson(address, snils, npf, convert_tariff)
-            .then((buyTransaction) => {
-                const {hash} = buyTransaction;
-                onTransaction(hash);
-                return new Promise((resolve) => {
-                    currentWallet.wallet.provider.once(hash, (transaction) => {
-                        console.log(transaction);
-                        resolve();
-                    });
-                });
-            })
-            .then(() => {
-                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
-                const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                return Promise.all([info, gasPrice]);
-            })
-            .then(([info, gasPrice]) => {
-                currentWallet = {
-                    wallet: currentWallet.wallet,
-                    info,
-                    gasPrice
-                };
-                return Page.showCurrentWallet(currentWallet);
-            });
-    };
-
-    Page.onNpfAddOperationAsync = (snils, count, comment, onTransaction) => {
-        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        return contract.addOperationHistory(snils, count, comment)
-            .then((buyTransaction) => {
-                const {hash} = buyTransaction;
-                onTransaction(hash);
-                return new Promise((resolve) => {
-                    currentWallet.wallet.provider.once(hash, (transaction) => {
-                        console.log(transaction);
-                        resolve();
-                    });
-                });
-            })
-            .then(() => {
-                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
-                const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                return Promise.all([info, gasPrice]);
-            })
-            .then(([info, gasPrice]) => {
-                currentWallet = {
-                    wallet: currentWallet.wallet,
-                    info,
-                    gasPrice
-                };
-                return Page.showCurrentWallet(currentWallet);
-            });
-    };
-
-    Page.setUpWorkerInfo = (npf, tariff) => {
-        Ether.getNpfs()
-            .then((npfs) => {
-                const npfList = npfs.filter((item) => {
-                    return item.owner.toLowerCase() == npf.toLowerCase();
-                });
-
-                function strNullPersent(s) {
-                    return `${s == null ? '...' : parseFloat(s) / 100} %`;
-                }
-
-                function strNullNpf(s) {
-                    return s == null ? '...' : `${s.name} (${s.owner})`;
-                }
-
-                Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.TARIFF).text(strNullPersent(tariff));
-                Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.NPF).text(strNullNpf(npfList[0]));
-            });
-
-
-    };
-
-    Page.onInfoWorkerAsync = (snils,) => {
-        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        return contract.personInfo(snils)
-            .then((personInfo) => {
-                const {npf, tariff} = personInfo;
-                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
-                const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                const setupInfo = Page.setUpWorkerInfo(npf, tariff);
-                return Promise.all([info, gasPrice, setupInfo]);
-            })
-            .then(([info, gasPrice, setupInfo]) => {
-                currentWallet = {
-                    wallet: currentWallet.wallet,
-                    info,
-                    gasPrice
-                };
-                return Page.showCurrentWallet(currentWallet);
-            });
-    };
-
-    Page.onAddNpfAsync = (address, name, onTransaction) => {
-        const isActive = true;
-        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        return contract.createNpf(address, name, isActive)
-            .then((buyTransaction) => {
-                const {hash} = buyTransaction;
-                onTransaction(hash);
-                return new Promise((resolve) => {
-                    currentWallet.wallet.provider.once(hash, (transaction) => {
-                        console.log(transaction);
-                        resolve();
-                    });
-                });
-            })
-            .then(() => {
-                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
-                const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                return Promise.all([info, gasPrice]);
-            })
-            .then(([info, gasPrice]) => {
-                currentWallet = {
-                    wallet: currentWallet.wallet,
-                    info,
-                    gasPrice
-                };
-                return Page.showCurrentWallet(currentWallet);
-            });
-    };
-
-    Page.onAddBankAsync = (address, name, onTransaction) => {
-        const isActive = true;
-        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        return contract.createBank(address, name, isActive)
-            .then((buyTransaction) => {
-                const {hash} = buyTransaction;
-                onTransaction(hash);
-                return new Promise((resolve) => {
-                    currentWallet.wallet.provider.once(hash, (transaction) => {
-                        console.log(transaction);
-                        resolve();
-                    });
-                });
-            })
-            .then(() => {
-                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
-                const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                return Promise.all([info, gasPrice]);
-            })
-            .then(([info, gasPrice]) => {
-                currentWallet = {
-                    wallet: currentWallet.wallet,
-                    info,
-                    gasPrice
-                };
-                return Page.showCurrentWallet(currentWallet);
-            });
-    };
-
-    Page.onWorkerSetTariffAsync = (tariff, onTransaction) => {
-        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        const convert_tariff = tariff * 100;
-        return contract.changeTariff(convert_tariff)
-            .then((buyTransaction) => {
-                const {hash} = buyTransaction;
-                onTransaction(hash);
-                return new Promise((resolve) => {
-                    currentWallet.wallet.provider.once(hash, (transaction) => {
-                        console.log(transaction);
-                        resolve();
-                    });
-                });
-            })
-            .then(() => {
-                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
-                const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                return Promise.all([info, gasPrice]);
-            })
-            .then(([info, gasPrice]) => {
-                currentWallet = {
-                    wallet: currentWallet.wallet,
-                    info,
-                    gasPrice
-                };
-                return Page.showCurrentWallet(currentWallet);
-            });
-    };
-
-    Page.onWorkerSetNpfAsync = (npf, onTransaction) => {
-        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
-        debugger;
-        return contract.changeNpf(npf)
-            .then((buyTransaction) => {
-                const {hash} = buyTransaction;
-                onTransaction(hash);
-                return new Promise((resolve) => {
-                    currentWallet.wallet.provider.once(hash, (transaction) => {
-                        console.log(transaction);
-                        resolve();
-                    });
-                });
-            })
-            .then(() => {
-                const info = Ether.getWalletInfoAsync(currentWallet.wallet);
-                const gasPrice = currentWallet.wallet.provider.getGasPrice();
-                return Promise.all([info, gasPrice]);
-            })
-            .then(([info, gasPrice]) => {
-                currentWallet = {
-                    wallet: currentWallet.wallet,
-                    info,
-                    gasPrice
-                };
-                return Page.showCurrentWallet(currentWallet);
-            });
-    };
 }
 
 $(onload);
-

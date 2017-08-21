@@ -195,10 +195,16 @@
                             <div class="row">
                                 <div id="info-npf-group" class="col-md-6">
                                     <button id="info-npf-button" class="btn btn-default">Show npfs</button>
+                                    <span id="info-npf-wait"
+                                          class="glyphicon glyphicon-refresh rotating"></span>
+                                    <span id="info-npf-error" class="help-block"></span>
                                     <ul id="info-npf-list" class="list-group"></ul>
                                 </div>
                                 <div id="info-bank-group" class="col-md-6">
                                     <button id="info-bank-button" class="btn btn-default">Show banks</button>
+                                    <span id="info-bank-wait"
+                                          class="glyphicon glyphicon-refresh rotating"></span>
+                                    <span id="info-bank-error" class="help-block"></span>
                                     <ul id="info-bank-list" class="list-group"></ul>
                                 </div>
                             </div>
@@ -228,15 +234,10 @@
                                 <div id="npf-get-tariff-group" class="form-group form-inline">
                                     <input id="npf-get-tariff-snils" class="form-control" placeholder="snils..."/>
                                     <button id="npf-get-tariff-button" class="btn btn-default">Get tariff</button>
-                                </div>
-                                <div class="form-group">
-
-                                    <div>
-                                        <span id="npf-get-tariff-tariff"></span>
-                                    </div>
-                                    <div>
-                                        <span id="npf-get-tariff-error"></span>
-                                    </div>
+                                    <span id="npf-get-tariff-wait"
+                                          class="glyphicon glyphicon-refresh rotating"></span>
+                                    <span id="npf-get-tariff-tariff" class="help-block"></span>
+                                    <span id="npf-get-tariff-error" class="help-block"></span>
                                 </div>
                             </form>
                         </div>
@@ -345,6 +346,9 @@
                         <div class="container-fluid">
                             <div id="worker-history-group" class="col-md-12">
                                 <button id="worker-history-button" class="btn btn-default">Show history</button>
+                                <span id="worker-history-wait"
+                                      class="glyphicon glyphicon-refresh rotating"></span>
+                                <span id="worker-history-error" class="help-block"></span>
                                 <ul id="worker-history-list" class="list-group"></ul>
                             </div>
                         </div>

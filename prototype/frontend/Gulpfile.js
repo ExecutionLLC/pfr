@@ -16,16 +16,19 @@ const path = {
         html: 'build/',
         js: 'build/js/',
         less: 'build/css',
+        fonts: 'build/fonts'
     },
     src: {
         html: 'src/*.html',
         js: 'src/js/pfr.js',
         less: 'src/less/pfr.less',
+        fonts: 'src/fonts/**/*.*'
     },
     watch: {
         html: 'src/*.html',
         js: 'src/js/**/*.js',
         less: 'src/less/**/*.less',
+        fonts: 'src/fonts/**/*.*'
     },
     clean: './build'
 };
@@ -67,10 +70,16 @@ gulp.task('less:build', function () {
         .pipe(reload({stream: true}));
 });
 
+gulp.task('fonts:build', function() {
+    gulp.src(path.src.fonts)
+        .pipe(gulp.dest(path.build.fonts))
+});
+
 gulp.task('build', [
     'html:build',
     'js:build',
     'less:build',
+    'fonts:build'
 ]);
 
 gulp.task('watch', function(){
@@ -82,6 +91,9 @@ gulp.task('watch', function(){
     });
     watch([path.watch.js], function(event, cb) {
         gulp.start('js:build');
+    });
+    watch([path.watch.fonts], function(event, cb) {
+        gulp.start('fonts:build');
     });
 });
 
