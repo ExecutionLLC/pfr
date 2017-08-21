@@ -112,6 +112,10 @@ const Api = {
         const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
         return contract.personInfo(snils);
     },
+    personInfoByAddress(wallet, address){
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
+        return contract.personInfoByAddress(address);
+    },
     createNpf(wallet, address, name, onTransaction) {
         const isActive = true;
         const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
@@ -148,6 +152,35 @@ const Api = {
     addOperationHistory(wallet, snils, count, comment, onTransaction){
         const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
         return contract.addOperationHistory(snils, count, comment)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve();
+                    });
+                });
+            })
+    },
+    changeTariff(wallet, tariff, onTransaction){
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
+        const convert_tariff = tariff * 100;
+        return contract.changeTariff(convert_tariff)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve();
+                    });
+                });
+            })
+    },
+    changeNpf(wallet, npf, onTransaction){
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
+        return contract.changeNpf(npf)
             .then((buyTransaction) => {
                 const {hash} = buyTransaction;
                 onTransaction(hash);

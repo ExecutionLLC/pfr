@@ -270,8 +270,10 @@ const Page = {
                 return Promise.resolve();
             } else if (walletType === 'WORKER') {
                 Page.setWorkerNpfs(AppState.getNpfs());
-                Page.$id(Page.ELEMENT_ID.WORKER.CONTAINER).toggle(true);
-                return Promise.resolve();
+                return Page.setCurrentWorker()
+                    .then(() => {
+                        Page.$id(Page.ELEMENT_ID.WORKER.CONTAINER).toggle(true);
+                    });
             } else {
                 Page.$id(Page.ELEMENT_ID.EMPLOYER.CONTAINER).toggle(true);
                 return Promise.resolve();
@@ -279,6 +281,23 @@ const Page = {
         }
 
         return showInfo()
+    },
+    setCurrentWorker(){
+        return Api.personInfoByAddress(AppState.getWallet(), AppState.getWallet().address)
+            .then((personInfo) => {
+                const {npf, tariff} = personInfo;
+                AppState.setPerson({
+                    npf, tariff
+                });
+                const curNpf = AppState.getNpfs().filter((item) => {
+                    return item.owner.toLowerCase() == npf.toLowerCase();
+                })[0];
+                function strNullPersent(s) {
+                    return `${s == null ? '...' : parseFloat(s) / 100} %`;
+                }
+                Page.$id(Page.ELEMENT_ID.WORKER.CURRENT_TARIFF.TARIFF).text(strNullPersent(AppState.getPerson().tariff));
+                Page.$id(Page.ELEMENT_ID.WORKER.CURRENT_TARIFF.NPF).text(curNpf.name);
+            })
     },
     setPfrNpfs(npfs) {
         $.each(npfs, (i, npf) => {
@@ -591,6 +610,63 @@ const Page = {
     showNpfAddOperationTransaction(id, complete, fail) {
         Page.showTransaction(Page.ELEMENT_ID.NPF.ADD_OPERATION, id, complete, fail);
     },
+    workerSetTariffState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.workerSetTariffState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.WORKER.SET_TARIFF.TARIFF).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.WORKER.SET_TARIFF.BUTTON).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.WORKER.SET_TARIFF.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+        },
+        init() {
+            Page.workerSetTariffState._isWaiting = false;
+            Page.workerSetTariffState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.workerSetTariffState._isWaiting = isWait;
+            Page.workerSetTariffState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.workerSetTariffState._showCurrentState();
+        }
+    },
+    showSetTariffError(error) {
+        Page.$id(Page.ELEMENT_ID.WORKER.SET_TARIFF.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showSetTariffTransaction(id, complete, fail) {
+        Page.showTransaction(Page.ELEMENT_ID.WORKER.SET_TARIFF, id, complete, fail);
+    },
+
+    workerSetNpfState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.workerSetTariffState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.NPF).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.BUTTON).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+        },
+        init() {
+            Page.workerSetNpfState._isWaiting = false;
+            Page.workerSetNpfState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.workerSetNpfState._isWaiting = isWait;
+            Page.workerSetNpfState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.workerSetNpfState._showCurrentState();
+        }
+    },
+    showSetNpfError(error) {
+        Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showSetNpfTransaction(id, complete, fail) {
+        Page.showTransaction(Page.ELEMENT_ID.WORKER.SET_NPF, id, complete, fail);
+    },
 
     init() {
         Page.showNodeError();
@@ -608,8 +684,8 @@ const Page = {
         Page.infoBankState.init();
         Page.npfGetTariffState.init();
         Page.npfAddOperationState.init();
-        // Page.workerSetTariffState.init();
-        // Page.workerSetNpfState.init();
+        Page.workerSetTariffState.init();
+        Page.workerSetNpfState.init();
 
         Page.$id(Page.ELEMENT_ID.NODES.ADD_NODE_SHOW_BUTTON).click(() => {
             Page.nodesState.toggleNodeAdding(true);
@@ -1025,6 +1101,82 @@ const Page = {
             catch (e) {
                 Page.showNpfAddOperationError(e);
                 Page.npfAddOperationState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.WORKER.SET_TARIFF.BUTTON).click(() => {
+            Page.showSetTariffError();
+            Page.showSetTariffTransaction();
+            Page.workerSetTariffState.toggleWait(true);
+            const tariff = +Page.$id(Page.ELEMENT_ID.WORKER.SET_TARIFF.TARIFF).val();
+            try {
+                let transactionId;
+
+                function onTransactionId(id) {
+                    transactionId = id;
+                    Page.showSetTariffTransaction(id, false);
+                }
+
+                Api.changeTariff(AppState.getWallet(), tariff, onTransactionId)
+                    .then(() => Page.setCurrentWorker())
+                    .then(() => {
+                        Page.workerSetTariffState.toggleWait(false);
+                        Page.showSetTariffTransaction(transactionId, true);
+                    })
+                    .catch((err) => {
+                        Page.showSetTariffError(err);
+                        Page.workerSetTariffState.toggleWait(false);
+                        Page.showSetTariffTransaction(transactionId, true, true);
+                    })
+            }
+            catch (e) {
+                Page.showSetTariffError(e);
+                Page.workerSetTariffState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.WORKER.SET_TARIFF.TARIFF).on('input', (e) => {
+            if (e.target.value.indexOf(".") != '-1') {
+                e.target.value = e.target.value.substring(0, e.target.value.indexOf(".") + 3);
+            }
+            const parsedValue = parseFloat(e.target.value)
+            if (parsedValue > 6) {
+                e.target.value = "6";
+            }
+            if (parsedValue < 0) {
+                e.target.value = "0";
+            }
+        });
+
+        Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.BUTTON).click(() => {
+            Page.showSetNpfError();
+            Page.showSetNpfTransaction();
+            Page.workerSetNpfState.toggleWait(true);
+            const npf = Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.NPF).val();
+            try {
+                let transactionId;
+
+                function onTransactionId(id) {
+                    transactionId = id;
+                    Page.showSetNpfTransaction(id, false);
+                }
+                Api.changeNpf(AppState.getWallet(), npf, onTransactionId)
+                    .then(() => Page.setCurrentWorker())
+                    .then(() => {
+                        Page.workerSetNpfState.toggleWait(false);
+                        Page.showSetNpfTransaction(transactionId, true);
+                    })
+                    .catch((err) => {
+                        Page.showSetNpfError(err);
+                        Page.workerSetNpfState.toggleWait(false);
+                        Page.showSetNpfTransaction(transactionId, true, true);
+                    })
+            }
+            catch (e) {
+                Page.showSetNpfError(e);
+                Page.workerSetNpfState.toggleWait(false);
             }
             return false;
         });
