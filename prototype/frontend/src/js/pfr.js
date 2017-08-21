@@ -15,5 +15,5 @@ Custom
 //= nodes.js
 //= pfr_contract.js
 //= api.js
-//= model.js
+//= state.js
 //= view.js
