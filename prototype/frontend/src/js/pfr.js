@@ -13,7 +13,7 @@ Custom
  */
 //= utils.js
 //= nodes.js
-//= pfr_contract.js
+//= contract.js
 //= api.js
 //= state.js
 //= view.js
