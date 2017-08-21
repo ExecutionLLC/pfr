@@ -379,9 +379,6 @@ const Page = {
         toggleWait(isWait) {
             Page.addWorkerState._isWaiting = isWait;
             Page.addWorkerState._showCurrentState();
-        },
-        toggleValid(isValid) {
-            Page.addWorkerState._showCurrentState();
         }
     },
     showTransaction(ids, id, complete, fail) {
@@ -427,9 +424,6 @@ const Page = {
         toggleWait(isWait) {
             Page.infoWorkerState._isWaiting = isWait;
             Page.infoWorkerState._showCurrentState();
-        },
-        toggleValid(isValid) {
-            Page.infoWorkerState._showCurrentState();
         }
     },
     showInfoWorkerError(error) {
@@ -452,9 +446,6 @@ const Page = {
         },
         toggleWait(isWait) {
             Page.addNpfState._isWaiting = isWait;
-            Page.addNpfState._showCurrentState();
-        },
-        toggleValid(isValid) {
             Page.addNpfState._showCurrentState();
         }
     }
@@ -483,9 +474,6 @@ const Page = {
         toggleWait(isWait) {
             Page.addBankState._isWaiting = isWait;
             Page.addBankState._showCurrentState();
-        },
-        toggleValid(isValid) {
-            Page.addBankState._showCurrentState();
         }
     },
     showAddBankError(error) {
@@ -511,9 +499,6 @@ const Page = {
         toggleWait(isWait) {
             Page.infoNpfState._isWaiting = isWait;
             Page.infoNpfState._showCurrentState();
-        },
-        toggleValid(isValid) {
-            Page.infoNpfState._showCurrentState();
         }
     },
     showInfNpfError(error) {
@@ -534,9 +519,6 @@ const Page = {
         },
         toggleWait(isWait) {
             Page.infoBankState._isWaiting = isWait;
-            Page.infoBankState._showCurrentState();
-        },
-        toggleValid(isValid) {
             Page.infoBankState._showCurrentState();
         }
     },
@@ -559,9 +541,6 @@ const Page = {
         },
         toggleWait(isWait) {
             Page.npfGetTariffState._isWaiting = isWait;
-            Page.npfGetTariffState._showCurrentState();
-        },
-        toggleValid(isValid) {
             Page.npfGetTariffState._showCurrentState();
         }
     },
@@ -599,9 +578,6 @@ const Page = {
         toggleWait(isWait) {
             Page.npfAddOperationState._isWaiting = isWait;
             Page.npfAddOperationState._showCurrentState();
-        },
-        toggleValid(isValid) {
-            Page.npfAddOperationState._showCurrentState();
         }
     },
     showNpfAddOperationError(error) {
@@ -626,9 +602,6 @@ const Page = {
         },
         toggleWait(isWait) {
             Page.workerSetTariffState._isWaiting = isWait;
-            Page.workerSetTariffState._showCurrentState();
-        },
-        toggleValid(isValid) {
             Page.workerSetTariffState._showCurrentState();
         }
     },
@@ -682,9 +655,6 @@ const Page = {
         },
         toggleWait(isWait) {
             Page.workerHistoryState._isWaiting = isWait;
-            Page.workerHistoryState._showCurrentState();
-        },
-        toggleValid(isValid) {
             Page.workerHistoryState._showCurrentState();
         }
     },
@@ -1168,7 +1138,7 @@ const Page = {
             if (e.target.value.indexOf(".") != '-1') {
                 e.target.value = e.target.value.substring(0, e.target.value.indexOf(".") + 3);
             }
-            const parsedValue = parseFloat(e.target.value)
+            const parsedValue = parseFloat(e.target.value);
             if (parsedValue > 6) {
                 e.target.value = "6";
             }
