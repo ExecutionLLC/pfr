@@ -123,7 +123,9 @@ const Page = {
             TAB: 'worker-npf-change',
             SHOW_HISTORY: {
                 BUTTON: 'worker-history-button',
-                LIST: 'worker-history-list'
+                LIST: 'worker-history-list',
+                WAIT: 'worker-history-wait',
+                ERROR: 'worker-history-error'
             },
             SET_TARIFF: {
                 GROUP: 'worker-npf-tarif-set-tarif-group',
@@ -667,6 +669,30 @@ const Page = {
     showSetNpfTransaction(id, complete, fail) {
         Page.showTransaction(Page.ELEMENT_ID.WORKER.SET_NPF, id, complete, fail);
     },
+    workerHistoryState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.workerHistoryState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.BUTTON).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+        },
+        init() {
+            Page.workerHistoryState._isWaiting = false;
+            Page.workerHistoryState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.workerHistoryState._isWaiting = isWait;
+            Page.workerHistoryState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.workerHistoryState._showCurrentState();
+        }
+    },
+    showWorkerHistoryError(error) {
+        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
 
     init() {
         Page.showNodeError();
@@ -686,6 +712,7 @@ const Page = {
         Page.npfAddOperationState.init();
         Page.workerSetTariffState.init();
         Page.workerSetNpfState.init();
+        Page.workerHistoryState.init();
 
         Page.$id(Page.ELEMENT_ID.NODES.ADD_NODE_SHOW_BUTTON).click(() => {
             Page.nodesState.toggleNodeAdding(true);
@@ -1177,6 +1204,45 @@ const Page = {
             catch (e) {
                 Page.showSetNpfError(e);
                 Page.workerSetNpfState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.BUTTON).click(() => {
+            Page.showWorkerHistoryError();
+            Page.workerHistoryState.toggleWait(true);
+            try {
+
+                Api.getWorkerHistory(AppState.getWallet())
+                    .then((history) => {
+                        $.each(history, (i, {owner, npf, timestamp, amount, comment}) => {
+                            const npfList = AppState.getNpfs().filter((item) => {
+                                return item.owner.toLowerCase() == npf.toLowerCase();
+                            });
+                            if (npfList.length) {
+                                const npfItem = npfList[0];
+                                Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
+                                    .append($('<li></li>')
+                                        .addClass("list-group-item")
+                                        .text(`${moment(timestamp * 1000).format('DD.MM.YY HH:mm:ss')} ; ${npfItem.name}(${npfItem.owner}) ; ${amount} ; ${comment}`));
+                            }
+                        });
+                        Page.$id(Page.ELEMENT_ID.WORKER.SHOW_HISTORY.LIST)
+                            .append($('<li></li>')
+                                .addClass("list-group-item")
+                                .text("END"));
+                    })
+                    .then(() => {
+                        Page.workerHistoryState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showWorkerHistoryError(err);
+                        Page.workerHistoryState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showWorkerHistoryError(e);
+                Page.workerHistoryState.toggleWait(false);
             }
             return false;
         });

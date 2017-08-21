@@ -192,12 +192,12 @@ const Api = {
                 });
             })
     },
-    getWorkerHistory() {
+    getWorkerHistory(wallet) {
         return new Promise((resolve, reject) => {
             const web3contract = web3.eth
                 .contract(CONTRACT.ABI)
                 .at(CONTRACT.ID);
-            const opHistoryEvent = web3contract.EventOperation({_owner: currentWallet.wallet.address}, {
+            const opHistoryEvent = web3contract.EventOperation({_owner: wallet.address}, {
                 fromBlock: 0,
                 toBlock: 'latest'
             });
