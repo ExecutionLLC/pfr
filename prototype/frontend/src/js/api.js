@@ -145,6 +145,20 @@ const Api = {
                 });
             });
     },
+    addOperationHistory(wallet, snils, count, comment, onTransaction){
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
+        return contract.addOperationHistory(snils, count, comment)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve();
+                    });
+                });
+            })
+    },
     getWorkerHistory() {
         return new Promise((resolve, reject) => {
             const web3contract = web3.eth

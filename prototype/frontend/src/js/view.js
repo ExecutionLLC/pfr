@@ -99,7 +99,8 @@ const Page = {
                 SNILS: 'npf-get-tariff-snils',
                 TARIFF: 'npf-get-tariff-tariff',
                 BUTTON: 'npf-get-tariff-button',
-                ERROR: 'npf-get-tariff-error'
+                ERROR: 'npf-get-tariff-error',
+                WAIT: 'npf-get-tariff-wait'
             },
             ADD_OPERATION: {
                 GROUP: 'npf-add-operation-group',
@@ -523,6 +524,73 @@ const Page = {
             .text(error)
             .toggle(error != null);
     },
+    npfGetTariffState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.npfGetTariffState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.BUTTON).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.SNILS).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.npfGetTariffState._isWaiting = false;
+            Page.npfGetTariffState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.npfGetTariffState._isWaiting = isWait;
+            Page.npfGetTariffState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.npfGetTariffState._showCurrentState();
+        }
+    },
+    showNpfGetTariffError(error) {
+        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.TARIFF)
+            .toggle(error == null);
+        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showNpfGetTariffTariff(tariff) {
+        function strNullPersent(s) {
+            return `${s == null ? '...' : 'Tariff:  ' + parseFloat(s) / 100} %`;
+        }
+        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.TARIFF)
+            .text(strNullPersent(tariff))
+            .toggle(tariff != null);
+        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.ERROR)
+            .toggle(tariff == null);
+    },
+    npfAddOperationState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.npfAddOperationState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.COUNT).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.SNILS).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.COMMENT).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.npfAddOperationState._isWaiting = false;
+            Page.npfAddOperationState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.npfAddOperationState._isWaiting = isWait;
+            Page.npfAddOperationState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.npfAddOperationState._showCurrentState();
+        }
+    },
+    showNpfAddOperationError(error) {
+        Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showNpfAddOperationTransaction(id, complete, fail) {
+        Page.showTransaction(Page.ELEMENT_ID.NPF.ADD_OPERATION, id, complete, fail);
+    },
 
     init() {
         Page.showNodeError();
@@ -538,7 +606,8 @@ const Page = {
         Page.addNpfState.init();
         Page.infoNpfState.init();
         Page.infoBankState.init();
-        // Page.npfAddOperationState.init();
+        Page.npfGetTariffState.init();
+        Page.npfAddOperationState.init();
         // Page.workerSetTariffState.init();
         // Page.workerSetNpfState.init();
 
@@ -892,6 +961,70 @@ const Page = {
             catch (e) {
                 Page.showInfBankError(e);
                 Page.infoBankState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.BUTTON).click(() => {
+            Page.showNpfGetTariffError();
+            Page.npfGetTariffState.toggleWait(true);
+            const snils = Page.$id(Page.ELEMENT_ID.NPF.GET_TARIFF.SNILS).val();
+            try {
+
+                Api.personInfo(AppState.getWallet(), snils)
+                    .then((personInfo) => {
+                        const {npf, tariff} = personInfo;
+                        const isCurrentNpf = npf == AppState.getWallet().address;
+                        if (isCurrentNpf) {
+                            Page.showNpfGetTariffTariff(tariff)
+                        }else {
+                            Page.showNpfGetTariffError('Snils doesn\'t belongs to this npf');
+                        }
+                    })
+                    .then(() => {
+                        Page.npfGetTariffState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showNpfGetTariffError(err);
+                        Page.npfGetTariffState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showNpfGetTariffError(e);
+                Page.npfGetTariffState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.BUTTON).click(() => {
+            Page.showNpfAddOperationError();
+            Page.showNpfAddOperationTransaction();
+            Page.npfAddOperationState.toggleWait(true);
+            const comment = Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.COMMENT).val();
+            const count = +Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.COUNT).val();
+            const snils = Page.$id(Page.ELEMENT_ID.NPF.ADD_OPERATION.SNILS).val();
+            try {
+                let transactionId;
+
+                function onTransactionId(id) {
+                    transactionId = id;
+                    Page.showNpfAddOperationTransaction(id, false);
+                }
+
+                Api.addOperationHistory(AppState.getWallet(),snils, count, comment, onTransactionId)
+                    .then(() => {
+                        Page.npfAddOperationState.toggleWait(false);
+                        Page.showNpfAddOperationTransaction(transactionId, true);
+                    })
+                    .catch((err) => {
+                        Page.showNpfAddOperationError(err);
+                        Page.npfAddOperationState.toggleWait(false);
+                        Page.showNpfAddOperationTransaction(transactionId, true, true);
+                    })
+            }
+            catch (e) {
+                Page.showNpfAddOperationError(e);
+                Page.npfAddOperationState.toggleWait(false);
             }
             return false;
         });
