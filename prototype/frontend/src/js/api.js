@@ -44,13 +44,13 @@ const Api = {
                 return accountTypes[0];
             })
     },
-    getNpfs() {
+    getNpfs(blockNumber) {
         return new Promise((resolve, reject) => {
             const web3contract = web3.eth
                 .contract(CONTRACT.ABI)
                 .at(CONTRACT.ID);
             const npfEvent = web3contract.EventNewNpf({}, {
-                fromBlock: 0,
+                fromBlock: blockNumber,
                 toBlock: 'latest'
             });
             npfEvent.get((error, logs) => {
@@ -93,6 +93,57 @@ const Api = {
                 }
             });
         });
+    },
+    createPerson(wallet, address, npf, snils, tariff, onTransaction){
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
+        return contract.createPerson(address, snils, npf, tariff)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve();
+                    });
+                });
+            });
+    },
+    personInfo(wallet, snils){
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
+        return contract.personInfo(snils);
+    },
+    createNpf(wallet, address, name, onTransaction) {
+        const isActive = true;
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
+        return contract.createNpf(address, name, isActive)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve(transaction.blockNumber);
+                    });
+                });
+            })
+            .then((blockNumber) => {
+                return Api.getNpfs(blockNumber);
+            })
+    },
+    createBank(wallet, address, name, onTransaction) {
+        const isActive = true;
+        const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
+        return contract.createBank(address, name, isActive)
+            .then((buyTransaction) => {
+                const {hash} = buyTransaction;
+                onTransaction(hash);
+                return new Promise((resolve) => {
+                    wallet.provider.once(hash, (transaction) => {
+                        console.log(transaction);
+                        resolve();
+                    });
+                });
+            });
     },
     getWorkerHistory() {
         return new Promise((resolve, reject) => {

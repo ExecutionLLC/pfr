@@ -81,11 +81,15 @@ const Page = {
             },
             SHOW_NPF: {
                 BUTTON: 'info-npf-button',
-                LIST: 'info-npf-list'
+                LIST: 'info-npf-list',
+                WAIT: 'info-npf-wait',
+                ERROR: 'info-npf-error'
             },
             SHOW_BANK: {
                 BUTTON: 'info-bank-button',
-                LIST: 'info-bank-list'
+                LIST: 'info-bank-list',
+                WAIT: 'info-bank-wait',
+                ERROR: 'info-bank-error'
             }
         },
         NPF: {
@@ -276,20 +280,63 @@ const Page = {
         return showInfo()
     },
     setPfrNpfs(npfs) {
-        $.each(npfs, (i, {name, owner}) => {
-            Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT)
-                .append($('<option></option>')
-                    .attr("value", owner)
-                    .text(name));
+        $.each(npfs, (i, npf) => {
+            Page.addPfrNpf(npf);
         });
     },
-    setWorkerNpfs(npfs) {
+    setPfrNpfsInfo(npfs) {
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.LIST).empty();
         $.each(npfs, (i, {name, owner}) => {
-            Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.NPF)
-                .append($('<option></option>')
-                    .attr("value", owner)
-                    .text(name));
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.LIST)
+                .append($('<li></li>')
+                    .addClass("list-group-item")
+                    .text(`${name}(${owner})`));
         });
+    },
+    setPfrBanksInfo(banks) {
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.LIST).empty();
+        $.each(banks, (i, {name, owner}) => {
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.LIST)
+                .append($('<li></li>')
+                    .addClass("list-group-item")
+                    .text(`${name}(${owner})`));
+        });
+    },
+    addPfrNpf(npf) {
+        const {name, owner} = npf;
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_WORKER.NPF_SELECT)
+            .append($('<option></option>')
+                .attr("value", owner)
+                .text(name));
+    },
+
+    setWorkerNpfs(npfs) {
+        $.each(npfs, (i, npf) => {
+            Page.addWorkerNpf(npf);
+        });
+    },
+    addWorkerNpf(npf) {
+        const {name, owner} = npf;
+        Page.$id(Page.ELEMENT_ID.WORKER.SET_NPF.NPF)
+            .append($('<option></option>')
+                .attr("value", owner)
+                .text(name));
+    },
+    setUpWorkerInfo(npf, tariff) {
+        const npfList = AppState.getNpfs().filter((item) => {
+            return item.owner.toLowerCase() == npf.toLowerCase();
+        });
+
+        function strNullPersent(s) {
+            return `${s == null ? '...' : parseFloat(s) / 100} %`;
+        }
+
+        function strNullNpf(s) {
+            return s == null ? '...' : `${s.name} (${s.owner})`;
+        }
+
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.TARIFF).text(strNullPersent(tariff));
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.NPF).text(strNullNpf(npfList[0]))
     },
 
     addWorkerState: {
@@ -343,6 +390,140 @@ const Page = {
         Page.showTransaction(Page.ELEMENT_ID.PFR.ADD_WORKER, id, complete, fail);
     },
 
+    infoWorkerState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.infoWorkerState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.SNILS).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.infoWorkerState._isWaiting = false;
+            Page.infoWorkerState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.infoWorkerState._isWaiting = isWait;
+            Page.infoWorkerState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.infoWorkerState._showCurrentState();
+        }
+    },
+    showInfoWorkerError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    addNpfState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.addNpfState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.ADDRESS).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.NAME).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.addNpfState._isWaiting = false;
+            Page.addNpfState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.addNpfState._isWaiting = isWait;
+            Page.addNpfState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.addNpfState._showCurrentState();
+        }
+    }
+    ,
+    showAddNpfError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showAddNpfTransaction(id, complete, fail) {
+        Page.showTransaction(Page.ELEMENT_ID.PFR.ADD_NPF, id, complete, fail);
+    },
+    addBankState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.addBankState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.ADDRESS).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.NAME).prop('disabled', isWaiting);
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.addBankState._isWaiting = false;
+            Page.addBankState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.addBankState._isWaiting = isWait;
+            Page.addBankState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.addBankState._showCurrentState();
+        }
+    },
+    showAddBankError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    showAddBankTransaction(id, complete, fail) {
+        Page.showTransaction(Page.ELEMENT_ID.PFR.ADD_BANK, id, complete, fail);
+    },
+
+    infoNpfState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.infoNpfState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.infoNpfState._isWaiting = false;
+            Page.infoNpfState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.infoNpfState._isWaiting = isWait;
+            Page.infoNpfState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.infoNpfState._showCurrentState();
+        }
+    },
+    showInfNpfError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+    infoBankState: {
+        _isWaiting: false,
+        _showCurrentState() {
+            const isWaiting = Page.infoBankState._isWaiting;
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.WAIT).css('visibility', isWaiting ? 'visible' : 'hidden');
+            Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.BUTTON).prop('disabled', isWaiting);
+        },
+        init() {
+            Page.infoBankState._isWaiting = false;
+            Page.infoBankState._showCurrentState();
+        },
+        toggleWait(isWait) {
+            Page.infoBankState._isWaiting = isWait;
+            Page.infoBankState._showCurrentState();
+        },
+        toggleValid(isValid) {
+            Page.infoBankState._showCurrentState();
+        }
+    },
+    showInfBankError(error) {
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.ERROR)
+            .text(error)
+            .toggle(error != null);
+    },
+
     init() {
         Page.showNodeError();
         Page.showAddNodeError();
@@ -352,9 +533,11 @@ const Page = {
         Page.showAlterWalletFileError();
         Page.nodesState.init();
         Page.addWorkerState.init();
-        // Page.infoWorkerState.init();
-        // Page.addBankState.init();
-        // Page.addNpfState.init();
+        Page.infoWorkerState.init();
+        Page.addBankState.init();
+        Page.addNpfState.init();
+        Page.infoNpfState.init();
+        Page.infoBankState.init();
         // Page.npfAddOperationState.init();
         // Page.workerSetTariffState.init();
         // Page.workerSetNpfState.init();
@@ -456,14 +639,14 @@ const Page = {
                     try {
                         const wallet = Api.createWalletByPrivateKey(privateKey0x, url, chainId);
                         AppState.setWallet(wallet);
-                        return Api.getNpfs()
+                        return Api.getNpfs(0)
                             .then((npfs) => {
                                 AppState.setNpfs(npfs);
                                 return Api.getWalletType(wallet)
                             })
                             .then((walletType) => {
                                 return Page.showCurrentWallet(walletType)
-                                    .then(()=> {
+                                    .then(() => {
                                         Page.showAlterWalletPrivateKeyWait(false)
 
                                     });
@@ -493,9 +676,9 @@ const Page = {
                     const {url, chainId} = Nodes.getCurrentNode();
                     try {
                         Api.createWalletByFilePassword(file, password, url, chainId)
-                            .then((wallet)=>{
+                            .then((wallet) => {
                                 AppState.setWallet(wallet);
-                                return Api.getNpfs()
+                                return Api.getNpfs(0)
                                     .then((npfs) => {
                                         AppState.setNpfs(npfs);
                                         return Api.getWalletType(wallet)
@@ -503,7 +686,7 @@ const Page = {
                             })
                             .then((walletType) => {
                                 return Page.showCurrentWallet(walletType)
-                                    .then(()=> {
+                                    .then(() => {
                                         Page.showAlterWalletFileWait(false)
 
                                     });
@@ -551,7 +734,8 @@ const Page = {
                     Page.showAddWorkerTransaction(id, false);
                 }
 
-                Page.onAddWorkerAsync(address, npf, snils, tariff, onTransactionId)
+                const api_tariff = tariff * 100;
+                Api.createPerson(AppState.getWallet(), address, npf, snils, api_tariff, onTransactionId)
                     .then(() => {
                         Page.addWorkerState.toggleWait(false);
                         Page.showAddWorkerTransaction(transactionId, true);
@@ -569,6 +753,148 @@ const Page = {
             return false;
         });
 
+        Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.BUTTON).click(() => {
+            Page.showInfoWorkerError();
+            Page.infoWorkerState.toggleWait(true);
+            const snils = Page.$id(Page.ELEMENT_ID.PFR.INFO_WORKER.SNILS).val();
+            try {
+
+                Api.personInfo(AppState.getWallet(), snils)
+                    .then((personInfo) => {
+                        const {npf, tariff} = personInfo;
+                        return Page.setUpWorkerInfo(npf, tariff);
+                    })
+                    .then(() => {
+                        Page.infoWorkerState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showInfoWorkerError(err);
+                        Page.infoWorkerState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showInfoWorkerError(e);
+                Page.infoWorkerState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.BUTTON).click(() => {
+            Page.showAddNpfError();
+            Page.showAddNpfTransaction();
+            Page.addNpfState.toggleWait(true);
+            const address = Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.ADDRESS).val();
+            const name = Page.$id(Page.ELEMENT_ID.PFR.ADD_NPF.NAME).val();
+            try {
+                let transactionId;
+
+                function onTransactionId(id) {
+                    transactionId = id;
+                    Page.showAddNpfTransaction(id, false);
+                }
+
+                Api.createNpf(AppState.getWallet(), address, name, onTransactionId)
+                    .then((createdNpfs) => {
+                        createdNpfs.forEach(npf => {
+                           AppState.addNpf(npf);
+                           Page.addPfrNpf(npf);
+                        });
+                        Page.addNpfState.toggleWait(false);
+                        Page.showAddNpfTransaction(transactionId, true);
+                    })
+                    .catch((err) => {
+                        Page.showAddNpfError(err);
+                        Page.addNpfState.toggleWait(false);
+                        Page.showAddNpfTransaction(transactionId, true, true);
+                    })
+            }
+            catch (e) {
+                Page.showAddNpfError(e);
+                Page.addNpfState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.BUTTON).click(() => {
+            Page.showAddBankError();
+            Page.showAddBankTransaction();
+            Page.addBankState.toggleWait(true);
+            const address = Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.ADDRESS).val();
+            const name = Page.$id(Page.ELEMENT_ID.PFR.ADD_BANK.NAME).val();
+            try {
+                let transactionId;
+
+                function onTransactionId(id) {
+                    transactionId = id;
+                    Page.showAddBankTransaction(id, false);
+                }
+
+                Api.createBank(AppState.getWallet(), address, name, onTransactionId)
+                    .then(() => {
+                        Page.addBankState.toggleWait(false);
+                        Page.showAddBankTransaction(transactionId, true);
+                    })
+                    .catch((err) => {
+                        Page.showAddBankError(err);
+                        Page.addBankState.toggleWait(false);
+                        Page.showAddBankTransaction(transactionId, true, true);
+                    })
+            }
+            catch (e) {
+                Page.showAddBankError(e);
+                Page.addBankState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_NPF.BUTTON).click(() => {
+            Page.showInfNpfError();
+            Page.infoNpfState.toggleWait(true);
+            try {
+
+                Api.getNpfs(0)
+                    .then((npfs) => {
+                        AppState.setNpfs(npfs);
+                        Page.setPfrNpfsInfo(npfs);
+                    })
+                    .then(() => {
+                        Page.infoNpfState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showInfNpfError(err);
+                        Page.infoNpfState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showInfNpfError(e);
+                Page.infoNpfState.toggleWait(false);
+            }
+            return false;
+        });
+
+        Page.$id(Page.ELEMENT_ID.PFR.SHOW_BANK.BUTTON).click(() => {
+            Page.showInfBankError();
+            Page.infoBankState.toggleWait(true);
+            try {
+
+                Api.getBanks(0)
+                    .then((banks) => {
+                        Page.setPfrBanksInfo(banks);
+                    })
+                    .then(() => {
+                        Page.infoBankState.toggleWait(false);
+                    })
+                    .catch((err) => {
+                        Page.showInfBankError(err);
+                        Page.infoBankState.toggleWait(false);
+                    })
+            }
+            catch (e) {
+                Page.showInfBankError(e);
+                Page.infoBankState.toggleWait(false);
+            }
+            return false;
+        });
 
         return Page.showCurrentWallet();
     }

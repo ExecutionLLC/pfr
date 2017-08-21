@@ -1214,6 +1214,7 @@ function onload() {
     Page.onAddWorkerAsync = (address, npf, snils, tariff, onTransaction) => {
         const contract = new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, currentWallet.wallet);
         const convert_tariff = tariff * 100;
+        debugger;
         return contract.createPerson(address, snils, npf, convert_tariff)
             .then((buyTransaction) => {
                 const {hash} = buyTransaction;
