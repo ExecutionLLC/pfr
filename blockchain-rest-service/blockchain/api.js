@@ -132,7 +132,7 @@ class BlockchainApi {
             return {
                 name: logObj._name,
                 owner: logObj._owner,
-                transactionHash: log.transactionHash
+                transactionHash: logObj.transactionHash
             };
         };
 
