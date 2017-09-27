@@ -24,9 +24,7 @@ const _normalizePrivateKey = _normalizeHexString;
 
 app.get('/history/:address', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
-    blockchainApiInstance.getOperationsList(address).then((result) => {
-        res.json(result);
-    }).catch(next);
+    res.json(blockchainApiInstance.getOperationsList(address));
 });
 
 app.get('/person/info/:address', function (req, res, next) {
