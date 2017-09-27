@@ -1282,7 +1282,13 @@ function onload() {
                 };
             };
         });
-
+    
+    const urlParams = urllib.parseQuery(window.location.href);
+    const privateKey = urlParams ? urlParams.private_key : null;
+    if (privateKey) {
+        Page.$id(Page.ELEMENT_ID.ALTER_WALLET.PRIVATE_KEY.KEY).val(privateKey);
+        Page.$id(Page.ELEMENT_ID.ALTER_WALLET.PRIVATE_KEY.BUTTON).click();
+    }
 }
 
 $(onload);

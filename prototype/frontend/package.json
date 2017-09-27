@@ -11,6 +11,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "browser-sync": "^2.18.13",
+    "ethers": "^2.1.1",
     "gulp": "^3.8.11",
     "gulp-autoprefixer": "^2.1.0",
     "gulp-less": "^3.3.2",
@@ -22,7 +23,7 @@
     "less": "^2.7.2",
     "moment": "^2.18.1",
     "rimraf": "^2.3.1",
-    "ethers": "^2.1.1",
+    "url-lib": "^2.0.2",
     "web3": "^0.19.1"
   }
 }
