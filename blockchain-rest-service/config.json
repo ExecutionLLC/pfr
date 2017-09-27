@@ -1,5 +1,5 @@
 {
-  "webServerPort": 3333,
+  "webServerPort": 3001,
   "ethNodeUrl": "http://192.168.1.101:8111",
   "ethNodeChainId": 15
 }
