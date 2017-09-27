@@ -260,6 +260,10 @@ class BlockchainApi {
             };
         });
     }
+
+    getTransaction(transactionHash) {
+        return this._web3.eth.getTransaction(transactionHash);
+    }
 }
 
 module.exports = BlockchainApi;

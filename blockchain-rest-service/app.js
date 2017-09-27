@@ -22,9 +22,10 @@ function _normalizeHexString(hexString) {
 
 const _normalizeAddress = _normalizeHexString;
 const _normalizePrivateKey = _normalizeHexString;
+const _normalizeTransactionHash = _normalizeHexString;
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 app.get('/person/operations/:address', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
@@ -42,6 +43,13 @@ app.get('/person/tariff/:address', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
     blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
         res.json({ tariff: result.tariff});
+    }).catch(next);
+});
+
+app.get('/transaction/:transactionhash', function (req, res, next) {
+    const transactionHash = _normalizeTransactionHash(req.params.transactionhash);
+    blockchainApiInstance.getTransaction(transactionHash).then((result) => {
+        res.json(result);
     }).catch(next);
 });
 
