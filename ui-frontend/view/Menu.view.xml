@@ -1,0 +1,49 @@
+<mvc:View
+    controllerName="personal.account.controller.Menu"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:tnt="sap.tnt">
+<tnt:ToolHeader>
+    <core:Icon
+        src="sap-icon://home"
+        size="2rem"
+        class="sapUiMediumMargin"/>
+        <IconTabHeader
+            showOverflowSelectList="true"
+            backgroundDesign="Transparent"
+            select="onSelectTab">
+            <layoutData>
+                <OverflowToolbarLayoutData
+                        shrinkable="true"/>
+            </layoutData>
+            <items>
+                <IconTabFilter
+                    text="{i18n>toolbarIcon.profile}"
+                    key="Profile"/>
+                <IconTabFilter
+                    text="{i18n>toolbarIcon.report}"
+                    key="Report"/>
+                <IconTabFilter
+                    text="{i18n>toolbarIcon.rate}"
+                    key="Rate"/>
+                <IconTabFilter
+                    text="{i18n>toolbarIcon.NPF}"
+                    key="NPF"/>
+            </items>
+        </IconTabHeader>
+    </tnt:ToolHeader>
+
+
+    <NavContainer
+        id="navCon"
+        width="100%">
+        <mvc:XMLView  id="Profile" viewName="personal.account.view.TabBarViews.Profile"></mvc:XMLView>
+        <mvc:XMLView  id="Report" viewName="personal.account.view.TabBarViews.Report"></mvc:XMLView>
+        <mvc:XMLView  id="Rate" viewName="personal.account.view.TabBarViews.Rate"></mvc:XMLView>
+        <mvc:XMLView  id="NPF" viewName="personal.account.view.TabBarViews.NPF"></mvc:XMLView>
+
+    </NavContainer>
+
+</mvc:View>

@@ -1,0 +1,7 @@
+<mvc:View
+    controllerName="personal.account.controller.TabBarControllers.NPF"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true">
+
+</mvc:View>

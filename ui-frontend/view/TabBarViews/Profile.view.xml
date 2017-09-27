@@ -1,0 +1,59 @@
+<mvc:View
+    controllerName="personal.account.controller.TabBarControllers.Profile"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc">
+    <Toolbar
+        width="50%"
+        height="10rem">
+        <TileContent>
+            <content>
+                <NumericContent
+                    value="6%"/>
+            </content>
+        </TileContent>
+        <ToolbarSeparator class="toolBarSeparator-bigger"/>
+        <TileContent>
+            <content>
+                <NumericContent
+                    value="6%"/>
+            </content>
+        </TileContent>
+        <ToolbarSeparator class="toolBarSeparator-bigger"/>
+        <TileContent>
+            <content>
+                <NumericContent
+                    value="6%"/>
+            </content>
+        </TileContent>
+
+    </Toolbar>
+    <GenericTile
+        header="Мой тариф:"
+        headerImage="sap-icon://edit-outside">
+        <tileContent>
+            <TileContent>
+                <content>
+                    <NumericContent
+                            value="6%"/>
+                </content>
+            </TileContent>
+        </tileContent>
+    </GenericTile>
+    <GenericTile
+            frameType="TwoByOne"
+            header="Прогнозируемая пенсия:">
+        <tileContent>
+            <TileContent
+                footer="{
+                    path: 'i18n>tileFooterLink'
+                    }">
+                <content>
+                    <NumericContent
+                        value="10.830 ₽/мес."
+                        width="100%"
+                        truncateValueTo="20"/>
+                </content>
+            </TileContent>
+        </tileContent>
+    </GenericTile>
+</mvc:View>

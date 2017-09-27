@@ -1,0 +1,83 @@
+<mvc:View
+    controllerName="personal.account.controller.App"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:layout="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form"
+    displayBlock="true">
+    <form:Form
+        width = "40%"
+        editable="true"
+        class="form-margin">
+        <form:formContainers>
+            <form:FormContainer>
+                <form:FormElement>
+                    <Label
+                        class="label-position"
+                        text="{i18n>label}"/>
+                </form:FormElement>
+                <form:FormElement>
+                    <Label
+                        text="{i18n>label.enter}"/>
+                    <HBox>
+                        <Link
+                            text="{i18n>link.login}"
+                            class="sapUiSmallMarginEnd"/>
+                        <Link
+                            text="{i18n>link.snils}"/>
+                    </HBox>
+                </form:FormElement>
+                <form:FormElement>
+                    <Input
+                        placeholder="{i18n>placeholder.mail}"
+                        type = "Text"
+                        submit = "onButtonOk">
+                        <layoutData>
+                            <layout:GridData
+                                span="L8 M8 S8"/>
+                        </layoutData>
+                    </Input>
+                </form:FormElement>
+                <form:FormElement>
+                    <Input
+                        placeholder="{i18n>placeholder.password}"
+                        type = "Password"
+                        submit = "onButtonOk">
+                        <layoutData>
+                            <layout:GridData
+                                span="L8 M8 S8"/>
+                        </layoutData>
+                    </Input>
+                    <Link
+                        emphasized="true"
+                        text="{i18n>link.forgotPassword}"/>
+                </form:FormElement>
+                <form:FormElement>
+                    <Button
+                        text="{i18n>button.enter}"
+                        type="Emphasized"
+                        press = "onEnter">
+                        <layoutData>
+                            <layout:GridData
+                                span="L6 M6 S4"/>
+                        </layoutData>
+                    </Button>
+                    <Link
+                        emphasized="true"
+                        text="{i18n>link.reg}">
+                        <layoutData>
+                            <layout:GridData
+                                span="L2 M2 S4"/>
+                        </layoutData>
+                    </Link>
+                </form:FormElement>
+            </form:FormContainer>
+        </form:formContainers>
+        <form:layout>
+            <form:ResponsiveGridLayout
+                columnsL="1"
+                columnsM="1"
+                columnsS="1"/>
+        </form:layout>
+    </form:Form>
+</mvc:View>

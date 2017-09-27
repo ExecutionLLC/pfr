@@ -1,0 +1,13 @@
+.form-margin {
+	margin-left: 35%;
+	margin-top: 10%;
+}
+.label-position {
+	font-size: x-large;
+	margin-bottom: 10%;
+}
+.toolBarSeparator-bigger {
+	height: 7rem;
+	width: 0.1rem;
+	background-color: darkgray;
+}
