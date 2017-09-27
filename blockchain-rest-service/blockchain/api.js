@@ -213,7 +213,7 @@ class BlockchainApi {
     }
 
     _getSignedContract(privateKey) {
-        const wallet = _getEthWallet(privateKey);
+        const wallet = this._getEthWallet(privateKey);
         return ethers.Contract(CONTRACT.ABI, CONTRACT.ID, wallet);
     }
 
