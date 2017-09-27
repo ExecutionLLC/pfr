@@ -214,7 +214,7 @@ class BlockchainApi {
 
     _getSignedContract(privateKey) {
         const wallet = this._getEthWallet(privateKey);
-        return new ethers.Contract(CONTRACT.ABI, CONTRACT.ID, wallet);
+        return new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
     }
 
     getNpfList() {
