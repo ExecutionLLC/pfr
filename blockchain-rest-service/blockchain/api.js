@@ -140,11 +140,11 @@ class BlockchainApi {
             fromBlock: 0
         }).on('data', (event) => {
             const npfObject = logObjToNpfObj(event);
-            this._operationsCache.push(npfObject);
+            this._npfCache.push(npfObject);
             logger.info('got new npf object: ' + JSON.stringify(npfObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
-            this._operationsCache = this._operationsCache.filter(
+            this._npfCache = this._npfCache.filter(
                 value => value.transactionHash !== removedTransactionHash
             );
             logger.warn('removed npf object (transaction hash = ' + removedTransactionHash + ')');
@@ -157,7 +157,7 @@ class BlockchainApi {
         return this._contract.getPastEvents('EventNewNpf', options).then((logs) => {
             const npfs = logs.map(logObj => logObjToNpfObj(logObj));
             this._npfCache = npfs.concat(this._npfCache);
-            logger.info('npf cache filled (length = ' + this._operationsCache.length + ')');
+            logger.info('npf cache filled (length = ' + this._npfCache.length + ')');
         });
     }
 
