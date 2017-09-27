@@ -227,7 +227,7 @@ class BlockchainApi {
         }
 
         const addressInUpperCase = address.toUpperCase();
-        return this._operationsCache.filter(value => value._owner.toUpperCase() === addressInUpperCase);
+        return this._operationsCache.filter(value => value.owner.toUpperCase() === addressInUpperCase);
     }
 
     getPersonInfoBySnils(snils) {
