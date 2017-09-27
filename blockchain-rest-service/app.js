@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser')
 const express = require('express');
 const morgan = require('morgan');
 
@@ -22,7 +23,10 @@ function _normalizeHexString(hexString) {
 const _normalizeAddress = _normalizeHexString;
 const _normalizePrivateKey = _normalizeHexString;
 
-app.get('/history/:address', function (req, res, next) {
+// parse application/json
+app.use(bodyParser.json())
+
+app.get('/person/operations/:address', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
     res.json(blockchainApiInstance.getOperationsList(address));
 });
@@ -41,16 +45,12 @@ app.get('/person/tariff/:address', function (req, res, next) {
     }).catch(next);
 });
 
-app.get('/person/tariff/:privatekey/:tariff', function (req, res, next) {
-    const privateKey = _normalizePrivateKey(req.params.privatekey);
-    const tariff = parseInt(req.params.tariff, 10);
+app.put('/person/tariff', function (req, res, next) {
+    const privateKey = _normalizePrivateKey(req.body.privateKey);
+    const tariff = req.body.tariff;
 
-    if(isNaN(tariff)) {
-        throw Error('tariff is not integer');
-    }
-
-    blockchainApiInstance.changeTariff(privateKey, tariff).then((result) => {
-        res.json({ tariff: result.tariff});
+    blockchainApiInstance.changeTariff(privateKey, tariff).then((transactionHash) => {
+        res.json({ transactionHash });
     }).catch(next);
 });
 
