@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 
 const BlockchainApi = require('./blockchain/api');
+const blockchainApiInstance = new BlockchainApi();
+
 const config = require('./utils/config');
 const logger = require('./utils/log')('app');
 
@@ -22,21 +24,21 @@ const _normalizePrivateKey = _normalizeHexString;
 
 app.get('/history/:address', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
-    BlockchainApi.getOperationsList(address).then((result) => {
+    blockchainApiInstance.getOperationsList(address).then((result) => {
         res.json(result);
     }).catch(next);
 });
 
 app.get('/person/info/:address', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
-    BlockchainApi.getPersonInfoByAddress(address).then((result) => {
+    blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
         res.json(result);
     }).catch(next);
 });
 
 app.get('/person/tariff/:address', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
-    BlockchainApi.getPersonInfoByAddress(address).then((result) => {
+    blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
         res.json({ tariff: result.tariff});
     }).catch(next);
 });
@@ -49,7 +51,7 @@ app.get('/person/tariff/:privatekey/:tariff', function (req, res, next) {
         throw Error('tariff is not integer');
     }
 
-    BlockchainApi.changeTariff(privateKey, tariff).then((result) => {
+    blockchainApiInstance.changeTariff(privateKey, tariff).then((result) => {
         res.json({ tariff: result.tariff});
     }).catch(next);
 });
@@ -72,7 +74,9 @@ app.use(function(err, req, res, next){
     });
 });
 
-const appPort = config.get('webServerPort') || 3000;
-app.listen(appPort, function () {
-    logger.info('Server listening on port ' + appPort);
-});
+blockchainApiInstance.init().then(() => {
+    const appPort = config.get('webServerPort') || 3000;
+    app.listen(appPort, function () {
+        logger.info('Server listening on port ' + appPort);
+    });
+}).catch(logger.error);
