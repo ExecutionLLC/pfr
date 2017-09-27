@@ -120,7 +120,7 @@ class BlockchainApi {
     constructor() {
         const provider = new Web3.providers.HttpProvider(config.get('ethNodeUrl'));
         this._web3 =  new Web3(provider);
-        this._contract = this._web3.eth.Contract(CONTRACT.ABI, CONTRACT.ID);
+        this._contract = new this._web3.eth.Contract(CONTRACT.ABI, CONTRACT.ID);
 
         this._npfCache = [];
         this._operationsCache = [];
