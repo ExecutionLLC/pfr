@@ -8,7 +8,7 @@ const validator = require('../utils/validator');
 
 class BlockchainApi {
     constructor() {
-        const provider = new Web3.providers.HttpProvider(config.get('ethNodeUrl'));
+        const provider = new Web3.providers.WebsocketProvider(config.get('ethNodeWsUrl'));
         this._web3 =  new Web3(provider);
         this._contract = new this._web3.eth.Contract(CONTRACT.ABI, CONTRACT.ID);
 
@@ -100,7 +100,7 @@ class BlockchainApi {
             throw Error('private key is not valid');
         }
         const chainId = config.get('ethNodeChainId') || 1;
-        const provider = new ethers.providers.JsonRpcProvider(config.get('ethNodeUrl'), false, chainId);
+        const provider = new ethers.providers.JsonRpcProvider(config.get('ethNodeHttpUrl'), false, chainId);
         return new ethers.Wallet(privateKey, provider);
     }
 
