@@ -174,17 +174,23 @@ class BlockchainApi {
         ]);
     }
 
-    static _getEthWallet(privateKey) {
+    static _getEthWallet(privateKey, validationAddress) {
         if (!validator.isValidPrivateKey(privateKey)) {
             throw Error('private key is not valid');
         }
         const chainId = config.get('ethNodeChainId') || 1;
         const provider = new ethers.providers.JsonRpcProvider(config.get('ethNodeHttpUrl'), false, chainId);
-        return new ethers.Wallet(privateKey, provider);
+        const wallet = new ethers.Wallet(privateKey, provider);
+
+        if (validationAddress && (wallet.address !== validationAddress)) {
+            throw Error('private key address and validation address must be the same');
+        }
+
+        return wallet;
     }
 
-    _getSignedContract(privateKey) {
-        const wallet = BlockchainApi._getEthWallet(privateKey);
+    _getSignedContract(privateKey, validationAddress) {
+        const wallet = BlockchainApi._getEthWallet(privateKey, validationAddress);
         return new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
     }
 
@@ -237,12 +243,12 @@ class BlockchainApi {
         });
     }
 
-    changeTariff(privateKey, tariff, timestamp) {
+    changeTariff(address, privateKey, tariff, timestamp) {
         if (!timestamp) {
             timestamp = Date.now();
         }
 
-        const contract = this._getSignedContract(privateKey);
+        const contract = this._getSignedContract(privateKey, address);
         return contract.changeTariff(tariff, timestamp).then((transaction) => {
             return {
                 transactionHash: transaction.hash
@@ -250,12 +256,12 @@ class BlockchainApi {
         });
     }
 
-    changeNpf(privateKey, npfAddress, timestamp) {
+    changeNpf(address, privateKey, npfAddress, timestamp) {
         if (!timestamp) {
             timestamp = Date.now();
         }
 
-        const contract = this._getSignedContract(privateKey);
+        const contract = this._getSignedContract(privateKey, address);
         return contract.changeNpf(npfAddress, timestamp).then((transaction) => {
             return {
                 transactionHash: transaction.hash
