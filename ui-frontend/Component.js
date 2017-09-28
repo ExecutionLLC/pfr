@@ -28,6 +28,11 @@ sap.ui.define([
             oTableModelNPF.loadData("./test/TableDataNPF.json","",false);
             this.setModel(oTableModelNPF, "tableModelNPF");
 
+            // Подключили таблицу списка НПФ
+            var oTableModelNPF2 = new JSONModel();
+            oTableModelNPF2.loadData("./test/NPF.json","",false);
+            this.setModel(oTableModelNPF2, "NPF");
+
             UIComponent.prototype.init.apply(this, arguments);
             this.getRouter().initialize();
         }

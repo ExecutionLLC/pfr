@@ -4,7 +4,7 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:form="sap.ui.layout.form"
     xmlns:core="sap.ui.core"
-    xmlns:l="sap.ui.layout"
+    xmlns:layout="sap.ui.layout"
     displayBlock="true">
     <VBox class="sapUiSmallMargin">
         <form:Form id="FormDisplay480_12120Dual"
@@ -12,7 +12,7 @@
             <form:layout>
                 <form:ResponsiveGridLayout
                         labelSpanXL="4"
-                        labelSpanL="6"
+                        labelSpanL="9"
                         labelSpanM="12"
                         labelSpanS="12"
                         adjustLabelSpan="false"
@@ -21,7 +21,7 @@
                         emptySpanM="0"
                         emptySpanS="0"
                         columnsXL="2"
-                        columnsL="2"
+                        columnsL="3"
                         columnsM="2"
                         singleContainerFullSize="false" />
             </form:layout>
@@ -54,9 +54,68 @@
                         </form:FormElement>
                     </form:formElements>
                 </form:FormContainer>
+                <form:FormContainer>
+                    <form:formElements>
+                        <form:FormElement>
+                            <form:fields>
+                                <ToggleButton
+                                    pressed="{techModel>/isButtonShowNPFApply}"
+                                    text="Выбрать НПФ">
+                                    <layoutData>
+                                        <layout:GridData
+                                                span="L6 M3 S7"/>
+                                    </layoutData>
+                                </ToggleButton>
+                            </form:fields>
+                        </form:FormElement>
+                    </form:formElements>
+                </form:FormContainer>
             </form:formContainers>
         </form:Form>
     </VBox>
+    <!--скрытое окно списка НПФ-->
+    <Table
+        visible="{techModel>/isButtonShowNPFApply}"
+        items="{
+        path:'NPF>/Rows'}">
+        <columns>
+            <Column
+                hAlign="Center">
+                <Text
+                    text="НПФ"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text
+                    text="Рейтинг надежности"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text
+                    text="Перейти на сайт"/>
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem
+                type="Active"
+                press="onColumnListItemPress">
+                <cells>
+                    <Text
+                        text="{NPF>NPF}"/>
+                    <Text
+                        text="{NPF>Rating}"/>
+                    <core:Icon
+                        src="sap-icon://hello-world"
+                        press="onIconPress"
+                        size="2rem"/>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+    <!--конец-->
+    <Button
+        text="Сменить НПФ"
+        visible="{techModel>/isCustomListSelected}"/>
     <Label
             text="История смены НПФ"
             class="sapUiLargeMarginBegin"/>

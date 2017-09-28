@@ -11,8 +11,10 @@ sap.ui.define([
         modelStructure:{
             //техническая модель приложения
             tech:{
-                isButtonShowApply:false,				// индикатор который показывает нажата ли кнопка показать
-                currentValueSlider: null
+                isButtonShowApply:false,				// Индикатор который показывает нажата ли кнопка показать во вкладке "Получить выписку"
+                currentValueSlider: null,               // Значение слайдера
+                isButtonShowNPFApply:false,             // Индикатор который показывает нажата ли кнопка показать во вкладке "Сменить НПФ"
+                isCustomListSelected:false
             }
         }
 
