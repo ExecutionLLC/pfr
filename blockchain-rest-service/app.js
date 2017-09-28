@@ -37,19 +37,30 @@ app.get('/person/:address', function (req, res, next) {
     }).catch(next);
 });
 
+app.put('/person/:address/npf', function (req, res, next) {
+    const privateKey = _normalizePrivateKey(req.body.privateKey);
+    const npf = req.body.npf;
+    const timestamp = req.body.timestamp;
+
+    blockchainApiInstance.changeNpf(privateKey, npf, timestamp).then((transactionHash) => {
+        res.json({ transactionHash });
+    }).catch(next);
+});
+
+app.put('/person/:address/tariff', function (req, res, next) {
+    const privateKey = _normalizePrivateKey(req.body.privateKey);
+    const tariff = req.body.tariff;
+    const timestamp = req.body.timestamp;
+    
+    blockchainApiInstance.changeTariff(privateKey, tariff, timestamp).then((transactionHash) => {
+        res.json({ transactionHash });
+    }).catch(next);
+});
+
 app.get('/transaction/:transactionhash', function (req, res, next) {
     const transactionHash = _normalizeTransactionHash(req.params.transactionhash);
     blockchainApiInstance.getTransaction(transactionHash).then((result) => {
         res.json(result);
-    }).catch(next);
-});
-
-app.put('/person/tariff', function (req, res, next) {
-    const privateKey = _normalizePrivateKey(req.body.privateKey);
-    const tariff = req.body.tariff;
-
-    blockchainApiInstance.changeTariff(privateKey, tariff).then((transactionHash) => {
-        res.json({ transactionHash });
     }).catch(next);
 });
 
