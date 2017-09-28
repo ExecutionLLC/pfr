@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 
 app.get('/person/operations/:address', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
-    res.json(blockchainApiInstance.getOperationsList(address));
+    res.json(blockchainApiInstance.getOperationsHistory(address));
 });
 
 app.get('/person/info/:address', function (req, res, next) {
