@@ -57,8 +57,10 @@ class BlockchainApi {
             return {
                 owner: logObj._owner,
                 npf: logObj._npf,
+                tariff: logObj._tariff,
                 timestamp: logObj._timestamp,
                 amount: logObj._amount,
+                contractor: logObj._contractor,
                 comment: logObj._comment,
                 transactionHash: logObj.transactionHash
             };
@@ -68,7 +70,7 @@ class BlockchainApi {
             fromBlock: 0
         }).on('data', (event) => {
             const operationObject = logObjToOperationObj(event);
-            this._operationsCache.push();
+            this._operationsCache.push(operationObject);
             logger.info('got new operation object: ' + JSON.stringify(operationObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
@@ -121,10 +123,11 @@ class BlockchainApi {
     }
 
     getPersonInfoBySnils(snils) {
-        return this._contract.methods.personInfo(snils).call().then((result) => {
+        return this._contract.methods.personInfoBySnils(snils).call().then((result) => {
             return {
                 npf: result.npf,
-                tariff: result.tariff
+                tariff: result.tariff,
+                balance: result.balance
             };
         });
     }
@@ -137,23 +140,32 @@ class BlockchainApi {
         return this._contract.methods.personInfoByAddress(address).call().then((result) => {
             return {
                 npf: result.npf,
-                tariff: result.tariff
+                tariff: result.tariff,
+                balance: result.balance
             };
         });
     }
 
-    changeTariff(privateKey, tariff) {
+    changeTariff(privateKey, tariff, timestamp) {
+        if (!timestamp) {
+            timestamp = Date.now();
+        }
+
         const contract = this._getSignedContract(privateKey);
-        return contract.changeTariff(tariff).then((transaction) => {
+        return contract.changeTariff(tariff, timestamp).then((transaction) => {
             return {
                 transactionHash: transaction.hash
             };
         });
     }
 
-    changeNpf(privateKey, npfAddress) {
+    changeNpf(privateKey, npfAddress, timestamp) {
+        if (!timestamp) {
+            timestamp = Date.now();
+        }
+
         const contract = this._getSignedContract(privateKey);
-        return contract.changeNpf(npfAddress).then((transaction) => {
+        return contract.changeNpf(npfAddress, timestamp).then((transaction) => {
             return {
                 transactionHash: transaction.hash
             };
