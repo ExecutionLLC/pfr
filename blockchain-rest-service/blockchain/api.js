@@ -184,7 +184,7 @@ class BlockchainApi {
     }
 
     _getSignedContract(privateKey) {
-        const wallet = _getEthWallet(privateKey);
+        const wallet = BlockchainApi._getEthWallet(privateKey);
         return new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
     }
 
@@ -192,13 +192,25 @@ class BlockchainApi {
         return this._npfCache;
     }
 
-    getOperationsHistory(address) {
+    static _getHistory(historyArray, address) {
         if (!validator.isValidWalletId(address)) {
             throw Error('address is not valid');
         }
 
         const addressInUpperCase = address.toUpperCase();
-        return this._operationsHistoryCache.filter(value => value.owner.toUpperCase() === addressInUpperCase);
+        return historyArray.filter(value => value.owner.toUpperCase() === addressInUpperCase);
+    }
+
+    getOperationsHistory(address) {
+        return BlockchainApi._getHistory(this._operationsHistoryCache, address);
+    }
+
+    getTariffHistory(address) {
+        return BlockchainApi._getHistory(this._tariffHistoryCache, address);
+    }
+
+    getNpfHistory(address) {
+        return BlockchainApi._getHistory(this._npfHistoryCache, address);
     }
 
     getPersonInfoBySnils(snils) {

@@ -27,22 +27,13 @@ const _normalizeTransactionHash = _normalizeHexString;
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/person/operations/:address', function (req, res, next) {
-    const address = _normalizeAddress(req.params.address);
-    res.json(blockchainApiInstance.getOperationsHistory(address));
-});
-
-app.get('/person/info/:address', function (req, res, next) {
+app.get('/person/:address', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
     blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
+        result.operationsHistory = blockchainApiInstance.getOperationsHistory(address);
+        result.tariffHistory = blockchainApiInstance.getTariffHistory(address);
+        result.npfHistory = blockchainApiInstance.getNpfHistory(address);
         res.json(result);
-    }).catch(next);
-});
-
-app.get('/person/tariff/:address', function (req, res, next) {
-    const address = _normalizeAddress(req.params.address);
-    blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
-        res.json({ tariff: result.tariff});
     }).catch(next);
 });
 
