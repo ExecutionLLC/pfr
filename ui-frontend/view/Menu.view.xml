@@ -41,7 +41,7 @@
         width="100%">
         <mvc:XMLView  id="Profile" viewName="personal.account.view.TabBarViews.Profile"></mvc:XMLView>
         <mvc:XMLView  id="Report" viewName="personal.account.view.TabBarViews.Report"></mvc:XMLView>
-        <mvc:XMLView  id="Rate" viewName="personal.account.view.TabBarViews.Rate"></mvc:XMLView>
+        <mvc:XMLView  id="Rate" viewName="personal.account.view.TabBarViews.ChangeTarif"></mvc:XMLView>
         <mvc:XMLView  id="NPF" viewName="personal.account.view.TabBarViews.NPF"></mvc:XMLView>
 
     </NavContainer>

@@ -3,8 +3,10 @@ sap.ui.define([], function () {
     return {
         formatFooterString:function (text) {
 
+        },
+        formatIconColorByStatus : function (sStatus) {
+              return sStatus == 'done' ? 'green' : 'red'
         }
-
     }
 
 },true);

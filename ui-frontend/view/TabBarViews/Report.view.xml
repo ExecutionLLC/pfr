@@ -1,23 +1,11 @@
 <mvc:View
     controllerName="personal.account.controller.TabBarControllers.Report"
     xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:form="sap.ui.layout.form"
     xmlns:layout="sap.ui.layout">
-    <!--<layout:Grid
-        width="100%">
-        <HBox>
-            <Label
-                text="{i18n>totalMany}"
-                class="sapUiLargeMarginEnd">
-            </Label>
-            <Text
-                text="500 000, 18 рублей">
-            </Text>
-        </HBox>
-    </layout:Grid>-->
-    <form:Form
-        editable="true">
+    <form:Form>
         <form:formContainers>
             <form:FormContainer>
                 <form:FormElement
@@ -62,30 +50,6 @@
                 columnsS="1"/>
         </form:layout>
     </form:Form>
-
-  <!--  <layout:Grid
-        width="100%">
-        <Label text="Движение средств за период"/>
-        <DateRangeSelection
-            placeholder="Выберите диапазон дат"
-            change="onDateRangeChange">
-            <layoutData>
-                <layout:GridData
-                    span="L3 M5 S12"
-                    indent="L0 M0 S0"/>
-            </layoutData>
-        </DateRangeSelection>
-        <ToggleButton
-            pressed="{techModel>/isButtonShowApply}"
-            width="100%"
-            text="Показать">
-            <layoutData>
-                <layout:GridData
-                    span="L2 M3 S7"
-                    indent="L0 M0 S0"/>
-            </layoutData>
-        </ToggleButton>
-    </layout:Grid>-->
 <!--дополнительное поле информации при нажатой кнопке-->
     <form:Form
             visible="{techModel>/isButtonShowApply}"
@@ -133,4 +97,79 @@
         </form:layout>
     </form:Form>
     <!--Конец доп поля-->
+
+    <Table
+        items="{
+            path:'tableModel>/Rows'}">
+        <columns>
+            <Column
+                hAlign="Center">
+                <Text text="Дата"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text text="Операция"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text text="Статус"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text text="Тариф"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text text="Контрагент"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text text="ПНФ"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text text="Сумма начисления"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text text="Расч.размер зарплаты"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text text="Проверить операцию"/>
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <Text
+                        text="{tableModel>Data}"/>
+                    <Text
+                        text="{tableModel>Operation}"/>
+                    <core:Icon
+                        src="sap-icon://overlay"
+                        color= "{
+                            path:'tableModel>Status',
+                            formatter: '.formatter.formatIconColorByStatus'
+                            }"/>
+                    <Text
+                        text="{tableModel>Tarif}"/>
+                    <Text
+                        text="{tableModel>Contragent}"/>
+                    <Text
+                        text="{tableModel>PNF}"/>
+                    <Text
+                        text="{tableModel>Summ}"/>
+                    <Text
+                        text="{tableModel>Sallary}"/>
+                    <core:Icon
+                        src="sap-icon://initiative"
+                        press="onIconPress"
+                        size="2rem"/>
+
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+
 </mvc:View>

@@ -1,59 +1,175 @@
 <mvc:View
     controllerName="personal.account.controller.TabBarControllers.Profile"
     xmlns="sap.m"
-    xmlns:mvc="sap.ui.core.mvc">
-    <Toolbar
-        width="50%"
-        height="10rem">
-        <TileContent>
-            <content>
-                <NumericContent
-                    value="6%"/>
-            </content>
-        </TileContent>
-        <ToolbarSeparator class="toolBarSeparator-bigger"/>
-        <TileContent>
-            <content>
-                <NumericContent
-                    value="6%"/>
-            </content>
-        </TileContent>
-        <ToolbarSeparator class="toolBarSeparator-bigger"/>
-        <TileContent>
-            <content>
-                <NumericContent
-                    value="6%"/>
-            </content>
-        </TileContent>
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core">
+    <l:Grid
+        defaultSpan="L10 M10 S10"
+        class="sapUiSmallMarginTop">
+        <l:content>
+            <CustomListItem >
+                <content>
+                    <HBox
+                        height ="7rem"
+                        width = "96%"
+                        class = "sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
+                        <VBox
+                            height = "7rem"
+                            alignItems ="Center"
+                            width = "31%"
+                            class="right-border">
+                            <HBox
+                                width = "100%"
+                                height = "2rem"
+                                alignItems = "Center"
+                                justifyContent = "SpaceAround"
+                                class = "sapUiSmallMarginEnd">
+                                <Text
+                                    text ="Мой НПФ:"
+                                    class = "H2"  />
+                                <core:Icon
+                                    src="sap-icon://edit-outside"
+                                    color = "#346187"
+                                    width = "2rem"
+                                    height = "2rem"
+                                    size= "2rem"/>
+                            </HBox>
+                            <Text
+                                text ="Флокс"
+                                class = "coloredText sapUiTinyMarginTop"/>
+                        </VBox>
 
-    </Toolbar>
-    <GenericTile
-        header="Мой тариф:"
-        headerImage="sap-icon://edit-outside">
-        <tileContent>
-            <TileContent>
-                <content>
-                    <NumericContent
-                            value="6%"/>
+                        <VBox
+                            height ="7rem"
+                            width = "34%"
+                            class = "right-border" >
+                            <Text
+                                text = "+3"
+                                textAlign = "End"
+                                width="90%"
+                                class="green H2"/>
+                            <HBox
+                                alignItems = "Center"
+                                justifyContent = "SpaceAround">
+                                <Image
+                                    src="./test/img/aRate.JPG"
+                                    width = '4rem'
+                                    height = "4rem"
+                                    class = "sapUiSmallMarginBeginEnd"/>
+                                <Text
+                                    text = "Рейтинг надежности"
+                                    class="H2"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox
+                            height ="7rem"
+                            width = "34%">
+                            <Text
+                                text = "-1"
+                                textAlign = "End"
+                                width="100%"
+                                class="red H2"/>
+                            <HBox
+                                alignItems = "Center"
+                                justifyContent = "SpaceAround">
+                                <Image
+                                    src="./test/img/rate.JPG"
+                                    width = '4rem'
+                                    height = "4rem"
+                                    class = "sapUiSmallMarginBeginEnd"/>
+                                <Text
+                                    text = "Рейтинг доходности"
+                                    class="H2"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
                 </content>
-            </TileContent>
-        </tileContent>
-    </GenericTile>
-    <GenericTile
-            frameType="TwoByOne"
-            header="Прогнозируемая пенсия:">
-        <tileContent>
-            <TileContent
-                footer="{
-                    path: 'i18n>tileFooterLink'
-                    }">
+                <layoutData>
+                    <l:GridData
+                        span="L8 M6 S6"
+                        indent="L2 M3 S3"/>
+                </layoutData>
+            </CustomListItem>
+
+            <CustomListItem
+                class="sapUiTinyMarginBottom">
                 <content>
-                    <NumericContent
-                        value="10.830 ₽/мес."
-                        width="100%"
-                        truncateValueTo="20"/>
+                    <VBox
+                        height = "7rem"
+                        alignItems ="Center"
+                        width = "100%"
+                        class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
+                        <HBox
+                            width = "100%"
+                            height = "2rem"
+                            alignItems = "Center"
+                            justifyContent = "SpaceAround"
+                            class = "sapUiSmallMarginEnd">
+                            <Text
+                                text ="Мой тариф:"
+                                class = "H2"  />
+                            <core:Icon
+                                src="sap-icon://edit-outside"
+                                color = "#346187"
+                                width = "2rem"
+                                height = "2rem"
+                                size= "2rem"/>
+                        </HBox>
+                        <Text
+                            text ="6%"
+                            class = "coloredText sapUiTinyMarginTop"/>
+                    </VBox>
                 </content>
-            </TileContent>
-        </tileContent>
-    </GenericTile>
+                <layoutData>
+                    <l:GridData
+                        span="L3 M2 S2"
+                        indent="L2 M3 S3" />
+                </layoutData>
+            </CustomListItem>
+
+            <CustomListItem
+                class="sapUiTinyMarginBottom">
+            <content>
+            <VBox
+                height = "7rem"
+                width = "94%"
+                justifyContent = "SpaceAround"
+                class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
+            <Text
+                text ="Прогнозируемая пенсия:"
+                class = "H2"
+                textAlign = "Begin"
+                width = "100%"/>
+            <Text
+                text ="10.830 ₽/мес."
+                textAlign = "Center"
+                width = "100%"
+                class = "H1"/>
+            <HBox
+                width = "100%"
+                justifyContent = "End" >
+            <core:Icon
+                src="sap-icon://edit-outside"
+                color = "#346187"
+                width = "2rem"
+                height = "1rem"
+                size= "1rem"/>
+                <Link
+                    text ="Узнать, как получить больше"
+                    textAlign = "End"
+                    width = "100%"
+                    class ="link"/>
+            </HBox>
+
+            </VBox>
+            </content>
+                <layoutData>
+                    <l:GridData
+                        span="L5 M4 S4" />
+                </layoutData>
+            </CustomListItem>
+        </l:content>
+    </l:Grid>
 </mvc:View>

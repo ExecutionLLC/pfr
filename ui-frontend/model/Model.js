@@ -12,7 +12,7 @@ sap.ui.define([
             //техническая модель приложения
             tech:{
                 isButtonShowApply:false,				// индикатор который показывает нажата ли кнопка показать
-
+                currentValueSlider: null
             }
         }
 

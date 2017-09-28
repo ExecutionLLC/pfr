@@ -2,6 +2,92 @@
     controllerName="personal.account.controller.TabBarControllers.NPF"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
     displayBlock="true">
-
+    <VBox class="sapUiSmallMargin">
+        <form:Form id="FormDisplay480_12120Dual"
+                editable="false">
+            <form:layout>
+                <form:ResponsiveGridLayout
+                        labelSpanXL="4"
+                        labelSpanL="6"
+                        labelSpanM="12"
+                        labelSpanS="12"
+                        adjustLabelSpan="false"
+                        emptySpanXL="0"
+                        emptySpanL="0"
+                        emptySpanM="0"
+                        emptySpanS="0"
+                        columnsXL="2"
+                        columnsL="2"
+                        columnsM="2"
+                        singleContainerFullSize="false" />
+            </form:layout>
+            <form:formContainers>
+                <form:FormContainer>
+                    <form:formElements>
+                        <form:FormElement label="Текущий НПФ">
+                            <form:fields>
+                                <Text text="Флокс"/>
+                            </form:fields>
+                        </form:FormElement>
+                        <form:FormElement label="Новый НПФ">
+                            <form:fields>
+                                <Text text=""/>
+                            </form:fields>
+                        </form:FormElement>
+                    </form:formElements>
+                </form:FormContainer>
+                <form:FormContainer>
+                    <form:formElements>
+                        <form:FormElement label="Рейтинг надежности">
+                            <form:fields>
+                                <Text text="А++" />
+                            </form:fields>
+                        </form:FormElement>
+                        <form:FormElement label="Возможная дата смены НПФ">
+                            <form:fields>
+                                <Text text="" />
+                            </form:fields>
+                        </form:FormElement>
+                    </form:formElements>
+                </form:FormContainer>
+            </form:formContainers>
+        </form:Form>
+    </VBox>
+    <Label
+            text="История смены НПФ"
+            class="sapUiLargeMarginBegin"/>
+    <Table
+            items="{
+            path:'tableModelNPF>/Rows'}">
+        <columns>
+            <Column
+                    hAlign="Center">
+                <Text text="Дата операции"/>
+            </Column>
+            <Column
+                    hAlign="Center">
+                <Text text="НПФ"/>
+            </Column>
+            <Column
+                    hAlign="Center"/>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <Text
+                            text="{tableModelNPF>Data}"/>
+                    <Text
+                            text="{tableModelNPF>NPF}"/>
+                    <core:Icon
+                            src="sap-icon://initiative"
+                            press="onIconPress"
+                            size="2rem"/>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
 </mvc:View>

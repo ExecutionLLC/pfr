@@ -11,3 +11,38 @@
 	width: 0.1rem;
 	background-color: darkgray;
 }
+.label-margin-top{
+	margin-top: 1rem;
+}
+
+.coloredText {
+	color : #346187;
+	font-size : 2rem;
+	font-weight: bold;
+}
+
+.H1 {
+	font-size : 2rem;
+	font-weight: bold;
+}
+.H2 {
+	font-size : 1rem;
+}
+
+.link {
+	text-decoration: underline;
+	color : #346187;
+}
+
+.right-border {
+	border-right: 0.5px groove;
+	border-color : black;
+}
+
+.green {
+	color : green;
+}
+
+.red {
+	color : red;
+}

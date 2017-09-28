@@ -1,0 +1,80 @@
+<mvc:View
+    controllerName="personal.account.controller.TabBarControllers.ChangeTarif"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form">
+    <layout:Grid
+        width="100%">
+        <Label
+            text="Ваш текущий тариф"
+            class="label-margin-top">
+            <layoutData>
+                <layout:GridData
+                        span="L2 M4 S4"/>
+            </layoutData>
+        </Label>
+        <Input
+            value="{=${techModel>/currentValueSlider} + '%'}"
+            width="30%"
+            type = "Text">
+            <layoutData>
+                <layout:GridData
+                    span="L8 M4 S4"/>
+            </layoutData>
+        </Input>
+        <Slider
+            value="{techModel>/currentValueSlider}"
+            width="55%"
+            min="0"
+            max="6"
+            enableTickmarks="true">
+            <layoutData>
+                <layout:GridData
+                        span="L8 M4 S4"/>
+            </layoutData>
+        </Slider>
+        <Button
+                text="Сменить тариф">
+            <layoutData>
+                <layout:GridData
+                        span="L2 M4 S4"
+                        indent="L3 M3 S3"/>
+            </layoutData>
+        </Button>
+    </layout:Grid>
+    <Label
+        text="История смены тарифа"
+        class="sapUiLargeMarginBegin"/>
+    <Table
+            items="{
+            path:'tableModelChangeTarif>/Rows'}">
+        <columns>
+            <Column
+                hAlign="Center">
+                <Text text="Дата операции"/>
+            </Column>
+            <Column
+                hAlign="Center">
+                <Text text="Тариф"/>
+            </Column>
+            <Column
+                hAlign="Center"/>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <Text
+                            text="{tableModelChangeTarif>Data}"/>
+                    <Text
+                            text="{tableModelChangeTarif>Tarif}"/>
+                    <core:Icon
+                            src="sap-icon://initiative"
+                            press="onIconPress"
+                            size="2rem"/>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</mvc:View>
