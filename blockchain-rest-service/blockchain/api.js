@@ -20,11 +20,12 @@ class BlockchainApi {
 
     _initNpfCache() {
         const logObjToNpfObj = (logObj) => {
+            const transactionHash = logObj.transactionHash;
             logObj = logObj.returnValues;
             return {
                 name: logObj._name,
                 owner: logObj._owner,
-                transactionHash: logObj.transactionHash
+                transactionHash
             };
         };
 
@@ -55,16 +56,17 @@ class BlockchainApi {
 
     _initOperationsHistoryCache() {
         const logObjToHistoryObj = (logObj) => {
+            const transactionHash = logObj.transactionHash;
             logObj = logObj.returnValues;
             return {
                 owner: logObj._owner,
                 npf: logObj._npf,
-                tariff: logObj._tariff,
-                timestamp: logObj._timestamp,
-                amount: logObj._amount,
+                tariff: parseInt(logObj._tariff, 10),
+                timestamp: parseInt(logObj._timestamp, 10),
+                amount: parseInt(logObj._amount, 10),
                 contractor: logObj._contractor,
                 comment: logObj._comment,
-                transactionHash: logObj.transactionHash
+                transactionHash
             };
         };
 
@@ -95,12 +97,14 @@ class BlockchainApi {
 
     _initTariffHistoryCache() {
         const logObjToHistoryObj = (logObj) => {
+            const transactionHash = logObj.transactionHash;
             logObj = logObj.returnValues;
             return {
                 owner: logObj._owner,
                 oldTariff: logObj._oldTariff,
                 newTariff: logObj._newTariff,
-                timestamp: logObj._timestamp
+                timestamp: parseInt(logObj._timestamp),
+                transactionHash
             };
         };
 
@@ -131,12 +135,14 @@ class BlockchainApi {
 
     _initNpfHistoryCache() {
         const logObjToHistoryObj = (logObj) => {
+            const transactionHash = logObj.transactionHash;
             logObj = logObj.returnValues;
             return {
                 owner: logObj._owner,
                 oldNpf: logObj._oldNpf,
                 newNpf: logObj._newNpf,
-                timestamp: logObj._timestamp
+                timestamp: parseInt(logObj._timestamp, 10),
+                transactionHash
             };
         };
 
@@ -189,7 +195,7 @@ class BlockchainApi {
         return wallet;
     }
 
-    _getSignedContract(privateKey, validationAddress) {
+    static _getSignedContract(privateKey, validationAddress) {
         const wallet = BlockchainApi._getEthWallet(privateKey, validationAddress);
         return new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
     }
@@ -219,16 +225,6 @@ class BlockchainApi {
         return BlockchainApi._getHistory(this._npfHistoryCache, address);
     }
 
-    getPersonInfoBySnils(snils) {
-        return this._contract.methods.personInfoBySnils(snils).call().then((result) => {
-            return {
-                npf: result.npf,
-                tariff: result.tariff,
-                balance: result.balance
-            };
-        });
-    }
-
     getPersonInfoByAddress(address) {
         if (!validator.isValidWalletId(address)) {
             throw Error('address is not valid');
@@ -237,8 +233,8 @@ class BlockchainApi {
         return this._contract.methods.personInfoByAddress(address).call().then((result) => {
             return {
                 npf: result.npf,
-                tariff: result.tariff,
-                balance: result.balance
+                tariff: parseInt(result.tariff, 10),
+                balance: parseInt(result.balance, 10)
             };
         });
     }
@@ -248,7 +244,7 @@ class BlockchainApi {
             timestamp = Date.now();
         }
 
-        const contract = this._getSignedContract(privateKey, address);
+        const contract = BlockchainApi._getSignedContract(privateKey, address);
         return contract.changeTariff(tariff, timestamp).then((transaction) => {
             return {
                 transactionHash: transaction.hash
@@ -261,7 +257,7 @@ class BlockchainApi {
             timestamp = Date.now();
         }
 
-        const contract = this._getSignedContract(privateKey, address);
+        const contract = BlockchainApi._getSignedContract(privateKey, address);
         return contract.changeNpf(npfAddress, timestamp).then((transaction) => {
             return {
                 transactionHash: transaction.hash
