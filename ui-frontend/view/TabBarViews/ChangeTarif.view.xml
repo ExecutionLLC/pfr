@@ -16,7 +16,7 @@
             </layoutData>
         </Label>
         <Input
-            value="{=${techModel>/currentValueSlider} + '%'}"
+            value="{=${techModel>/tech/currentValueSlider} + '%'}"
             width="30%"
             type = "Text">
             <layoutData>
@@ -25,7 +25,7 @@
             </layoutData>
         </Input>
         <Slider
-            value="{techModel>/currentValueSlider}"
+            value="{techModel>/tech/currentValueSlider}"
             width="55%"
             min="0"
             max="6"

@@ -35,7 +35,7 @@
                         </form:FormElement>
                         <form:FormElement label="Новый НПФ">
                             <form:fields>
-                                <Text text=""/>
+                                <Text text="{techModel>/changeNPF/newNPF}"/>
                             </form:fields>
                         </form:FormElement>
                     </form:formElements>
@@ -59,7 +59,7 @@
                         <form:FormElement>
                             <form:fields>
                                 <ToggleButton
-                                    pressed="{techModel>/isButtonShowNPFApply}"
+                                    pressed="{techModel>/tech/isButtonShowNPFApply}"
                                     text="Выбрать НПФ">
                                     <layoutData>
                                         <layout:GridData
@@ -75,7 +75,7 @@
     </VBox>
     <!--скрытое окно списка НПФ-->
     <Table
-        visible="{techModel>/isButtonShowNPFApply}"
+        visible="{techModel>/tech/isButtonShowNPFApply}"
         items="{
         path:'NPF>/Rows'}">
         <columns>
@@ -113,38 +113,64 @@
         </items>
     </Table>
     <!--конец-->
-    <Button
-        text="Сменить НПФ"
-        visible="{techModel>/isCustomListSelected}"/>
+
+    <!--доп контейнер подтверждения смены НПФ-->
+    <layout:Grid>
+        <ObjectStatus
+            visible="{techModel>/changeNPF/isWarningTextVisible}"
+            text="{techModel>/changeNPF/warningText}"
+            state="{techModel>/changeNPF/state}">
+            <layoutData>
+                <layout:GridData
+                    span="L6 M3 S7"
+                    indent="L1 M8 S8"/>
+            </layoutData>
+        </ObjectStatus>
+        <Button
+            width="100%"
+            press="onChangeNPF"
+            text="{techModel>/changeNPF/buttonText}"
+            visible="{techModel>/tech/isCustomListSelected}">
+            <layoutData>
+                <layout:GridData
+                    span="L2 M3 S7"
+                    indent="L1 M8 S8"/>
+            </layoutData>
+        </Button>
+    </layout:Grid>
+    <!--конец-->
     <Label
-            text="История смены НПФ"
-            class="sapUiLargeMarginBegin"/>
+        text="История смены НПФ"
+        class="sapUiLargeMarginBegin"/>
     <Table
-            items="{
-            path:'tableModelNPF>/Rows'}">
+        items="{
+            path:'tableModelNPF>/Rows'
+        }">
         <columns>
             <Column
-                    hAlign="Center">
-                <Text text="Дата операции"/>
+                hAlign="Center">
+                <Text
+                    text="Дата операции"/>
             </Column>
             <Column
-                    hAlign="Center">
-                <Text text="НПФ"/>
+                hAlign="Center">
+                <Text
+                    text="НПФ"/>
             </Column>
             <Column
-                    hAlign="Center"/>
+                hAlign="Center"/>
         </columns>
         <items>
             <ColumnListItem>
                 <cells>
                     <Text
-                            text="{tableModelNPF>Data}"/>
+                        text="{tableModelNPF>Data}"/>
                     <Text
-                            text="{tableModelNPF>NPF}"/>
+                        text="{tableModelNPF>NPF}"/>
                     <core:Icon
-                            src="sap-icon://initiative"
-                            press="onIconPress"
-                            size="2rem"/>
+                        src="sap-icon://initiative"
+                        press="onIconPress"
+                        size="2rem"/>
                 </cells>
             </ColumnListItem>
         </items>
