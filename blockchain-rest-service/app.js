@@ -37,6 +37,31 @@ app.get('/person/:address', function (req, res, next) {
     }).catch(next);
 });
 
+app.get('/person/:address/operationsHistory', function (req, res, next) {
+    const address = _normalizeAddress(req.params.address);
+    const history = blockchainApiInstance.getOperationsHistory(address);
+    res.json(history);
+});
+
+app.get('/person/:address/tariffHistory', function (req, res, next) {
+    const address = _normalizeAddress(req.params.address);
+    const history = blockchainApiInstance.getTariffHistory(address);
+    res.json(history);
+});
+
+app.get('/person/:address/npfHistory', function (req, res, next) {
+    const address = _normalizeAddress(req.params.address);
+    const history = blockchainApiInstance.getNpfHistory(address);
+    res.json(history);
+});
+
+app.get('/person/:address/npf', function (req, res, next) {
+    const address = _normalizeAddress(req.params.address);
+    blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
+        res.json({ npf: result.npf });
+    }).catch(next);
+});
+
 app.put('/person/:address/npf', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
     const privateKey = _normalizePrivateKey(req.body.privateKey);
@@ -45,6 +70,13 @@ app.put('/person/:address/npf', function (req, res, next) {
 
     blockchainApiInstance.changeNpf(address, privateKey, npf, timestamp).then((transactionHash) => {
         res.json({ transactionHash });
+    }).catch(next);
+});
+
+app.get('/person/:address/tariff', function (req, res, next) {
+    const address = _normalizeAddress(req.params.address);
+    blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
+        res.json({ tariff: result.tariff });
     }).catch(next);
 });
 
