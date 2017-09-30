@@ -4,8 +4,13 @@ sap.ui.define([], function () {
         formatFooterString:function (text) {
 
         },
-        formatIconColorByStatus : function (sStatus) {
+        // изменять цвет кружочков в таблице во вкладке "Получить выписку"
+        formatIconColorByStatus: function (sStatus) {
               return sStatus == 'done' ? 'green' : 'red'
+        },
+        // изменить название кнопки по щелчку на нее во вкладке "Получить выписку"
+        formatButtonName: function (bIsButtonShowApply) {
+            return bIsButtonShowApply === true ? 'Спрятать' : 'Показать'
         }
     }
 

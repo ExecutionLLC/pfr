@@ -25,6 +25,30 @@ sap.ui.define([
                 isWarningTextVisible:false,
                 state:"Error",
                 buttonPressCount:0                                                          // Счетчик нажатия кнопки "Сменить НПФ"
+            },
+            // Настройки диаграммы
+            diagrammProperties:{
+                // Ось Х
+                valueAxis:{
+                    title:{
+                        visible:false                                                       // Видимость заголовка оси Х
+                    },
+                    axisLine:{
+                        visible:false                                                       // Видимость левой полосы
+                    }
+                },
+                // Ось Y
+                categoryAxis:{
+                    title:{                                                                 // Видимость заголовка оси Y
+                        visible:false
+                    },
+                    axisTick:{
+                        visible:false                                                       // Видимость рисок
+                    }
+                },
+                title: {                                                                    // Видимость основного заголовка диаграммы
+                    visible: false
+                }
             }
         }
 

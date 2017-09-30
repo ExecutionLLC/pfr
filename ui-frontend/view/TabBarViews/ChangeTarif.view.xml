@@ -5,76 +5,83 @@
     xmlns:layout="sap.ui.layout"
     xmlns:core="sap.ui.core"
     xmlns:form="sap.ui.layout.form">
-    <layout:Grid
-        width="100%">
+    <Page
+        showHeader="false">
+        <layout:Grid
+                width="100%">
+            <Label
+                    text="Ваш текущий тариф"
+                    class="label-margin-top">
+                <layoutData>
+                    <layout:GridData
+                            span="L2 M4 S4"/>
+                </layoutData>
+            </Label>
+            <Input
+                    value="{=${techModel>/tech/currentValueSlider} + '%'}"
+                    width="34%"
+                    type = "Text">
+                <layoutData>
+                    <layout:GridData
+                            span="L8 M4 S4"/>
+                </layoutData>
+            </Input>
+            <Slider
+                    value="{techModel>/tech/currentValueSlider}"
+                    min="0"
+                    max="6"
+                    enableTickmarks="true">
+                <ResponsiveScale tickmarksBetweenLabels="1"/>
+                <layoutData>
+                    <layout:GridData
+                            span="L5 M4 S4"/>
+                </layoutData>
+            </Slider>
+            <Button
+                    text="Сменить тариф">
+                <layoutData>
+                    <layout:GridData
+                            span="L2 M4 S4"
+                            indent="L1 M3 S3"/>
+                </layoutData>
+            </Button>
+        </layout:Grid>
+
+
+
         <Label
-            text="Ваш текущий тариф"
-            class="label-margin-top">
-            <layoutData>
-                <layout:GridData
-                        span="L2 M4 S4"/>
-            </layoutData>
-        </Label>
-        <Input
-            value="{=${techModel>/tech/currentValueSlider} + '%'}"
-            width="30%"
-            type = "Text">
-            <layoutData>
-                <layout:GridData
-                    span="L8 M4 S4"/>
-            </layoutData>
-        </Input>
-        <Slider
-            value="{techModel>/tech/currentValueSlider}"
-            width="55%"
-            min="0"
-            max="6"
-            enableTickmarks="true">
-            <layoutData>
-                <layout:GridData
-                        span="L8 M4 S4"/>
-            </layoutData>
-        </Slider>
-        <Button
-                text="Сменить тариф">
-            <layoutData>
-                <layout:GridData
-                        span="L2 M4 S4"
-                        indent="L3 M3 S3"/>
-            </layoutData>
-        </Button>
-    </layout:Grid>
-    <Label
-        text="История смены тарифа"
-        class="sapUiLargeMarginBegin"/>
-    <Table
-            items="{
+            text="История смены тарифа"
+            class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
+        <Table
+                items="{
             path:'tableModelChangeTarif>/Rows'}">
-        <columns>
-            <Column
-                hAlign="Center">
-                <Text text="Дата операции"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text text="Тариф"/>
-            </Column>
-            <Column
-                hAlign="Center"/>
-        </columns>
-        <items>
-            <ColumnListItem>
-                <cells>
-                    <Text
-                            text="{tableModelChangeTarif>Data}"/>
-                    <Text
-                            text="{tableModelChangeTarif>Tarif}"/>
-                    <core:Icon
-                            src="sap-icon://initiative"
-                            press="onIconPress"
-                            size="2rem"/>
-                </cells>
-            </ColumnListItem>
-        </items>
-    </Table>
+            <columns>
+                <Column
+                        hAlign="Center">
+                    <Text text="Дата операции"/>
+                </Column>
+                <Column
+                        hAlign="Center">
+                    <Text text="Тариф"/>
+                </Column>
+                <Column
+                        hAlign="Center"/>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Text
+                                text="{tableModelChangeTarif>Data}"/>
+                        <Text
+                                text="{tableModelChangeTarif>Tarif}"/>
+                        <core:Icon
+                                src="sap-icon://initiative"
+                                press="onIconPress"
+                                size="2rem"/>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </Page>
+
 </mvc:View>

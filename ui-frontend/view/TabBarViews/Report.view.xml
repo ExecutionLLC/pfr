@@ -5,171 +5,223 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:form="sap.ui.layout.form"
     xmlns:layout="sap.ui.layout">
-    <form:Form>
-        <form:formContainers>
-            <form:FormContainer>
-                <form:FormElement
-                    label="{i18n>totalMany}">
-                    <Text text="500 000, 18 рублей"/>
-                </form:FormElement>
-                <form:FormElement
-                    label="Движение средств за период">
-                    <DateRangeSelection
-                        placeholder="Выберите диапазон дат"
-                        change="onDateRangeChange">
-                        <layoutData>
-                            <layout:GridData
-                                span="L4 M5 S4"/>
-                        </layoutData>
-                    </DateRangeSelection>
-                    <ToggleButton
-                        pressed="{techModel>/isButtonShowApply}"
-                        width="100%"
-                        text="Показать">
-                        <layoutData>
-                            <layout:GridData
-                                span="L2 M3 S7"
-                                indent="L0 M0 S0"/>
-                        </layoutData>
-                    </ToggleButton>
-                    <Button
-                        press="onPrint"
-                        icon="sap-icon://print">
-                        <layoutData>
-                            <layout:GridData
+    <Page
+        showHeader="false">
+        <form:Form>
+            <form:formContainers>
+                <form:FormContainer>
+                    <form:FormElement>
+                        <Label text="{i18n>totalMany}">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L3 M5 S4"
+                                    indent="L1 M0 S0"/>
+                            </layoutData>
+                        </Label>
+                        <Text
+                            text="500 000, 18 рублей"
+                            class="sapUiSmallMarginBottom">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L6 M5 S4"/>
+                            </layoutData>
+                        </Text>
+                    </form:FormElement>
+                    <form:FormElement>
+                        <Label
+                            class="label-margin-top"
+                            text="Движение средств за период:">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L3 M5 S4"
+                                    indent="L1 M0 S0"/>
+                            </layoutData>
+                        </Label>
+                        <DateRangeSelection
+                            placeholder="Выберите диапазон дат"
+                            change="onDateRangeChange">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L4 M5 S4"/>
+                            </layoutData>
+                        </DateRangeSelection>
+                        <ToggleButton
+                            pressed="{techModel>/tech/isButtonShowApply}"
+                            width="100%"
+                            text="{
+                                path:'techModel>/tech/isButtonShowApply',
+                                formatter:'.formatter.formatButtonName'
+                            }">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L2 M3 S7"
+                                    indent="L0 M0 S0"/>
+                            </layoutData>
+                        </ToggleButton>
+                        <Button
+                            press="onPrint"
+                            icon="sap-icon://print">
+                            <layoutData>
+                                <layout:GridData
                                     span="L2 M2 S2"/>
-                        </layoutData>
-                    </Button>
-                </form:FormElement>
-            </form:FormContainer>
-        </form:formContainers>
-        <form:layout>
-            <form:ResponsiveGridLayout
-                columnsL="1"
-                columnsM="1"
-                columnsS="1"/>
-        </form:layout>
-    </form:Form>
-<!--дополнительное поле информации при нажатой кнопке-->
-    <form:Form
-            visible="{techModel>/isButtonShowApply}"
+                            </layoutData>
+                        </Button>
+                    </form:FormElement>
+                </form:FormContainer>
+            </form:formContainers>
+            <form:layout>
+                <form:ResponsiveGridLayout
+                    columnsL="1"
+                    columnsM="1"
+                    columnsS="1"/>
+            </form:layout>
+        </form:Form>
+        <!--дополнительное поле информации при нажатой кнопке-->
+        <form:Form
+            visible="{techModel>/tech/isButtonShowApply}"
             editable="true">
-        <form:formContainers>
-            <form:FormContainer>
-                <form:FormElement
-                    label="Входящий остаток на 07.05.2014">
-                    <Text text="174 179, 19 рублей">
-                        <layoutData>
-                            <layout:GridData
-                                span="L2 M3 S7"/>
-                        </layoutData>
-                    </Text>
-                </form:FormElement>
-                <form:FormElement
-                    label="Исходящий остаток на 07.05.2017">
-                    <Text text="188 469б 72 рублей">
-                        <layoutData>
-                            <layout:GridData
+            <form:formContainers>
+                <form:FormContainer>
+                    <form:FormElement>
+                        <Label
+                            text="Входящий остаток на 07.05.2014:"
+                            class="label-margin-top">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L3 M3 S7"
+                                    indent="L1 M0 S0"/>
+                            </layoutData>
+                        </Label>
+                        <Text text="174 179, 19 рублей">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L6 M3 S7"
+                                    indent="L1 M0 S0"/>
+                            </layoutData>
+                        </Text>
+                    </form:FormElement>
+                    <form:FormElement>
+                        <Label
+                            text="Исходящий остаток на 07.05.2017:"
+                            class="label-margin-top">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L3 M3 S7"
+                                    indent="L1 M0 S0"/>
+                            </layoutData>
+                        </Label>
+                        <Text text="188 469б 72 рублей">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L6 M3 S7"
+                                    indent="L1 M0 S0"/>
+                            </layoutData>
+                        </Text>
+                    </form:FormElement>
+                    <form:FormElement>
+                        <Label
+                            text="Итого движения денежных средств по счету за период:"
+                            class="label-margin-top">
+                            <layoutData>
+                                <layout:GridData
+                                    span="L4 M3 S7"
+                                    indent="L1 M0 S0"/>
+                            </layoutData>
+                        </Label>
+                        <Text text="14 317 рублей">
+                            <layoutData>
+                                <layout:GridData
                                     span="L2 M3 S7"/>
-                        </layoutData>
-                    </Text>
-                </form:FormElement>
-                <form:FormElement
-                    label="Итого движения денежных средств по счету за период">
-                    <Text text="14 317 рублей">
-                        <layoutData>
-                            <layout:GridData
-                                    span="L2 M3 S7"/>
-                        </layoutData>
-                    </Text>
-                </form:FormElement>
-            </form:FormContainer>
-        </form:formContainers>
-        <form:layout>
-            <form:ResponsiveGridLayout
-                labelSpanXL ="3"
-                labelSpanL="3"
-                labelSpanM ="4"
-                labelSpanS ="3"
-                columnsL="1"
-                columnsM="1"
-                columnsS="1"/>
-        </form:layout>
-    </form:Form>
-    <!--Конец доп поля-->
+                            </layoutData>
+                        </Text>
+                    </form:FormElement>
+                </form:FormContainer>
+            </form:formContainers>
+            <form:layout>
+                <form:ResponsiveGridLayout
+                    labelSpanXL ="3"
+                    labelSpanL="3"
+                    labelSpanM ="4"
+                    labelSpanS ="3"
+                    columnsL="1"
+                    columnsM="1"
+                    columnsS="1"/>
+            </form:layout>
+        </form:Form>
+        <!--Конец доп поля-->
 
-    <Table
-        items="{
+        <Table
+                items="{
             path:'tableModel>/Rows'}">
-        <columns>
-            <Column
-                hAlign="Center">
-                <Text text="Дата"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text text="Операция"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text text="Статус"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text text="Тариф"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text text="Контрагент"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text text="ПНФ"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text text="Сумма начисления"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text text="Расч.размер зарплаты"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text text="Проверить операцию"/>
-            </Column>
-        </columns>
-        <items>
-            <ColumnListItem>
-                <cells>
-                    <Text
-                        text="{tableModel>Data}"/>
-                    <Text
-                        text="{tableModel>Operation}"/>
-                    <core:Icon
-                        src="sap-icon://overlay"
-                        color= "{
-                            path:'tableModel>Status',
-                            formatter: '.formatter.formatIconColorByStatus'
+            <columns>
+                <Column
+                    hAlign="Center">
+                    <Text text="Дата"/>
+                </Column>
+                <Column
+                    hAlign="Center">
+                    <Text text="Операция"/>
+                </Column>
+                <Column
+                    hAlign="Center">
+                    <Text text="Статус"/>
+                </Column>
+                <Column
+                    hAlign="Center">
+                    <Text text="Тариф"/>
+                </Column>
+                <Column
+                    hAlign="Center">
+                    <Text text="Контрагент"/>
+                </Column>
+                <Column
+                    hAlign="Center">
+                    <Text text="ПНФ"/>
+                </Column>
+                <Column
+                    hAlign="Center">
+                    <Text text="Сумма начисления"/>
+                </Column>
+                <Column
+                    hAlign="Center">
+                    <Text text="Расч.размер зарплаты"/>
+                </Column>
+                <Column
+                    hAlign="Center">
+                    <Text text="Проверить операцию"/>
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Text
+                            text="{tableModel>Data}"/>
+                        <Text
+                            text="{tableModel>Operation}"/>
+                        <core:Icon
+                            src="sap-icon://overlay"
+                            color= "{
+                                path:'tableModel>Status',
+                                formatter: '.formatter.formatIconColorByStatus'
                             }"/>
-                    <Text
-                        text="{tableModel>Tarif}"/>
-                    <Text
-                        text="{tableModel>Contragent}"/>
-                    <Text
-                        text="{tableModel>PNF}"/>
-                    <Text
-                        text="{tableModel>Summ}"/>
-                    <Text
-                        text="{tableModel>Sallary}"/>
-                    <core:Icon
-                        src="sap-icon://initiative"
-                        press="onIconPress"
-                        size="2rem"/>
+                        <Text
+                            text="{tableModel>Tarif}"/>
+                        <Text
+                            text="{tableModel>Contragent}"/>
+                        <Text
+                            text="{tableModel>PNF}"/>
+                        <Text
+                            text="{tableModel>Summ}"/>
+                        <Text
+                            text="{tableModel>Sallary}"/>
+                        <core:Icon
+                            src="sap-icon://initiative"
+                            press="onIconPress"
+                            size="2rem"/>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
 
-                </cells>
-            </ColumnListItem>
-        </items>
-    </Table>
-
+    </Page>
 </mvc:View>

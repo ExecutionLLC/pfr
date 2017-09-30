@@ -6,74 +6,87 @@
     xmlns:core="sap.ui.core"
     xmlns:layout="sap.ui.layout"
     displayBlock="true">
-    <VBox class="sapUiSmallMargin">
-        <form:Form id="FormDisplay480_12120Dual"
-                editable="false">
-            <form:layout>
-                <form:ResponsiveGridLayout
-                        labelSpanXL="4"
-                        labelSpanL="9"
-                        labelSpanM="12"
-                        labelSpanS="12"
-                        adjustLabelSpan="false"
-                        emptySpanXL="0"
-                        emptySpanL="0"
-                        emptySpanM="0"
-                        emptySpanS="0"
-                        columnsXL="2"
-                        columnsL="3"
-                        columnsM="2"
-                        singleContainerFullSize="false" />
-            </form:layout>
-            <form:formContainers>
-                <form:FormContainer>
-                    <form:formElements>
-                        <form:FormElement label="Текущий НПФ">
-                            <form:fields>
-                                <Text text="Флокс"/>
-                            </form:fields>
-                        </form:FormElement>
-                        <form:FormElement label="Новый НПФ">
-                            <form:fields>
-                                <Text text="{techModel>/changeNPF/newNPF}"/>
-                            </form:fields>
-                        </form:FormElement>
-                    </form:formElements>
-                </form:FormContainer>
-                <form:FormContainer>
-                    <form:formElements>
-                        <form:FormElement label="Рейтинг надежности">
-                            <form:fields>
-                                <Text text="А++" />
-                            </form:fields>
-                        </form:FormElement>
-                        <form:FormElement label="Возможная дата смены НПФ">
-                            <form:fields>
-                                <Text text="" />
-                            </form:fields>
-                        </form:FormElement>
-                    </form:formElements>
-                </form:FormContainer>
-                <form:FormContainer>
-                    <form:formElements>
-                        <form:FormElement>
-                            <form:fields>
-                                <ToggleButton
-                                    pressed="{techModel>/tech/isButtonShowNPFApply}"
-                                    text="Выбрать НПФ">
-                                    <layoutData>
-                                        <layout:GridData
-                                                span="L6 M3 S7"/>
-                                    </layoutData>
-                                </ToggleButton>
-                            </form:fields>
-                        </form:FormElement>
-                    </form:formElements>
-                </form:FormContainer>
-            </form:formContainers>
-        </form:Form>
-    </VBox>
-    <!--скрытое окно списка НПФ-->
+    <layout:Grid
+        width="100%">
+        <Label
+            class="sapUiSmallMarginTop"
+            text="Текущий НПФ:">
+            <layoutData>
+                <layout:GridData
+                    span="L2 M4 S4"
+                    indent="L1 M1 S1"/>
+            </layoutData>
+        </Label>
+        <Text
+            class="sapUiSmallMarginTop text-bold"
+            text="Флокс">
+            <layoutData>
+                <layout:GridData
+                    span="L4 M4 S4"/>
+            </layoutData>
+        </Text>
+        <Label
+                class="sapUiSmallMarginTop"
+                text="Рейтинг надежности:">
+            <layoutData>
+                <layout:GridData
+                        span="L2 M4 S4"/>
+            </layoutData>
+        </Label>
+        <Text
+            class="sapUiSmallMarginTop"
+            text="А++">
+            <layoutData>
+                <layout:GridData
+                        span="L1 M4 S4"/>
+            </layoutData>
+        </Text>
+    </layout:Grid>
+    <layout:Grid
+            width="100%">
+        <Label
+                class="sapUiSmallMarginTop"
+                text="Новый НПФ:">
+            <layoutData>
+                <layout:GridData
+                        span="L2 M4 S4"
+                        indent="L1 M1 S1"/>
+            </layoutData>
+        </Label>
+        <Text
+                class="sapUiSmallMarginTop text-bold"
+                text="{techModel>/changeNPF/newNPF}">
+            <layoutData>
+                <layout:GridData
+                        span="L4 M4 S4"/>
+            </layoutData>
+        </Text>
+        <Label
+                class="sapUiSmallMarginTop"
+                text="Возможная дата смены НПФ:">
+            <layoutData>
+                <layout:GridData
+                        span="L2 M4 S4"/>
+            </layoutData>
+        </Label>
+        <Text
+            class="sapUiSmallMarginTop"
+            text="">
+            <layoutData>
+                <layout:GridData
+                        span="L1 M4 S4"/>
+            </layoutData>
+        </Text>
+        <ToggleButton
+                width="100%"
+                pressed="{techModel>/tech/isButtonShowNPFApply}"
+                text="Выбрать НПФ">
+            <layoutData>
+                <layout:GridData
+                        span="L2 M3 S7"/>
+            </layoutData>
+        </ToggleButton>
+    </layout:Grid>
     <Table
         visible="{techModel>/tech/isButtonShowNPFApply}"
         items="{
@@ -117,12 +130,13 @@
     <!--доп контейнер подтверждения смены НПФ-->
     <layout:Grid>
         <ObjectStatus
+            class="sapUiSmallMarginTop"
             visible="{techModel>/changeNPF/isWarningTextVisible}"
             text="{techModel>/changeNPF/warningText}"
             state="{techModel>/changeNPF/state}">
             <layoutData>
                 <layout:GridData
-                    span="L6 M3 S7"
+                    span="L5 M3 S7"
                     indent="L1 M8 S8"/>
             </layoutData>
         </ObjectStatus>
@@ -134,14 +148,14 @@
             <layoutData>
                 <layout:GridData
                     span="L2 M3 S7"
-                    indent="L1 M8 S8"/>
+                    indent="L4 M8 S8"/>
             </layoutData>
         </Button>
     </layout:Grid>
     <!--конец-->
     <Label
         text="История смены НПФ"
-        class="sapUiLargeMarginBegin"/>
+        class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
     <Table
         items="{
             path:'tableModelNPF>/Rows'

@@ -11,91 +11,91 @@
     <Page
         showHeader="false">
         <l:Grid
-                defaultSpan="L10 M10 S10"
-                class="sapUiSmallMarginTop">
+            defaultSpan="L10 M10 S10"
+            class="sapUiSmallMarginTop">
             <l:content>
                 <CustomListItem >
                     <content>
                         <HBox
-                                height ="7rem"
-                                width = "96%"
-                                class = "sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
+                            height ="7rem"
+                            width = "96%"
+                            class = "sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
                             <VBox
-                                    height = "7rem"
-                                    alignItems ="Center"
-                                    width = "31%"
-                                    class="right-border">
+                                height = "7rem"
+                                alignItems ="Center"
+                                width = "31%"
+                                class="right-border">
                                 <HBox
-                                        width = "100%"
-                                        height = "2rem"
-                                        alignItems = "Center"
-                                        justifyContent = "SpaceAround"
-                                        class = "sapUiSmallMarginEnd">
+                                    width = "100%"
+                                    height = "2rem"
+                                    alignItems = "Center"
+                                    justifyContent = "SpaceAround"
+                                    class = "sapUiSmallMarginEnd">
                                     <Text
-                                            text ="Мой НПФ:"
-                                            class = "H2"  />
+                                        text ="Мой НПФ:"
+                                        class = "H2"  />
                                     <core:Icon
-                                            src="sap-icon://edit-outside"
-                                            color = "#346187"
-                                            width = "2rem"
-                                            height = "2rem"
-                                            size= "2rem"/>
+                                        src="sap-icon://edit-outside"
+                                        color = "#346187"
+                                        width = "2rem"
+                                        height = "2rem"
+                                        size= "2rem"/>
                                 </HBox>
                                 <Text
-                                        text ="Флокс"
-                                        class = "coloredText sapUiTinyMarginTop"/>
+                                    text ="Флокс"
+                                    class = "coloredText sapUiTinyMarginTop"/>
                             </VBox>
 
                             <VBox
-                                    height ="7rem"
-                                    width = "34%"
-                                    class = "right-border" >
+                                height ="7rem"
+                                width = "34%"
+                                class = "right-border" >
                                 <Text
-                                        text = "+3"
-                                        textAlign = "End"
-                                        width="90%"
-                                        class="green H2"/>
+                                    text = "+3"
+                                    textAlign = "End"
+                                    width="90%"
+                                    class="green H2"/>
                                 <HBox
-                                        alignItems = "Center"
-                                        justifyContent = "SpaceAround">
+                                    alignItems = "Center"
+                                    justifyContent = "SpaceAround">
                                     <Image
-                                            src="./test/img/aRate.JPG"
-                                            width = '4rem'
-                                            height = "4rem"
-                                            class = "sapUiSmallMarginBeginEnd"/>
+                                        src="./test/img/aRate.JPG"
+                                        width = '4rem'
+                                        height = "4rem"
+                                        class = "sapUiSmallMarginBeginEnd"/>
                                     <Text
-                                            text = "Рейтинг надежности"
-                                            class="H2"/>
+                                        text = "Рейтинг надежности"
+                                        class="H2"/>
                                 </HBox>
                             </VBox>
 
                             <VBox
-                                    height ="7rem"
-                                    width = "34%">
+                                height ="7rem"
+                                width = "34%">
                                 <Text
-                                        text = "-1"
-                                        textAlign = "End"
-                                        width="100%"
-                                        class="red H2"/>
+                                    text = "-1"
+                                    textAlign = "End"
+                                    width="100%"
+                                    class="red H2"/>
                                 <HBox
-                                        alignItems = "Center"
-                                        justifyContent = "SpaceAround">
+                                    alignItems = "Center"
+                                    justifyContent = "SpaceAround">
                                     <Image
-                                            src="./test/img/rate.JPG"
-                                            width = '4rem'
-                                            height = "4rem"
-                                            class = "sapUiSmallMarginBeginEnd"/>
+                                        src="./test/img/rate.JPG"
+                                        width = '4rem'
+                                        height = "4rem"
+                                        class = "sapUiSmallMarginBeginEnd"/>
                                     <Text
-                                            text = "Рейтинг доходности"
-                                            class="H2"/>
+                                        text = "Рейтинг доходности"
+                                        class="H2"/>
                                 </HBox>
                             </VBox>
                         </HBox>
                     </content>
                     <layoutData>
                         <l:GridData
-                                span="L8 M6 S6"
-                                indent="L2 M3 S3"/>
+                            span="L8 M6 S6"
+                            indent="L2 M3 S3"/>
                     </layoutData>
                 </CustomListItem>
 
@@ -103,123 +103,124 @@
                         class="sapUiTinyMarginBottom">
                     <content>
                         <VBox
-                                height = "7rem"
-                                alignItems ="Center"
+                            height = "7rem"
+                            alignItems ="Center"
+                            width = "100%"
+                            class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
+                            <HBox
                                 width = "100%"
-                                class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
-                            <HBox
-                                    width = "100%"
-                                    height = "2rem"
-                                    alignItems = "Center"
-                                    justifyContent = "SpaceAround"
-                                    class = "sapUiSmallMarginEnd">
+                                height = "2rem"
+                                alignItems = "Center"
+                                justifyContent = "SpaceAround"
+                                class = "sapUiSmallMarginEnd">
                                 <Text
-                                        text ="Мой тариф:"
-                                        class = "H2"  />
+                                    text ="Мой тариф:"
+                                    class = "H2"  />
                                 <core:Icon
-                                        src="sap-icon://edit-outside"
-                                        color = "#346187"
-                                        width = "2rem"
-                                        height = "2rem"
-                                        size= "2rem"/>
+                                    src="sap-icon://edit-outside"
+                                    color = "#346187"
+                                    width = "2rem"
+                                    height = "2rem"
+                                    size= "2rem"/>
                             </HBox>
                             <Text
-                                    text ="6%"
-                                    class = "coloredText sapUiTinyMarginTop"/>
+                                text ="6%"
+                                class = "coloredText sapUiTinyMarginTop"/>
                         </VBox>
                     </content>
                     <layoutData>
                         <l:GridData
-                                span="L3 M2 S2"
-                                indent="L2 M3 S3" />
+                            span="L3 M2 S2"
+                            indent="L2 M3 S3" />
                     </layoutData>
                 </CustomListItem>
 
                 <CustomListItem
-                        class="sapUiTinyMarginBottom">
+                    class="sapUiTinyMarginBottom">
                     <content>
                         <VBox
-                                height = "7rem"
-                                width = "94%"
-                                justifyContent = "SpaceAround"
-                                class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
+                            height = "7rem"
+                            width = "94%"
+                            justifyContent = "SpaceAround"
+                            class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
                             <Text
-                                    text ="Прогнозируемая пенсия:"
-                                    class = "H2"
-                                    textAlign = "Begin"
-                                    width = "100%"/>
+                                text ="Прогнозируемая пенсия:"
+                                class = "H2"
+                                textAlign = "Begin"
+                                width = "100%"/>
                             <Text
-                                    text ="10.830 ₽/мес."
-                                    textAlign = "Center"
-                                    width = "100%"
-                                    class = "H1"/>
+                                text ="10.830 ₽/мес."
+                                textAlign = "Center"
+                                width = "100%"
+                                class = "H1"/>
                             <HBox
-                                    width = "100%"
-                                    justifyContent = "End" >
+                                width = "100%"
+                                justifyContent = "End" >
                                 <core:Icon
-                                        src="sap-icon://edit-outside"
-                                        color = "#346187"
-                                        width = "2rem"
-                                        height = "1rem"
-                                        size= "1rem"/>
+                                    src="sap-icon://edit-outside"
+                                    color = "#346187"
+                                    width = "2rem"
+                                    height = "1rem"
+                                    size= "1rem"/>
                                 <Link
-                                        text ="Узнать, как получить больше"
-                                        textAlign = "End"
-                                        width = "100%"
-                                        class ="link"/>
+                                    text ="Узнать, как получить больше"
+                                    textAlign = "End"
+                                    width = "100%"
+                                    class ="link"/>
                             </HBox>
                         </VBox>
                     </content>
                     <layoutData>
                         <l:GridData
-                                span="L5 M4 S4" />
+                            span="L5 M4 S4" />
                     </layoutData>
                 </CustomListItem>
                 <CustomListItem>
                     <content>
                         <suite:ChartContainer
-                                autoAdjustHeight="false"
-                                title="График поступлений"
-                                showLegend="false"
-                                showZoom="false"
-                                showLegendButton="false">
+                            autoAdjustHeight="false"
+                            title="График поступлений"
+                            showLegend="false"
+                            showZoom="false"
+                            showLegendButton="false">
                             <suite:content>
                                 <suite:ChartContainerContent
-                                        icon = "sap-icon://line-chart"
-                                        title = "Line Chart">
+                                    icon = "sap-icon://line-chart"
+                                    title = "Line Chart">
                                     <suite:content>
                                         <viz:VizFrame
-                                                id="idVizFrame"
-                                                uiConfig="{applicationSet:'fiori'}"
-                                                vizType='line'>
+                                            id="idVizFrame"
+                                            uiConfig="{applicationSet:'fiori'}"
+                                            vizType='line'
+                                            vizProperties="{techModel>/diagrammProperties}">
                                             <viz:dataset>
                                                 <viz.data:FlattenedDataset
-                                                        data="{
-                                path:'vizFrame>/data'
-                            }">
+                                                    data="{
+                                                        path:'vizFrame>/data'
+                                                    }">
                                                     <viz.data:dimensions>
                                                         <viz.data:DimensionDefinition
-                                                                name="Date"
-                                                                value="{vizFrame>Date}" />
+                                                            name="Date"
+                                                            value="{vizFrame>Date}" />
                                                     </viz.data:dimensions>
                                                     <viz.data:measures>
                                                         <viz.data:MeasureDefinition
-                                                                name="Salary"
-                                                                value="{vizFrame>Salary}" />
+                                                            name="Salary"
+                                                            value="{vizFrame>Salary}" />
                                                     </viz.data:measures>
                                                 </viz.data:FlattenedDataset>
                                             </viz:dataset>
                                             <viz:feeds>
                                                 <viz.feeds:FeedItem
-                                                        id='valueAxisFeed'
-                                                        uid="valueAxis"
-                                                        type="Measure"
-                                                        values="Salary"/>
+                                                    id='valueAxisFeed'
+                                                    uid="valueAxis"
+                                                    type="Measure"
+                                                    values="Salary"/>
                                                 <viz.feeds:FeedItem
-                                                        id='categoryAxisFeed'
-                                                        uid="categoryAxis"
-                                                        type="Dimension"
-                                                        values="Date" />
+                                                    id='categoryAxisFeed'
+                                                    uid="categoryAxis"
+                                                    type="Dimension"
+                                                    values="Date" />
                                             </viz:feeds>
                                         </viz:VizFrame>
                                     </suite:content>
@@ -229,8 +230,8 @@
                     </content>
                     <layoutData>
                         <l:GridData
-                                span="L8 M2 S2"
-                                indent="L2 M3 S3" />
+                            span="L8 M2 S2"
+                            indent="L2 M3 S3" />
                     </layoutData>
                 </CustomListItem>
 

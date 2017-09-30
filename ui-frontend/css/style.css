@@ -46,3 +46,11 @@
 .red {
 	color : red;
 }
+
+.label-font_style {
+	font-weight: bold;
+	font-size: large;
+}
+.text-bold{
+	font-weight: bold;
+}
