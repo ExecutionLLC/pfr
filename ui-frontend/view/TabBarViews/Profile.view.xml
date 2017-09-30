@@ -183,10 +183,9 @@
                             showLegend="false"
                             showZoom="false"
                             showLegendButton="false">
+
                             <suite:content>
-                                <suite:ChartContainerContent
-                                    icon = "sap-icon://line-chart"
-                                    title = "Line Chart">
+                                <suite:ChartContainerContent>
                                     <suite:content>
                                         <viz:VizFrame
                                             id="idVizFrame"
@@ -226,6 +225,13 @@
                                     </suite:content>
                                 </suite:ChartContainerContent>
                             </suite:content>
+                            <suite:toolbar>
+                                <OverflowToolbar>
+                                    <ToolbarSpacer/>
+                                    <Select/>
+                                    <suite:ChartContainerToolbarPlaceholder></suite:ChartContainerToolbarPlaceholder>
+                                </OverflowToolbar>
+                            </suite:toolbar>
                         </suite:ChartContainer>
                     </content>
                     <layoutData>
