@@ -17,6 +17,8 @@ class BlockchainApi {
         this._tariffHistoryCache = [];
         this._npfHistoryCache = [];
 
+        // still uncompleted
+        // TODO: add cleaner for failed transactions
         this._pendedOperations = [];
         this._pendedTariffChanges = [];
         this._pendedNpfChanges = [];
