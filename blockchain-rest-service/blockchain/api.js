@@ -340,7 +340,7 @@ class BlockchainApi {
             }
 
             const transaction = this._contract.methods.changeTariff(tariff, timestamp);
-            _signAndSendTransaction(transaction, privateKey).on('transactionHash', (transactionHash) => {
+            this._signAndSendTransaction(transaction, privateKey).on('transactionHash', (transactionHash) => {
                 resolve(transactionHash);
             }).on('receipt', (receipt) => {
                 logger.info('receipt');
