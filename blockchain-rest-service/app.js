@@ -93,6 +93,13 @@ app.put('/person/:address/tariff', function (req, res, next) {
     }).catch(next);
 });
 
+app.get('/person/:address/balance', function (req, res, next) {
+    const address = _normalizeAddress(req.params.address);
+    blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
+        res.json({ balance: result.balance });
+    }).catch(next);
+});
+
 app.get('/transaction/:transactionhash', function (req, res, next) {
     const transactionHash = _normalizeTransactionHash(req.params.transactionhash);
     blockchainApiInstance.getTransaction(transactionHash).then((result) => {
