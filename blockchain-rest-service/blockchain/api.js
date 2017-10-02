@@ -25,12 +25,9 @@ class BlockchainApi {
     _initNpfCache() {
         const logObjToNpfObj = (logObj) => {
             const transactionHash = logObj.transactionHash;
-            logObj = logObj.returnValues;
-            return {
-                name: logObj._name,
-                owner: logObj._owner,
-                transactionHash
-            };
+            const { _name: name, _owner: owner } = logObj.returnValues;
+
+            return { name, owner, transactionHash };
         };
 
         this._contract.events.EventNewNpf({
@@ -60,16 +57,17 @@ class BlockchainApi {
 
     _initOperationsHistoryCache() {
         const logObjToHistoryObj = (logObj) => {
-            const transactionHash = logObj.transactionHash;
-            logObj = logObj.returnValues;
+            const { transactionHash, returnValues }= logObj;
+            const { _owner: owner, _npf: npf, _contractor: contractor, _comment: comment } = returnValues;
+
             return {
-                owner: logObj._owner,
-                npf: logObj._npf,
-                tariff: parseInt(logObj._tariff, 10),
-                timestamp: parseInt(logObj._timestamp, 10),
-                amount: parseInt(logObj._amount, 10),
-                contractor: logObj._contractor,
-                comment: logObj._comment,
+                owner,
+                npf,
+                tariff: parseInt(returnValues._tariff, 10),
+                timestamp: parseInt(returnValues._timestamp, 10),
+                amount: parseInt(returnValues._amount, 10),
+                contractor,
+                comment,
                 transactionHash
             };
         };
@@ -109,13 +107,14 @@ class BlockchainApi {
 
     _initTariffHistoryCache() {
         const logObjToHistoryObj = (logObj) => {
-            const transactionHash = logObj.transactionHash;
-            logObj = logObj.returnValues;
+            const { transactionHash, returnValues }= logObj;
+            const { _owner: owner, _oldTariff: oldTariff, _newTariff: newTariff } = returnValues;
+
             return {
-                owner: logObj._owner,
-                oldTariff: logObj._oldTariff,
-                newTariff: logObj._newTariff,
-                timestamp: parseInt(logObj._timestamp),
+                owner,
+                oldTariff,
+                newTariff,
+                timestamp: parseInt(returnValues._timestamp),
                 transactionHash
             };
         };
@@ -155,13 +154,14 @@ class BlockchainApi {
 
     _initNpfHistoryCache() {
         const logObjToHistoryObj = (logObj) => {
-            const transactionHash = logObj.transactionHash;
-            logObj = logObj.returnValues;
+            const { transactionHash, returnValues } = logObj;
+            const { _owner: owner, _oldNpf: oldNpf, _newNpf: newNpf } = returnValues;
+
             return {
-                owner: logObj._owner,
-                oldNpf: logObj._oldNpf,
-                newNpf: logObj._newNpf,
-                timestamp: parseInt(logObj._timestamp, 10),
+                owner,
+                oldNpf,
+                newNpf,
+                timestamp: parseInt(returnValues._timestamp, 10),
                 transactionHash
             };
         };
