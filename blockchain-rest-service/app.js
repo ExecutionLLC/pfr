@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 
 function normalizeHexString(hexString) {
     if (hexString && hexString.substring(0, 2) !== '0x') {
-        return '0x' + hexString;
+        return `0x${hexString}`;
     }
 
     return hexString;
