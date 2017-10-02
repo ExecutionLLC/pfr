@@ -1,10 +1,10 @@
 const winston = require('winston');
 
-const _LOGGERS = {};
+const LOGGERS = Object.create(null);
 
 function getLogger(name) {
-    if (!_LOGGERS[name]) {
-        _LOGGERS[name] = new winston.Logger({
+    if (!LOGGERS[name]) {
+        LOGGERS[name] = new winston.Logger({
             transports: [
                 new winston.transports.Console({
                     level: 'debug',
@@ -18,7 +18,7 @@ function getLogger(name) {
         });
     }
 
-    return _LOGGERS[name];
+    return LOGGERS[name];
 }
 
 module.exports = getLogger;
