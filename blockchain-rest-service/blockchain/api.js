@@ -188,7 +188,7 @@ class BlockchainApi {
         const provider = new ethers.providers.JsonRpcProvider(config.get('ethNodeHttpUrl'), false, chainId);
         const wallet = new ethers.Wallet(privateKey, provider);
 
-        if (validationAddress && (wallet.address !== validationAddress)) {
+        if (validationAddress && (wallet.address.toUpperCase() !== validationAddress.toUpperCase())) {
             throw Error('private key address and validation address must be the same');
         }
 
