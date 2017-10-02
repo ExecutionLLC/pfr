@@ -116,6 +116,23 @@ app.get('/person/:address/balance', function (req, res, next) {
     }).catch(next);
 });
 
+app.put('/person/:address/operation', function (req, res, next) {
+    const address = _normalizeAddress(req.params.address);
+
+    const privateKey = _normalizePrivateKey(req.body.privateKey);
+    const {
+        amount,
+        contractor,
+        comment,
+        timestamp
+    } = req.body;
+
+    blockchainApiInstance.addOperation(address, privateKey, amount, contractor, comment, timestamp).then((result) => {
+        res.json(result);
+        res.status(202);
+    }).catch(next);
+});
+
 app.get('/transaction/:transactionhash', function (req, res, next) {
     const transactionHash = _normalizeTransactionHash(req.params.transactionhash);
     blockchainApiInstance.getTransaction(transactionHash).then((result) => {
