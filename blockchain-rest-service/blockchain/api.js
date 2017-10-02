@@ -228,6 +228,11 @@ class BlockchainApi {
         return new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
     }
 
+    _signAndSendTransaction(transaction, privateKey) {
+        const signedTransaction = transaction.sign(privateKey);
+        return this._web3.eth.sendSignedTransaction(signedTransaction.serialize().toString('hex'));
+    }
+
     getNpfList() {
         return this._npfCache;
     }
@@ -334,6 +339,15 @@ class BlockchainApi {
                 timestamp = Date.now();
             }
 
+            const transaction = this._contract.methods.changeTariff(tariff, timestamp);
+            _signAndSendTransaction(transaction, privateKey).on('transactionHash', (transactionHash) => {
+                resolve(transactionHash);
+            }).on('receipt', (receipt) => {
+                logger.info('receipt');
+            }).on('confirmation', (confirmationNumber, receipt) => {
+                logger.info('confirmation');
+            }).on('error', reject); // If a out of gas error, the second parameter is the receipt.
+            /*
             const contract = BlockchainApi._getSignedContract(privateKey, address);
             contract.changeTariff(tariff, timestamp).then((transaction) => {
                 const transactionHash = transaction.hash;
@@ -345,6 +359,7 @@ class BlockchainApi {
                 });
                 return { transactionHash };
             }).then(resolve, reject);
+            */
         });
     }
 
