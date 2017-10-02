@@ -266,6 +266,40 @@ class BlockchainApi {
         });
     }
 
+    getPersonSnils(address) {
+        if (!validator.isValidWalletId(address)) {
+            throw Error('address is not valid');
+        }
+
+        return this._contract.methods.personSnilsByAddress(address).call().then((snils) => {
+            if (!snils) {
+                throw new Error('person is not registered');
+            }
+
+            return { snils };
+        });
+    }
+
+    addOperation(address, npfPrivateKey, amount, contractor, comment, timestamp) {
+        return new Promise((resolve, reject) => {
+            if (!timestamp) {
+                timestamp = Date.now();
+            }
+
+            if (!contractor) {
+                return reject(Error('contractor can not be empty'));
+            }
+            if (!comment) {
+                return reject(Error('comment can not be empty'));
+            }
+
+            Promise.all([this.getPersonInfoByAddress(address), this.getPersonSnils(address)]).then(([info, snils]) => {
+                const contract = BlockchainApi._getSignedContract(npfPrivateKey, info.npf);
+                return contract.addOperationHistory(snils, timestamp, amount, contractor, comment);
+            }).then(resolve).catch(reject);
+        });
+    }
+
     changeTariff(address, privateKey, tariff, timestamp) {
         if (!timestamp) {
             timestamp = Date.now();
