@@ -79,14 +79,14 @@ class BlockchainApi {
         }).on('data', (event) => {
             const historyObject = logObjToHistoryObj(event);
             this._pendedOperations = this._pendedOperations.filter(
-                value => value.transactionHash !== transactionHash
+                value => value.transactionHash !== historyObject.transactionHash
             );
             this._operationsHistoryCache.push(historyObject);
             logger.info('got new operation history object: ' + JSON.stringify(historyObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
             this._pendedOperations = this._pendedOperations.filter(
-                value => value.transactionHash !== transactionHash
+                value => value.transactionHash !== removedTransactionHash
             );
             this._operationsHistoryCache = this._operationsHistoryCache.filter(
                 value => value.transactionHash !== removedTransactionHash
@@ -124,14 +124,14 @@ class BlockchainApi {
         }).on('data', (event) => {
             const historyObject = logObjToHistoryObj(event);
             this._pendedTariffChanges = this._pendedTariffChanges.filter(
-                value => value.transactionHash !== transactionHash
+                value => value.transactionHash !== historyObject.transactionHash
             );
             this._tariffHistoryCache.push(historyObject);
             logger.info('got new tariff history object: ' + JSON.stringify(historyObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
             this._pendedTariffChanges = this._pendedTariffChanges.filter(
-                value => value.transactionHash !== transactionHash
+                value => value.transactionHash !== removedTransactionHash
             );
             this._tariffHistoryCache = this._tariffHistoryCache.filter(
                 value => value.transactionHash !== removedTransactionHash
@@ -169,14 +169,14 @@ class BlockchainApi {
         }).on('data', (event) => {
             const historyObject = logObjToHistoryObj(event);
             this._pendedNpfChanges = this._pendedNpfChanges.filter(
-                value => value.transactionHash !== transactionHash
+                value => value.transactionHash !== historyObject.transactionHash
             );
             this._npfHistoryCache.push(historyObject);
             logger.info('got new npf history object: ' + JSON.stringify(historyObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
             this._pendedNpfChanges = this._pendedNpfChanges.filter(
-                value => value.transactionHash !== transactionHash
+                value => value.transactionHash !== removedTransactionHash
             );
             this._npfHistoryCache = this._npfHistoryCache.filter(
                 value => value.transactionHash !== removedTransactionHash
