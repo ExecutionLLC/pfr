@@ -17,6 +17,7 @@ class BlockchainApi {
         this._tariffHistoryCache = [];
         this._npfHistoryCache = [];
 
+        this._pendedOperations = [];
         this._pendedTariffChanges = [];
         this._pendedNpfChanges = [];
     }
@@ -73,14 +74,22 @@ class BlockchainApi {
             };
         };
 
+        const removePendedItem = (transactionHash) => {
+            this._pendedOperations = this._pendedOperations.filter(
+                value => value.transactionHash !== transactionHash
+            );
+        };
+
         this._contract.events.EventOperation({
             fromBlock: 0
         }).on('data', (event) => {
             const historyObject = logObjToHistoryObj(event);
+            removePendedItem(historyObject.transactionHash);
             this._operationsHistoryCache.push(historyObject);
             logger.info('got new operation history object: ' + JSON.stringify(historyObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
+            removePendedItem(removedTransactionHash);
             this._operationsHistoryCache = this._operationsHistoryCache.filter(
                 value => value.transactionHash !== removedTransactionHash
             );
@@ -244,6 +253,10 @@ class BlockchainApi {
         return BlockchainApi._getHistory(this._npfHistoryCache, address);
     }
 
+    getPendedOperations(address) {
+        return this._pendedOperations.filter(value => value.owner === address);
+    }
+
     getPendedTariffChanges(address) {
         return this._pendedTariffChanges.filter(value => value.owner === address);
     }
@@ -300,6 +313,17 @@ class BlockchainApi {
             Promise.all([this.getPersonInfoByAddress(address), this.getPersonSnils(address)]).then(([info, snils]) => {
                 const contract = BlockchainApi._getSignedContract(npfPrivateKey, info.npf);
                 return contract.addOperationHistory(snils, timestamp, amount, contractor, comment);
+            }).then((transaction) => {
+                const transactionHash = transaction.hash;
+                this._pendedOperations.push({
+                    owner: address,
+                    timestamp,
+                    amount,
+                    contractor,
+                    comment,
+                    transactionHash
+                });
+                return { transactionHash };
             }).then(resolve, reject);
         });
     }
@@ -312,13 +336,14 @@ class BlockchainApi {
 
             const contract = BlockchainApi._getSignedContract(privateKey, address);
             contract.changeTariff(tariff, timestamp).then((transaction) => {
+                const transactionHash = transaction.hash;
                 this._pendedTariffChanges.push({
                     owner: address,
-                    tariff: tariff,
-                    timestamp: timestamp,
-                    transactionHash: transaction.hash
+                    tariff,
+                    timestamp,
+                    transactionHash
                 });
-                return { transactionHash: transaction.hash };
+                return { transactionHash };
             }).then(resolve, reject);
         });
     }
@@ -331,13 +356,14 @@ class BlockchainApi {
 
             const contract = BlockchainApi._getSignedContract(privateKey, address);
             return contract.changeNpf(npfAddress, timestamp).then((transaction) => {
+                const transactionHash = transaction.hash;
                 this._pendedNpfChanges.push({
                     owner: address,
                     npf: npfAddress,
-                    timestamp: timestamp,
-                    transactionHash: transaction.hash
+                    timestamp,
+                    transactionHash
                 });
-                return { transactionHash: transaction.hash };
+                return { transactionHash };
             }).then(resolve, reject);
         });
     }
