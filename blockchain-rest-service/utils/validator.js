@@ -1,12 +1,8 @@
+const web3 = require('web3');
+
 const Validator = {
     isValidWalletId(address) {
-        if (address.substring(0, 2) !== '0x') {
-            return false;
-        } else if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
-            return false;
-        } else {
-            return true;
-        }
+        return web3.utils.isAddress(address);
     },
     isValidPrivateKey(key) {
         const prefixLength = key.substring(0, 2) === '0x' ? 2 : 0;
