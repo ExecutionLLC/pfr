@@ -253,30 +253,34 @@ class BlockchainApi {
     }
 
     getPersonInfoByAddress(address) {
-        if (!validator.isValidWalletId(address)) {
-            throw Error('address is not valid');
-        }
+        return new Promise((resolve, reject) => {
+            if (!validator.isValidWalletId(address)) {
+                return reject(Error('address is not valid'));
+            }
 
-        return this._contract.methods.personInfoByAddress(address).call().then((result) => {
-            return {
-                npf: result.npf,
-                tariff: parseInt(result.tariff, 10),
-                balance: parseInt(result.balance, 10)
-            };
+            this._contract.methods.personInfoByAddress(address).call().then((result) => {
+                return {
+                    npf: result.npf,
+                    tariff: parseInt(result.tariff, 10),
+                    balance: parseInt(result.balance, 10)
+                };
+            }).then(resolve, reject);
         });
     }
 
     getPersonSnils(address) {
-        if (!validator.isValidWalletId(address)) {
-            throw Error('address is not valid');
-        }
-
-        return this._contract.methods.personSnilsByAddress(address).call().then((snils) => {
-            if (!snils) {
-                throw new Error('person is not registered');
+        return new Promise((resolve, reject) => {
+            if (!validator.isValidWalletId(address)) {
+                return reject(Error('address is not valid'));
             }
 
-            return { snils };
+            this._contract.methods.personSnilsByAddress(address).call().then((snils) => {
+                if (!snils) {
+                    throw new Error('person is not registered');
+                }
+
+                return {snils};
+            }).then(resolve, reject);
         });
     }
 
@@ -296,45 +300,45 @@ class BlockchainApi {
             Promise.all([this.getPersonInfoByAddress(address), this.getPersonSnils(address)]).then(([info, snils]) => {
                 const contract = BlockchainApi._getSignedContract(npfPrivateKey, info.npf);
                 return contract.addOperationHistory(snils, timestamp, amount, contractor, comment);
-            }).then(resolve).catch(reject);
+            }).then(resolve, reject);
         });
     }
 
     changeTariff(address, privateKey, tariff, timestamp) {
-        if (!timestamp) {
-            timestamp = Date.now();
-        }
+        return Promise((resolve, reject) => {
+            if (!timestamp) {
+                timestamp = Date.now();
+            }
 
-        const contract = BlockchainApi._getSignedContract(privateKey, address);
-        return contract.changeTariff(tariff, timestamp).then((transaction) => {
-            this._pendedTariffChanges.push({
-                owner: address,
-                tariff: tariff,
-                timestamp: timestamp,
-                transactionHash: transaction.hash
-            });
-            return {
-                transactionHash: transaction.hash
-            };
+            const contract = BlockchainApi._getSignedContract(privateKey, address);
+            contract.changeTariff(tariff, timestamp).then((transaction) => {
+                this._pendedTariffChanges.push({
+                    owner: address,
+                    tariff: tariff,
+                    timestamp: timestamp,
+                    transactionHash: transaction.hash
+                });
+                return { transactionHash: transaction.hash };
+            }).then(resolve, reject);
         });
     }
 
     changeNpf(address, privateKey, npfAddress, timestamp) {
-        if (!timestamp) {
-            timestamp = Date.now();
-        }
+        return Promise((resolve, reject) => {
+            if (!timestamp) {
+                timestamp = Date.now();
+            }
 
-        const contract = BlockchainApi._getSignedContract(privateKey, address);
-        return contract.changeNpf(npfAddress, timestamp).then((transaction) => {
-            this._pendedNpfChanges.push({
-                owner: address,
-                npf: npfAddress,
-                timestamp: timestamp,
-                transactionHash: transaction.hash
-            });
-            return {
-                transactionHash: transaction.hash
-            };
+            const contract = BlockchainApi._getSignedContract(privateKey, address);
+            return contract.changeNpf(npfAddress, timestamp).then((transaction) => {
+                this._pendedNpfChanges.push({
+                    owner: address,
+                    npf: npfAddress,
+                    timestamp: timestamp,
+                    transactionHash: transaction.hash
+                });
+                return { transactionHash: transaction.hash };
+            }).then(resolve, reject);
         });
     }
 
