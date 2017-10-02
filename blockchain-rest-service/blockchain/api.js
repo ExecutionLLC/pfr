@@ -72,22 +72,20 @@ class BlockchainApi {
             };
         };
 
-        const removePendedItem = (transactionHash) => {
-            this._pendedOperations = this._pendedOperations.filter(
-                value => value.transactionHash !== transactionHash
-            );
-        };
-
         this._contract.events.EventOperation({
             fromBlock: 0
         }).on('data', (event) => {
             const historyObject = logObjToHistoryObj(event);
-            removePendedItem(historyObject.transactionHash);
+            this._pendedOperations = this._pendedOperations.filter(
+                value => value.transactionHash !== transactionHash
+            );
             this._operationsHistoryCache.push(historyObject);
             logger.info('got new operation history object: ' + JSON.stringify(historyObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
-            removePendedItem(removedTransactionHash);
+            this._pendedOperations = this._pendedOperations.filter(
+                value => value.transactionHash !== transactionHash
+            );
             this._operationsHistoryCache = this._operationsHistoryCache.filter(
                 value => value.transactionHash !== removedTransactionHash
             );
@@ -119,22 +117,20 @@ class BlockchainApi {
             };
         };
 
-        const removePendedItem = (transactionHash) => {
-            this._pendedTariffChanges = this._pendedTariffChanges.filter(
-                value => value.transactionHash !== transactionHash
-            );
-        };
-
         this._contract.events.EventTariffChanged({
             fromBlock: 0
         }).on('data', (event) => {
             const historyObject = logObjToHistoryObj(event);
-            removePendedItem(historyObject.transactionHash);
+            this._pendedTariffChanges = this._pendedTariffChanges.filter(
+                value => value.transactionHash !== transactionHash
+            );
             this._tariffHistoryCache.push(historyObject);
             logger.info('got new tariff history object: ' + JSON.stringify(historyObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
-            removePendedItem(removedTransactionHash);
+            this._pendedTariffChanges = this._pendedTariffChanges.filter(
+                value => value.transactionHash !== transactionHash
+            );
             this._tariffHistoryCache = this._tariffHistoryCache.filter(
                 value => value.transactionHash !== removedTransactionHash
             );
@@ -166,22 +162,20 @@ class BlockchainApi {
             };
         };
 
-        const removePendedItem = (transactionHash) => {
-            this._pendedNpfChanges = this._pendedNpfChanges.filter(
-                value => value.transactionHash !== transactionHash
-            );
-        };
-
         this._contract.events.EventNpfChanged({
             fromBlock: 0
         }).on('data', (event) => {
             const historyObject = logObjToHistoryObj(event);
-            removePendedItem(historyObject.transactionHash);
+            this._pendedNpfChanges = this._pendedNpfChanges.filter(
+                value => value.transactionHash !== transactionHash
+            );
             this._npfHistoryCache.push(historyObject);
             logger.info('got new npf history object: ' + JSON.stringify(historyObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
-            removePendedItem(removedTransactionHash);
+            this._pendedNpfChanges = this._pendedNpfChanges.filter(
+                value => value.transactionHash !== transactionHash
+            );
             this._npfHistoryCache = this._npfHistoryCache.filter(
                 value => value.transactionHash !== removedTransactionHash
             );
@@ -228,10 +222,36 @@ class BlockchainApi {
         return new ethers.Contract(CONTRACT.ID, CONTRACT.ABI, wallet);
     }
 
-    _signAndSendTransaction(transaction, privateKey) {
-        const signedTransaction = transaction.sign(privateKey);
-        return this._web3.eth.sendSignedTransaction(signedTransaction.serialize().toString('hex'));
-    }
+    // It is mach better way to send signed transaction, but we can
+    // not use it now, because of web3 bug (https://github.com/ethereum/web3.js/issues/932)
+    //
+    // _signAndSendTransaction(transaction, privateKey) {
+    //     return new Promise((resolve, reject) => {
+    //         const account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
+    //         const p0 = this._web3.eth.getTransactionCount(account.address);
+    //         const p1 = transaction.estimateGas({ from: account.address });
+    //         Promise.all([p0, p1]).then(([nonce, gas]) => {
+    //             const rawTransaction = {
+    //                 from: account.address,
+    //                 to: this._contract.options.address,
+    //                 nonce,
+    //                 data: transaction.encodeABI(),
+    //                 gas
+    //             };
+    //             return account.signTransaction(rawTransaction);
+    //         }).then((signedTransaction) => {
+    //             this._web3.eth.sendSignedTransaction(signedTransaction).on('transactionHash', (transactionHash) => {
+    //                 resolve(transactionHash);
+    //             }).on('receipt', (receipt) => {
+    //                 logger.info('receipt');
+    //             }).on('confirmation', (confirmationNumber, receipt) => {
+    //                 logger.info('confirmation');
+    //             }).on('error', (error) => {
+    //                 reject(error);
+    //             });
+    //         }).catch(reject);
+    //     });
+    // }
 
     getNpfList() {
         return this._npfCache;
@@ -335,19 +355,6 @@ class BlockchainApi {
 
     changeTariff(address, privateKey, tariff, timestamp) {
         return new Promise((resolve, reject) => {
-            if (!timestamp) {
-                timestamp = Date.now();
-            }
-
-            const transaction = this._contract.methods.changeTariff(tariff, timestamp);
-            this._signAndSendTransaction(transaction, privateKey).on('transactionHash', (transactionHash) => {
-                resolve(transactionHash);
-            }).on('receipt', (receipt) => {
-                logger.info('receipt');
-            }).on('confirmation', (confirmationNumber, receipt) => {
-                logger.info('confirmation');
-            }).on('error', reject); // If a out of gas error, the second parameter is the receipt.
-            /*
             const contract = BlockchainApi._getSignedContract(privateKey, address);
             contract.changeTariff(tariff, timestamp).then((transaction) => {
                 const transactionHash = transaction.hash;
@@ -359,7 +366,6 @@ class BlockchainApi {
                 });
                 return { transactionHash };
             }).then(resolve, reject);
-            */
         });
     }
 
