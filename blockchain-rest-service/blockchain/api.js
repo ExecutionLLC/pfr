@@ -334,7 +334,7 @@ class BlockchainApi {
     }
 
     changeTariff(address, privateKey, tariff, timestamp) {
-        return Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             if (!timestamp) {
                 timestamp = Date.now();
             }
@@ -364,7 +364,7 @@ class BlockchainApi {
     }
 
     changeNpf(address, privateKey, npfAddress, timestamp) {
-        return Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             if (!timestamp) {
                 timestamp = Date.now();
             }
