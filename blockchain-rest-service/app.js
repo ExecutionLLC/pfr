@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser')
 const express = require('express');
+const HttpStatus = require('http-status-codes');
 const morgan = require('morgan');
 
 const BlockchainApi = require('./blockchain/api');
@@ -90,7 +91,7 @@ app.put('/person/:address/npf', function (req, res, next) {
 
     blockchainApiInstance.changeNpf(address, privateKey, npf, timestamp).then((result) => {
         res.json(result);
-        res.status(202);
+        res.status(HttpStatus.ACCEPTED);
     }).catch(next);
 });
 
@@ -111,7 +112,7 @@ app.put('/person/:address/tariff', function (req, res, next) {
 
     blockchainApiInstance.changeTariff(address, privateKey, tariff, timestamp).then((result) => {
         res.json(result);
-        res.status(202);
+        res.status(HttpStatus.ACCEPTED);
     }).catch(next);
 });
 
@@ -135,7 +136,7 @@ app.put('/person/:address/operation', function (req, res, next) {
 
     blockchainApiInstance.addOperation(address, privateKey, amount, contractor, comment, timestamp).then((result) => {
         res.json(result);
-        res.status(202);
+        res.status(HttpStatus.ACCEPTED);
     }).catch(next);
 });
 
@@ -157,7 +158,7 @@ app.use(function(req, res, next){
 
 // error handlers
 app.use(function(err, req, res, next){
-    res.status(err.status || 500);
+    res.status(err.status || HttpStatus.INTERNAL_SERVER_ERROR);
     logger.error('%s %d %s', req.method, res.statusCode, err.message);
     res.json({
         error: err.message
