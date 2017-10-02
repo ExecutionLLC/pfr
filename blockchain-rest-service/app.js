@@ -70,6 +70,7 @@ app.put('/person/:address/npf', function (req, res, next) {
 
     blockchainApiInstance.changeNpf(address, privateKey, npf, timestamp).then((result) => {
         res.json(result);
+        res.status(202);
     }).catch(next);
 });
 
@@ -88,6 +89,7 @@ app.put('/person/:address/tariff', function (req, res, next) {
 
     blockchainApiInstance.changeTariff(address, privateKey, tariff, timestamp).then((result) => {
         res.json(result);
+        res.status(202);
     }).catch(next);
 });
 
