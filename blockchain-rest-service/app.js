@@ -32,7 +32,9 @@ app.get('/person/:address', function (req, res, next) {
     blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
         result.operationsHistory = blockchainApiInstance.getOperationsHistory(address);
         result.tariffHistory = blockchainApiInstance.getTariffHistory(address);
+        result.pendedTariffChanges = blockchainApiInstance.getPendedTariffChanges(address);
         result.npfHistory = blockchainApiInstance.getNpfHistory(address);
+        result.pendedNpfChanges = blockchainApiInstance.getPendedNpfChanges(address);
         res.json(result);
     }).catch(next);
 });
@@ -58,7 +60,10 @@ app.get('/person/:address/npfHistory', function (req, res, next) {
 app.get('/person/:address/npf', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
     blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
-        res.json({ npf: result.npf });
+        res.json({
+            npf: result.npf,
+            pendedNpfChanges: blockchainApiInstance.getPendedNpfChanges(address)
+    });
     }).catch(next);
 });
 
@@ -77,7 +82,10 @@ app.put('/person/:address/npf', function (req, res, next) {
 app.get('/person/:address/tariff', function (req, res, next) {
     const address = _normalizeAddress(req.params.address);
     blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
-        res.json({ tariff: result.tariff });
+        res.json({
+            tariff: result.tariff,
+            pendedTariffChanges: blockchainApiInstance.getPendedTariffChanges(address)
+        });
     }).catch(next);
 });
 

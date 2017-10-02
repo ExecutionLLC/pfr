@@ -16,6 +16,9 @@ class BlockchainApi {
         this._operationsHistoryCache = [];
         this._tariffHistoryCache = [];
         this._npfHistoryCache = [];
+
+        this._pendedTariffChanges = [];
+        this._pendedNpfChanges = [];
     }
 
     _initNpfCache() {
@@ -108,14 +111,22 @@ class BlockchainApi {
             };
         };
 
+        const removePendedItem = (transactionHash) => {
+            this._pendedTariffChanges = this._pendedTariffChanges.filter(
+                value => value.transactionHash !== transactionHash
+            );
+        };
+
         this._contract.events.EventTariffChanged({
             fromBlock: 0
         }).on('data', (event) => {
             const historyObject = logObjToHistoryObj(event);
+            removePendedItem(historyObject.transactionHash);
             this._tariffHistoryCache.push(historyObject);
             logger.info('got new tariff history object: ' + JSON.stringify(historyObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
+            removePendedItem(removedTransactionHash);
             this._tariffHistoryCache = this._tariffHistoryCache.filter(
                 value => value.transactionHash !== removedTransactionHash
             );
@@ -146,14 +157,22 @@ class BlockchainApi {
             };
         };
 
+        const removePendedItem = (transactionHash) => {
+            this._pendedNpfChanges = this._pendedNpfChanges.filter(
+                value => value.transactionHash !== transactionHash
+            );
+        };
+
         this._contract.events.EventNpfChanged({
             fromBlock: 0
         }).on('data', (event) => {
             const historyObject = logObjToHistoryObj(event);
+            removePendedItem(historyObject.transactionHash);
             this._npfHistoryCache.push(historyObject);
             logger.info('got new npf history object: ' + JSON.stringify(historyObject));
         }).on('change', (event) => {
             const removedTransactionHash = event.transactionHash;
+            removePendedItem(removedTransactionHash);
             this._npfHistoryCache = this._npfHistoryCache.filter(
                 value => value.transactionHash !== removedTransactionHash
             );
@@ -225,6 +244,14 @@ class BlockchainApi {
         return BlockchainApi._getHistory(this._npfHistoryCache, address);
     }
 
+    getPendedTariffChanges(address) {
+        return this._pendedTariffChanges.filter(value => value.owner === address);
+    }
+
+    getPendedNpfChanges(address) {
+        return this._pendedNpfChanges.filter(value => value.owner === address);
+    }
+
     getPersonInfoByAddress(address) {
         if (!validator.isValidWalletId(address)) {
             throw Error('address is not valid');
@@ -246,6 +273,12 @@ class BlockchainApi {
 
         const contract = BlockchainApi._getSignedContract(privateKey, address);
         return contract.changeTariff(tariff, timestamp).then((transaction) => {
+            this._pendedTariffChanges.push({
+                owner: address,
+                tariff: tariff,
+                timestamp: timestamp,
+                transactionHash: transaction.hash
+            });
             return {
                 transactionHash: transaction.hash
             };
@@ -259,6 +292,12 @@ class BlockchainApi {
 
         const contract = BlockchainApi._getSignedContract(privateKey, address);
         return contract.changeNpf(npfAddress, timestamp).then((transaction) => {
+            this._pendedNpfChanges.push({
+                owner: address,
+                npf: npfAddress,
+                timestamp: timestamp,
+                transactionHash: transaction.hash
+            });
             return {
                 transactionHash: transaction.hash
             };
