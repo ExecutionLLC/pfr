@@ -68,8 +68,8 @@ app.put('/person/:address/npf', function (req, res, next) {
     const npf = req.body.npf;
     const timestamp = req.body.timestamp;
 
-    blockchainApiInstance.changeNpf(address, privateKey, npf, timestamp).then((transactionHash) => {
-        res.json({ transactionHash });
+    blockchainApiInstance.changeNpf(address, privateKey, npf, timestamp).then((result) => {
+        res.json(result);
     }).catch(next);
 });
 
@@ -86,8 +86,8 @@ app.put('/person/:address/tariff', function (req, res, next) {
     const tariff = req.body.tariff;
     const timestamp = req.body.timestamp;
 
-    blockchainApiInstance.changeTariff(address, privateKey, tariff, timestamp).then((transactionHash) => {
-        res.json({ transactionHash });
+    blockchainApiInstance.changeTariff(address, privateKey, tariff, timestamp).then((result) => {
+        res.json(result);
     }).catch(next);
 });
 
