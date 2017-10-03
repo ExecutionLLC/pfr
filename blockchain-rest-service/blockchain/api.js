@@ -4,7 +4,7 @@ const Web3 = require('web3');
 const CONTRACT = require('./contract');
 const config = require('../utils/config');
 const logger = require('../utils/log')('blockchain api');
-const validator = require('../utils/validator');
+const utils = require('../utils/utils');
 
 class BlockchainApi {
     constructor() {
@@ -205,14 +205,14 @@ class BlockchainApi {
     }
 
     static _getEthWallet(privateKey, validationAddress) {
-        if (!validator.isValidPrivateKey(privateKey)) {
+        if (!utils.isValidPrivateKey(privateKey)) {
             throw Error('private key is not valid');
         }
         const chainId = config.get('ethNodeChainId') || 1;
         const provider = new ethers.providers.JsonRpcProvider(config.get('ethNodeHttpUrl'), false, chainId);
         const wallet = new ethers.Wallet(privateKey, provider);
 
-        if (validationAddress && (wallet.address.toUpperCase() !== validationAddress.toUpperCase())) {
+        if (validationAddress && utils.compareAddresses(wallet.address, validationAddress)) {
             throw Error('private key address and validation address must be the same');
         }
 
@@ -260,12 +260,9 @@ class BlockchainApi {
     }
 
     static _getHistory(historyArray, address) {
-        if (!validator.isValidWalletId(address)) {
-            throw Error('address is not valid');
-        }
-
-        const addressInUpperCase = address.toUpperCase();
-        return historyArray.filter(value => value.owner.toUpperCase() === addressInUpperCase);
+        return historyArray.filter(
+            value => utils.compareAddresses(value.owner, address)
+        );
     }
 
     getOperationsHistory(address) {
@@ -281,23 +278,26 @@ class BlockchainApi {
     }
 
     getPendedOperations(address) {
-        return this._pendedOperations.filter(value => value.owner === address);
+        return this._pendedOperations.filter(
+            value => utils.compareAddresses(value.owner, address)
+        );
     }
 
     getPendedTariffChanges(address) {
-        return this._pendedTariffChanges.filter(value => value.owner === address);
+        return this._pendedTariffChanges.filter(
+            value => utils.compareAddresses(value.owner, address)
+        );
     }
 
     getPendedNpfChanges(address) {
-        return this._pendedNpfChanges.filter(value => value.owner === address);
+        return this._pendedNpfChanges.filter(
+            value => utils.compareAddresses(value.owner, address)
+        );
     }
 
     getPersonInfoByAddress(address) {
         return new Promise((resolve, reject) => {
-            if (!validator.isValidWalletId(address)) {
-                return reject(Error('address is not valid'));
-            }
-
+            address = utils.normalizeAddress(address);
             this._contract.methods.personInfoByAddress(address).call().then((result) => {
                 return {
                     npf: result.npf,
@@ -310,10 +310,7 @@ class BlockchainApi {
 
     getPersonSnils(address) {
         return new Promise((resolve, reject) => {
-            if (!validator.isValidWalletId(address)) {
-                return reject(Error('address is not valid'));
-            }
-
+            address = utils.normalizeAddress(address);
             this._contract.methods.personSnilsByAddress(address).call().then((snils) => {
                 if (!snils) {
                     throw new Error('person is not registered');
@@ -329,6 +326,9 @@ class BlockchainApi {
             if (!timestamp) {
                 timestamp = Date.now();
             }
+
+            address = utils.normalizeAddress(address);
+            npfPrivateKey = utils.normalizePrivateKey(npfPrivateKey);
 
             if (!contractor) {
                 return reject(Error('contractor can not be empty'));
@@ -357,6 +357,13 @@ class BlockchainApi {
 
     changeTariff(address, privateKey, tariff, timestamp) {
         return new Promise((resolve, reject) => {
+            if (!timestamp) {
+                timestamp = Date.now();
+            }
+
+            address = utils.normalizeAddress(address);
+            privateKey = utils.normalizePrivateKey(privateKey);
+
             const contract = BlockchainApi._getSignedContract(privateKey, address);
             contract.changeTariff(tariff, timestamp).then((transaction) => {
                 const transactionHash = transaction.hash;
@@ -377,6 +384,10 @@ class BlockchainApi {
                 timestamp = Date.now();
             }
 
+            address = utils.normalizeAddress(address);
+            privateKey = utils.normalizePrivateKey(privateKey);
+            npfAddress = utils.normalizeAddress(npfAddress);
+
             const contract = BlockchainApi._getSignedContract(privateKey, address);
             return contract.changeNpf(npfAddress, timestamp).then((transaction) => {
                 const transactionHash = transaction.hash;
@@ -392,6 +403,7 @@ class BlockchainApi {
     }
 
     getTransaction(transactionHash) {
+        transactionHash = utils.normalizeHexString(transactionHash);
         return this._web3.eth.getTransaction(transactionHash);
     }
 }

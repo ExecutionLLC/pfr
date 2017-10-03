@@ -13,23 +13,11 @@ const app = express();
 
 app.use(morgan('dev'));
 
-function normalizeHexString(hexString) {
-    if (hexString && hexString.substring(0, 2) !== '0x') {
-        return `0x${hexString}`;
-    }
-
-    return hexString;
-}
-
-const normalizeAddress = normalizeHexString;
-const normalizePrivateKey = normalizeHexString;
-const normalizeTransactionHash = normalizeHexString;
-
 // parse application/json
 app.use(bodyParser.json());
 
 app.get('/person/:address', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
+    const address = req.params.address;
     blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
         result.operationsHistory = blockchainApiInstance.getOperationsHistory(address);
         result.pendedOperations = blockchainApiInstance.getPendedOperations(address);
@@ -42,40 +30,37 @@ app.get('/person/:address', function (req, res, next) {
 });
 
 app.get('/person/:address/operationsHistory', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
-    const history = blockchainApiInstance.getOperationsHistory(address);
-    res.json(history);
+    const address = req.params.address;
+    res.json(blockchainApiInstance.getOperationsHistory(address));
 });
 
 app.get('/person/:address/pendedOperations', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
+    const address = req.params.address;
     res.json(blockchainApiInstance.getPendedOperations(address));
 });
 
 app.get('/person/:address/tariffHistory', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
-    const history = blockchainApiInstance.getTariffHistory(address);
-    res.json(history);
+    const address = req.params.address;
+    res.json(blockchainApiInstance.getTariffHistory(address));
 });
 
 app.get('/person/:address/pendedTariffChanges', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
+    const address = req.params.address;
     res.json(blockchainApiInstance.getPendedTariffChanges(address));
 });
 
 app.get('/person/:address/npfHistory', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
-    const history = blockchainApiInstance.getNpfHistory(address);
-    res.json(history);
+    const address = req.params.address;
+    res.json(blockchainApiInstance.getNpfHistory(address));
 });
 
 app.get('/person/:address/pendedNpfChanges', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
+    const address = req.params.address;
     res.json(blockchainApiInstance.getPendedNpfChanges(address));
 });
 
 app.get('/person/:address/npf', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
+    const address = req.params.address;
     blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
         res.json({
             npf: result.npf
@@ -84,10 +69,8 @@ app.get('/person/:address/npf', function (req, res, next) {
 });
 
 app.put('/person/:address/npf', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
-    const privateKey = normalizePrivateKey(req.body.privateKey);
-    const npf = req.body.npf;
-    const timestamp = req.body.timestamp;
+    const address = req.params.address;
+    const { privateKey, npf, timestamp} = req.body;
 
     blockchainApiInstance.changeNpf(address, privateKey, npf, timestamp).then((result) => {
         res.json(result);
@@ -96,7 +79,7 @@ app.put('/person/:address/npf', function (req, res, next) {
 });
 
 app.get('/person/:address/tariff', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
+    const address = req.params.address;
     blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
         res.json({
             tariff: result.tariff
@@ -105,10 +88,8 @@ app.get('/person/:address/tariff', function (req, res, next) {
 });
 
 app.put('/person/:address/tariff', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
-    const privateKey = normalizePrivateKey(req.body.privateKey);
-    const tariff = req.body.tariff;
-    const timestamp = req.body.timestamp;
+    const address = req.params.address;
+    const { privateKey, tariff, timestamp } = req.body;
 
     blockchainApiInstance.changeTariff(address, privateKey, tariff, timestamp).then((result) => {
         res.json(result);
@@ -117,17 +98,17 @@ app.put('/person/:address/tariff', function (req, res, next) {
 });
 
 app.get('/person/:address/balance', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
+    const address = req.params.address;
     blockchainApiInstance.getPersonInfoByAddress(address).then((result) => {
         res.json({ balance: result.balance });
     }).catch(next);
 });
 
 app.put('/person/:address/operation', function (req, res, next) {
-    const address = normalizeAddress(req.params.address);
+    const address = req.params.address;
 
-    const privateKey = normalizePrivateKey(req.body.privateKey);
     const {
+        privateKey,
         amount,
         contractor,
         comment,
@@ -141,7 +122,7 @@ app.put('/person/:address/operation', function (req, res, next) {
 });
 
 app.get('/transaction/:transactionhash', function (req, res, next) {
-    const transactionHash = normalizeTransactionHash(req.params.transactionhash);
+    const transactionHash = req.params.transactionhash;
     blockchainApiInstance.getTransaction(transactionHash).then((result) => {
         res.json(result);
     }).catch(next);
