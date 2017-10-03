@@ -70,7 +70,16 @@ app.get('/person/:address/npf', function (req, res, next) {
 
 app.put('/person/:address/npf', function (req, res, next) {
     const address = req.params.address;
-    const { privateKey, npf, timestamp} = req.body;
+    const { privateKey, npf, timestamp, force } = req.body;
+
+    if (!force) {
+        const pended = blockchainApiInstance.getPendedNpfChanges(address);
+        if (pended.length > 0) {
+            res.json({ error: 'queue is not empty' });
+            res.status(HttpStatus.CONFLICT);
+            return;
+        }
+    }
 
     blockchainApiInstance.changeNpf(address, privateKey, npf, timestamp).then((result) => {
         res.json(result);
@@ -89,7 +98,16 @@ app.get('/person/:address/tariff', function (req, res, next) {
 
 app.put('/person/:address/tariff', function (req, res, next) {
     const address = req.params.address;
-    const { privateKey, tariff, timestamp } = req.body;
+    const { privateKey, tariff, timestamp, force } = req.body;
+
+    if (!force) {
+        const pended = blockchainApiInstance.getPendedTariffChanges(address);
+        if (pended.length > 0) {
+            res.json({ error: 'queue is not empty' });
+            res.status(HttpStatus.CONFLICT);
+            return;
+        }
+    }
 
     blockchainApiInstance.changeTariff(address, privateKey, tariff, timestamp).then((result) => {
         res.json(result);
@@ -112,8 +130,18 @@ app.put('/person/:address/operation', function (req, res, next) {
         amount,
         contractor,
         comment,
-        timestamp
+        timestamp,
+        force
     } = req.body;
+
+    if (!force) {
+        const pended = blockchainApiInstance.getPendedOperations(address);
+        if (pended.length > 0) {
+            res.json({ error: 'queue is not empty' });
+            res.status(HttpStatus.CONFLICT);
+            return;
+        }
+    }
 
     blockchainApiInstance.addOperation(address, privateKey, amount, contractor, comment, timestamp).then((result) => {
         res.json(result);
