@@ -65,14 +65,9 @@
           "target": "loginPage"
         },
         {
-          "pattern": "profile",
+          "pattern": "account:?query:",
           "name": "menuPage",
           "target": "menuPage"
-        },
-        {
-          "pattern": "report",
-          "name": "report",
-          "target": "report"
         },
         {
           "pattern": "npf",
@@ -90,19 +85,7 @@
         },
         "menuPage": {
           "viewName": "Menu"
-        },
-        "report": {
-          "viewPath": "personal.account.view.TabBarViews",
-          "viewName": "TabBarViews.Report",
-          "controlId": "menuPanel",
-          "controlAggregation": "content"
-        },
-        "npf": {
-          "viewPath": "personal.account.view.TabBarViews",
-          "viewName": "NPF",
-          "viewLevel" : 2
         }
-
       }
     }
   }

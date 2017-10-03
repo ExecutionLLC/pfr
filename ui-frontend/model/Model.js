@@ -15,7 +15,10 @@ sap.ui.define([
                 currentValueSlider: null,                                                   // Значение слайдера
                 isButtonShowNPFApply:false,                                                 // Индикатор который показывает нажата ли кнопка "Выбрать НПФ" во вкладке "Сменить НПФ"
                 isCustomListSelected:false,                                                 // Индикатор состояния таблицы выбора НПФ во вкладке "Сменить НПФ"
-                currencyCode: "рублей"
+                currencyCode: "рублей",                                                     // код валюты
+                selectedKey:"",                                                             // выбранная вкладка
+                tariff: null,                                                               // значение тарифа для конкретного пользователя (вставляется из бэка при загрузке страницы)
+                isButtonChangeTariffEnable: false,
             },
             // модель для хранения значений для изменений НПФ (последняя вкладка)
             changeNPF:{
@@ -52,7 +55,6 @@ sap.ui.define([
                 }
             }
         }
-
     };
 
     return oModule;

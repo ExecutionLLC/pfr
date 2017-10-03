@@ -6,7 +6,8 @@
     xmlns:form="sap.ui.layout.form"
     xmlns:layout="sap.ui.layout">
     <Page
-        showHeader="false">
+        showHeader="false"
+    enableScrolling="true">
         <layout:Grid
                 width="100%">
             <Label
@@ -148,6 +149,7 @@
         <!--Конец доп поля-->
 
         <Table
+                id="table--report"
                 items="{
                     path:'mainModel>/operationsHistory'
                 }">
@@ -199,12 +201,16 @@
 			                }"/>
                         <Text
                             text="{mainModel>comment}"/>
+                        <!--todo временная заглушка. потом будет использоваться код ниже-->
                         <core:Icon
+                            src="sap-icon://overlay"
+                            color= "green"/>
+                        <!--<core:Icon
                             src="sap-icon://overlay"
                             color= "{
                                 path:'tableModel>Status',
                                 formatter: '.formatter.formatIconColorByStatus'
-                            }"/>
+                            }"/>-->
                         <Text
                             text="{= ${mainModel>tariff} + '%'}"/>
                         <Text

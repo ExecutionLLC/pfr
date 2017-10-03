@@ -54,3 +54,9 @@
 .text-bold{
 	font-weight: bold;
 }
+
+/*todo: Правки косяков стандарной библиотеки стилей SAPUI5*/
+/*Правим заезжание наверх содержимого заголовка*/
+.cstMITHNoBBorder.sapMITH{
+	border-bottom: none;
+}
