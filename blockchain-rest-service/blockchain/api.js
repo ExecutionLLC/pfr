@@ -6,6 +6,9 @@ const config = require('../utils/config');
 const logger = require('../utils/log')('blockchain api');
 const utils = require('../utils/utils');
 
+// check and remove failed transaction every 5 minutes
+TRANSACTION_CLEANUP_INTERVAL = 5*60*1000;
+
 class BlockchainApi {
     constructor() {
         const provider = new Web3.providers.WebsocketProvider(config.get('ethNodeWsUrl'));
@@ -17,8 +20,6 @@ class BlockchainApi {
         this._tariffHistoryCache = [];
         this._npfHistoryCache = [];
 
-        // still uncompleted
-        // TODO: add cleaner for failed transactions
         this._pendedOperations = [];
         this._pendedTariffChanges = [];
         this._pendedNpfChanges = [];
@@ -196,12 +197,35 @@ class BlockchainApi {
     }
 
     init() {
+        setInterval(() => { this._removeFailedTransactions(); }, TRANSACTION_CLEANUP_INTERVAL);
         return Promise.all([
             this._initNpfCache(),
             this._initOperationsHistoryCache(),
             this._initTariffHistoryCache(),
             this._initNpfHistoryCache()
         ]);
+    }
+
+    _removeFailedTransactions() {
+        logger.info('checking transactions state');
+        const removeFinishedTransaction = (arrayName, transactionHash) => {
+            this._web3.eth.getTransactionReceipt(transactionHash).then((receipt) => {
+                if (receipt) {
+                    this[arrayName] = this[arrayName].filter(
+                        item => item.transactionHash !== transactionHash
+                    );
+                }
+            }).catch(logger.error);
+        };
+        this._pendedOperations.forEach(
+            value => removeFinishedTransaction('_pendedOperations', value.transactionHash)
+        );
+        this._pendedTariffChanges.forEach(
+            value => removeFinishedTransaction('_pendedTariffChanges', value.transactionHash)
+        );
+        this._pendedNpfChanges.forEach(
+            value => removeFinishedTransaction('_pendedNpfChanges', value.transactionHash)
+        );
     }
 
     static _getEthWallet(privateKey, validationAddress) {
@@ -212,7 +236,7 @@ class BlockchainApi {
         const provider = new ethers.providers.JsonRpcProvider(config.get('ethNodeHttpUrl'), false, chainId);
         const wallet = new ethers.Wallet(privateKey, provider);
 
-        if (validationAddress && utils.compareAddresses(wallet.address, validationAddress)) {
+        if (validationAddress && !utils.compareAddresses(wallet.address, validationAddress)) {
             throw Error('private key address and validation address must be the same');
         }
 
