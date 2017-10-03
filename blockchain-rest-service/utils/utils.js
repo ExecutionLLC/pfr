@@ -20,13 +20,13 @@ const Utils = {
         return hexString;
     },
     normalizePrivateKey(privateKey) {
-        if (!isValidPrivateKey(privateKey)) {
+        if (!Utils.isValidPrivateKey(privateKey)) {
             throw Error('address is not valid');
         }
-        return normalizeHexString(privateKey);
+        return Utils.normalizeHexString(privateKey);
     },
     compareAddresses(address0, address1) {
-        return normalizeAddress(address0) === normalizeAddress(address1);
+        return Utils.normalizeAddress(address0) === Utils.normalizeAddress(address1);
     }
 };
 
