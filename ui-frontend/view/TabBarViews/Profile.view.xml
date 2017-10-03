@@ -39,10 +39,13 @@
                                         color = "#346187"
                                         width = "2rem"
                                         height = "2rem"
-                                        size= "2rem"/>
+                                        size= "2rem"
+                                        press="onNavToNPF"/>
                                 </HBox>
                                 <Text
-                                    text ="Флокс"
+                                    text ="{
+                                        path:'mainModel>/npf',
+                                        formatter:'.formatter.formatNPFadressToName'}"
                                     class = "coloredText sapUiTinyMarginTop"/>
                             </VBox>
 
@@ -51,7 +54,9 @@
                                 width = "34%"
                                 class = "right-border" >
                                 <Text
-                                    text = "+3"
+                                    text = "{
+                                        path:'mainModel>/npf',
+                                        formatter:'.formatter.formatNPFadressToReliability'}"
                                     textAlign = "End"
                                     width="90%"
                                     class="green H2"/>
@@ -73,7 +78,9 @@
                                 height ="7rem"
                                 width = "34%">
                                 <Text
-                                    text = "-1"
+                                        text = "{
+                                        path:'mainModel>/npf',
+                                        formatter:'.formatter.formatNPFadressToIncomeRate'}"
                                     textAlign = "End"
                                     width="100%"
                                     class="red H2"/>
@@ -124,7 +131,7 @@
                                     size= "2rem"/>
                             </HBox>
                             <Text
-                                text ="6%"
+                                text ="{= ${mainModel>/tariff} + '%'}"
                                 class = "coloredText sapUiTinyMarginTop"/>
                         </VBox>
                     </content>
@@ -195,17 +202,20 @@
                                             <viz:dataset>
                                                 <viz.data:FlattenedDataset
                                                     data="{
-                                                        path:'vizFrame>/data'
+                                                        path:'mainModel>/operationsHistory'
                                                     }">
                                                     <viz.data:dimensions>
                                                         <viz.data:DimensionDefinition
                                                             name="Date"
-                                                            value="{vizFrame>Date}" />
+                                                            value="{
+                                                                path:'mainModel>timestamp',
+                                                                formatter:'.formatter.formatDate'
+                                                                }"/>
                                                     </viz.data:dimensions>
                                                     <viz.data:measures>
                                                         <viz.data:MeasureDefinition
                                                             name="Salary"
-                                                            value="{vizFrame>Salary}" />
+                                                            value="{mainModel>amount}" />
                                                     </viz.data:measures>
                                                 </viz.data:FlattenedDataset>
                                             </viz:dataset>

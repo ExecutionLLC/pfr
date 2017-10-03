@@ -19,7 +19,10 @@
         </Label>
         <Text
             class="sapUiSmallMarginTop text-bold"
-            text="Флокс">
+            text="{
+                path:'mainModel>/npf',
+                formatter:'.formatter.formatNPFadressToName'
+            }">
             <layoutData>
                 <layout:GridData
                     span="L4 M4 S4"/>
@@ -90,7 +93,7 @@
     <Table
         visible="{techModel>/tech/isButtonShowNPFApply}"
         items="{
-        path:'NPF>/Rows'}">
+        path:'npfModel>/'}">
         <columns>
             <Column
                 hAlign="Center">
@@ -114,7 +117,7 @@
                 press="onColumnListItemPress">
                 <cells>
                     <Text
-                        text="{NPF>NPF}"/>
+                        text="{npfModel>name}"/>
                     <Text
                         text="{NPF>Rating}"/>
                     <core:Icon
@@ -125,6 +128,7 @@
             </ColumnListItem>
         </items>
     </Table>
+
     <!--конец-->
 
     <!--доп контейнер подтверждения смены НПФ-->
@@ -158,7 +162,7 @@
         class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
     <Table
         items="{
-            path:'tableModelNPF>/Rows'
+            path:'mainModel>/npfHistory'
         }">
         <columns>
             <Column
@@ -178,7 +182,10 @@
             <ColumnListItem>
                 <cells>
                     <Text
-                        text="{tableModelNPF>Data}"/>
+                        text="{
+                            path: 'mainModel>timestamp',
+                            formatter:'.formatter.formateDateforTable'
+                        }"/>
                     <Text
                         text="{tableModelNPF>NPF}"/>
                     <core:Icon
@@ -189,4 +196,48 @@
             </ColumnListItem>
         </items>
     </Table>
+    <!--<Table
+            showNoData="false">
+        <columns>
+            <Column
+                    hAlign="Center">
+                <Text
+                        text="Дата операции"/>
+            </Column>
+            <Column
+                    hAlign="Center">
+                <Text
+                        text="НПФ"/>
+            </Column>
+            <Column
+                    hAlign="Center"/>
+        </columns>
+    </Table>
+    <ListBase
+            items="{
+                path:'mainModel>/npfHistory'
+        }">
+        <items>
+            <CustomListItem>
+                <Panel
+                        expandable="true">
+                    <headerToolbar>
+                        <Toolbar>
+                            <Text
+                                    text="{
+                                        path: 'mainModel>timestamp',
+                                        formatter:'.formatter.formateDateforTable'
+                            }"/>
+                            <Text
+                                    text="{tableModelNPF>NPF}"/>
+                            <core:Icon
+                                    src="sap-icon://initiative"
+                                    press="onIconPress"
+                                    size="2rem"/>
+                        </Toolbar>
+                    </headerToolbar>
+                </Panel>
+            </CustomListItem>
+        </items>
+    </ListBase>-->
 </mvc:View>

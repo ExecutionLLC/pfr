@@ -4,6 +4,11 @@ sap.ui.define([
 ], function (Controller,formatter) {
     "use strict";
     return Controller.extend("personal.account.controller.TabBarControllers.Profile", {
-        formatter: formatter
+        formatter: formatter,
+
+        onNavToNPF:function () {
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("changeNpf");
+        }
     });
 });

@@ -53,7 +53,10 @@
         "viewType": "XML",
         "viewPath": "personal.account.view",
         "controlId": "app",
-        "controlAggregation": "pages"
+        "controlAggregation": "pages",
+        "bypassed": {
+          "target": "notFound"
+        }
       },
       "routes": [
         {
@@ -69,12 +72,21 @@
         {
           "pattern": "report",
           "name": "report",
-          "target": "menuPage"
+          "target": "report"
+        },
+        {
+          "pattern": "npf",
+          "name": "changeNpf",
+          "target": "npf"
         }
       ],
       "targets": {
         "loginPage": {
           "viewName": "Login"
+        },
+        "notFound": {
+          "viewName": "NotFound",
+          "transition": "show"
         },
         "menuPage": {
           "viewName": "Menu"
@@ -84,6 +96,11 @@
           "viewName": "TabBarViews.Report",
           "controlId": "menuPanel",
           "controlAggregation": "content"
+        },
+        "npf": {
+          "viewPath": "personal.account.view.TabBarViews",
+          "viewName": "NPF",
+          "viewLevel" : 2
         }
 
       }

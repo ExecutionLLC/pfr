@@ -7,75 +7,72 @@
     xmlns:layout="sap.ui.layout">
     <Page
         showHeader="false">
-        <form:Form>
-            <form:formContainers>
-                <form:FormContainer>
-                    <form:FormElement>
-                        <Label text="{i18n>totalMany}">
-                            <layoutData>
-                                <layout:GridData
-                                    span="L3 M5 S4"
-                                    indent="L1 M0 S0"/>
-                            </layoutData>
-                        </Label>
-                        <Text
-                            text="500 000, 18 рублей"
-                            class="sapUiSmallMarginBottom">
-                            <layoutData>
-                                <layout:GridData
-                                    span="L6 M5 S4"/>
-                            </layoutData>
-                        </Text>
-                    </form:FormElement>
-                    <form:FormElement>
-                        <Label
-                            class="label-margin-top"
-                            text="Движение средств за период:">
-                            <layoutData>
-                                <layout:GridData
-                                    span="L3 M5 S4"
-                                    indent="L1 M0 S0"/>
-                            </layoutData>
-                        </Label>
-                        <DateRangeSelection
-                            placeholder="Выберите диапазон дат"
-                            change="onDateRangeChange">
-                            <layoutData>
-                                <layout:GridData
-                                    span="L4 M5 S4"/>
-                            </layoutData>
-                        </DateRangeSelection>
-                        <ToggleButton
-                            pressed="{techModel>/tech/isButtonShowApply}"
-                            width="100%"
-                            text="{
+        <layout:Grid
+                width="100%">
+            <Label
+                    class="label-margin-top"
+                    text="Движение средств за период:">
+                <layoutData>
+                    <layout:GridData
+                            span="L3 M5 S4"
+                            indent="L1 M0 S0"/>
+                </layoutData>
+            </Label>
+            <ObjectNumber
+                    class="label-margin-top"
+                    number="{
+						        parts:[{path:'mainModel>/balance'},{path:'techModel>/tech/currencyCode'}],
+						type: 'sap.ui.model.type.Currency'
+					    }">
+                <layoutData>
+                    <layout:GridData
+                            span="L4 M4 S4"/>
+                </layoutData>
+            </ObjectNumber>
+        </layout:Grid>
+        <layout:Grid
+                width="100%">
+            <Label
+                    class="sapUiSmallMarginTop"
+                    text="{i18n>totalMany}">
+                <layoutData>
+                    <layout:GridData
+                            span="L2 M4 S4"
+                            indent="L1 M1 S1"/>
+                </layoutData>
+            </Label>
+            <DateRangeSelection
+                    placeholder="Выберите диапазон дат"
+                    change="onDateRangeChange">
+                <layoutData>
+                    <layout:GridData
+                            span="L4 M5 S4"
+                            indent="L1 M0 S0"/>
+                </layoutData>
+            </DateRangeSelection>
+            <ToggleButton
+                    pressed="{techModel>/tech/isButtonShowApply}"
+                    width="100%"
+                    text="{
                                 path:'techModel>/tech/isButtonShowApply',
                                 formatter:'.formatter.formatButtonName'
                             }">
-                            <layoutData>
-                                <layout:GridData
-                                    span="L2 M3 S7"
-                                    indent="L0 M0 S0"/>
-                            </layoutData>
-                        </ToggleButton>
-                        <Button
-                            press="onPrint"
-                            icon="sap-icon://print">
-                            <layoutData>
-                                <layout:GridData
-                                    span="L2 M2 S2"/>
-                            </layoutData>
-                        </Button>
-                    </form:FormElement>
-                </form:FormContainer>
-            </form:formContainers>
-            <form:layout>
-                <form:ResponsiveGridLayout
-                    columnsL="1"
-                    columnsM="1"
-                    columnsS="1"/>
-            </form:layout>
-        </form:Form>
+                <layoutData>
+                    <layout:GridData
+                            span="L2 M3 S7"
+                            indent="L0 M0 S0"/>
+                </layoutData>
+            </ToggleButton>
+            <Button
+                    width="100%"
+                    press="onPrint"
+                    icon="sap-icon://print">
+                <layoutData>
+                    <layout:GridData
+                            span="L2 M2 S2"/>
+                </layoutData>
+            </Button>
+        </layout:Grid>
         <!--дополнительное поле информации при нажатой кнопке-->
         <form:Form
             visible="{techModel>/tech/isButtonShowApply}"
@@ -152,7 +149,8 @@
 
         <Table
                 items="{
-            path:'tableModel>/Rows'}">
+                    path:'mainModel>/operationsHistory'
+                }">
             <columns>
                 <Column
                     hAlign="Center">
@@ -195,9 +193,12 @@
                 <ColumnListItem>
                     <cells>
                         <Text
-                            text="{tableModel>Data}"/>
+                            text="{
+				                path: 'mainModel>timestamp',
+				                formatter:'.formatter.formateDateforTable'
+			                }"/>
                         <Text
-                            text="{tableModel>Operation}"/>
+                            text="{mainModel>comment}"/>
                         <core:Icon
                             src="sap-icon://overlay"
                             color= "{
@@ -205,13 +206,19 @@
                                 formatter: '.formatter.formatIconColorByStatus'
                             }"/>
                         <Text
-                            text="{tableModel>Tarif}"/>
+                            text="{= ${mainModel>tariff} + '%'}"/>
                         <Text
-                            text="{tableModel>Contragent}"/>
+                            text="{mainModel>contractor}"/>
                         <Text
-                            text="{tableModel>PNF}"/>
-                        <Text
-                            text="{tableModel>Summ}"/>
+                            text="{
+                                path:'mainModel>npf',
+                                formatter:'.formatter.formatNPFadressToName'
+                                }"/>
+                        <ObjectNumber
+                                number="{
+						        parts:[{path:'mainModel>amount'},{path:'techModel>/tech/currencyCode'}],
+						type: 'sap.ui.model.type.Currency'
+					    }"/>
                         <Text
                             text="{tableModel>Sallary}"/>
                         <core:Icon

@@ -18,7 +18,7 @@
                 </layoutData>
             </Label>
             <Input
-                    value="{=${techModel>/tech/currentValueSlider} + '%'}"
+                    value="{=${mainModel>/tariff} + '%'}"
                     width="34%"
                     type = "Text">
                 <layoutData>
@@ -54,7 +54,7 @@
             class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
         <Table
                 items="{
-            path:'tableModelChangeTarif>/Rows'}">
+                    path:'mainModel>/tariffHistory'}">
             <columns>
                 <Column
                         hAlign="Center">
@@ -71,9 +71,12 @@
                 <ColumnListItem>
                     <cells>
                         <Text
-                                text="{tableModelChangeTarif>Data}"/>
+                                text="{
+				                path: 'mainModel>timestamp',
+				                formatter:'.formatter.formateDateforTable'
+			                }"/>
                         <Text
-                                text="{tableModelChangeTarif>Tarif}"/>
+                                text="{mainModel>newTariff}"/>
                         <core:Icon
                                 src="sap-icon://initiative"
                                 press="onIconPress"
