@@ -1,7 +1,28 @@
-sap.ui.define([], function () {
+sap.ui.define(["sap/ui/core/format/NumberFormat"
+], function (NumberFormat) {
     "use strict";
     return {
-        formatFooterString:function (text) {
+
+        /**
+         * @description объект для форматирования валюты
+         */
+        oCurrencyFormat: NumberFormat.getCurrencyInstance(),
+
+
+        /**
+         * @description Внутренняя функция для добавления "0" вначало числа которое < 10
+         * @param value
+         * @return {string}
+         */
+        _addLeadingZeroIfNeedIt: function(value) {
+            if (value < 10) {
+                return "0" + value
+            }
+                return value;
+        },
+
+
+        formatFooterString: function (text) {
 
         },
         // изменять цвет кружочков в таблице во вкладке "Получить выписку"
@@ -65,13 +86,11 @@ sap.ui.define([], function () {
          *
          */
         formatDate: function (timestamp) {
-            var oDate = new Date(timestamp);
-            var nMonth = oDate.getMonth() +1;
-            var nYear = oDate.getFullYear();
+                var oDate = new Date(timestamp);
+                var nMonth = this.formatter._addLeadingZeroIfNeedIt(oDate.getMonth() + 1);
+                var nYear = oDate.getFullYear();
 
-            nMonth < 10 ? nMonth = "0" + nMonth : nMonth;
-
-            return nMonth + "." + nYear
+                return nMonth + "." + nYear
         },
 
         /**
@@ -79,15 +98,28 @@ sap.ui.define([], function () {
           *
          */
         formateDateforTable: function (timestamp) {
-            var oDate = new Date(timestamp);
-            var nDay = oDate.getDay()+1;
-            var nMonth = oDate.getMonth()+1;
-            var nYear = oDate.getFullYear();
+                var oDate = new Date(timestamp);
+                var nDay = this.formatter._addLeadingZeroIfNeedIt(oDate.getDate());
+                var nMonth = this.formatter._addLeadingZeroIfNeedIt(oDate.getMonth() + 1);
+                var nYear = oDate.getFullYear();
 
-            nDay < 10 ? nDay = "0" + nDay : nDay;
-            nMonth < 10 ? nMonth = "0" + nMonth : nMonth;
+                return nDay + "." + nMonth + "." + nYear
+        },
 
-            return nDay + "." + nMonth + "." + nYear
+        /**
+         * @description Форматирование видимости слайдера в зависимотси от pendedTariffChanges
+         */
+        formatSliderEnable: function (pendedTariffChanges) {
+            return pendedTariffChanges.length > 0;
+        },
+
+        /**
+         * @description Форматирование значения зарплаты
+         */
+        formateAmountToSalary: function (amount, tariff) {
+            var sallary = amount/tariff*100.0;
+            var formatSallary = this.formatter.oCurrencyFormat.format(sallary,"рублей");
+            return formatSallary
         }
     }
 

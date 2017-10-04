@@ -18,7 +18,8 @@ sap.ui.define([
                 currencyCode: "рублей",                                                     // код валюты
                 selectedKey:"",                                                             // выбранная вкладка
                 tariff: null,                                                               // значение тарифа для конкретного пользователя (вставляется из бэка при загрузке страницы)
-                isButtonChangeTariffEnable: false,
+                isButtonChangeTariffEnable: false,                                          // Доступность кнопки "Сменить тариф" во вкладке "Сменить тариф"
+                isSliderChangeTariffEnable: false                                           // Доступность слайдера на вкладке "Сменить тариф"
             },
             // модель для хранения значений для изменений НПФ (последняя вкладка)
             changeNPF:{

@@ -17,7 +17,7 @@
                 </layoutData>
             </Label>
             <Input
-                    value="{=${techModel>/tech/tariff} + '%'}"
+                    value="{=${mainModel>/tariff} + '%'}"
                     width="34%"
                     type = "Text"
                     enabled="false">
@@ -31,7 +31,10 @@
                     min="0"
                     max="6"
                     enableTickmarks="true"
-                    change="onChangeTariff">
+                    change="onChangeTariff"
+                    enabled="{
+                        path:'mainModel>/pendedTariffChanges',
+                        formatter:'.formatter.formatSliderEnable'}">
                 <ResponsiveScale tickmarksBetweenLabels="1"/>
                 <layoutData>
                     <layout:GridData
