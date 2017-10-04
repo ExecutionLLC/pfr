@@ -32,7 +32,7 @@ sap.ui.define([
                 jsonp: false
             });
             this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([{tariff: nNewTariff}]));
-            this.oTechModel.setProperty("/tech/isButtonChangeTariffEnable", false);                                      // Сделали кнопку невидимой
+            this.oTechModel.setProperty("/tech/isButtonChangeTariffEnable", false);                                        // Сделали слайдер невидимым
         },
 
         /**

@@ -110,7 +110,7 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
          * @description Форматирование видимости слайдера в зависимотси от pendedTariffChanges
          */
         formatSliderEnable: function (pendedTariffChanges) {
-            return pendedTariffChanges.length > 0;
+            return !pendedTariffChanges.length > 0;
         },
 
         /**
