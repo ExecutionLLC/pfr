@@ -51,6 +51,19 @@
                             indent="L1 M3 S3"/>
                 </layoutData>
             </Button>
+            <ObjectStatus
+                    class="sapUiSmallMarginTop"
+                    text="Заявка на рассмотрении"
+                    state="Warning"
+                    visible="{
+                        path:'mainModel>/pendedTariffChanges',
+                        formatter:'.formatter.formatStatusTextEnable'}">
+                <layoutData>
+                    <layout:GridData
+                            span="L3 M3 S7"
+                            indent="L1 M8 S8"/>
+                </layoutData>
+            </ObjectStatus>
         </layout:Grid>
 
 

@@ -150,17 +150,28 @@ sap.ui.define([
                 this.oMainModel.setProperty("/pendedNpfChanges", pendedNpfChanges.concat([{npf: nNewNpfAddress, timestamp: now}]));
 
                 // Установили в модель дату след смены нпф (отформатирована)
-                this.oTechModel.setProperty("/changeNPF/warningText", "Ваш НПФ успешно сменен на новый");
-                this.oTechModel.setProperty("/changeNPF/state", "Success");
+                this.oTechModel.setProperty("/changeNPF/warningText", "Заявка на рассмотрении");
+                this.oTechModel.setProperty("/changeNPF/state", "Warning");
                 // Скрываем кнопку "Сменить НПФ"
                 this.oTechModel.setProperty("/tech/isCustomListSelected", false);
                 // сбрасываем графу "новый НПФ"
                 this.oTechModel.setProperty("/changeNPF/newNPF","");
 
-                //todo передача параметров не работает в IE9-
+                /*//todo передача параметров не работает в IE9-
                 setTimeout(function changeVisible(model) {
                     model.setProperty("/changeNPF/isWarningTextVisible", false);
-                }, 2000, this.oTechModel);
+                }, 2000, this.oTechModel);*/
+
+                // Видимость сообщения о стадии обработки запроса
+                var mainModelBinding = new sap.ui.model.Binding(
+                        this.oMainModel, "/pendedNpfChanges", this.oMainModel.getContext("/pendedNpfChanges")
+                );
+
+                mainModelBinding.attachChange(function() {
+                    var pendedNpfChanges = this.oMainModel.getProperty("/pendedNpfChanges");
+                    var enableText = pendedNpfChanges.length === 0;
+                    this.oTechModel.setProperty("/changeNPF/isWarningTextVisible", enableText);
+                }.bind(this));
             }
 
             this.oTechModel.setProperty("/changeNPF/buttonPressCount", 1);

@@ -82,10 +82,17 @@ sap.ui.define([
         },
 
         /**
-         * @description Форматирование видимости слайдера в зависимотси от pendedTariffChanges
+         * @description Форматирование видимости любого контрола в зависимотси от pendedTariffChanges
          */
         formatSliderEnable: function (pendedTariffChanges) {
             return pendedTariffChanges.length === 0;
+        },
+
+        /**
+         * @description Форматирование видимости любого контрола в зависимотси от pendedTariffChanges
+         */
+        formatStatusTextEnable: function (pendedTariffChanges) {
+            return pendedTariffChanges.length !== 0;
         },
 
         /**
@@ -102,6 +109,12 @@ sap.ui.define([
          */
         formatColumnListItem: function (npfAddress, currentNpfAddress) {
             return npfAddress.toUpperCase() !== currentNpfAddress.toUpperCase();
+        },
+
+        formatNpfRating:function (npfAddress) {
+            var ratingOfReliability = this.formatter.formatNpfAddressToReliability.call(this,npfAddress);
+            var oNpfRating = Utils.conversionNpfRating(ratingOfReliability);
+            return oNpfRating.symbol;
         }
     }
 
