@@ -110,7 +110,7 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
          * @description Форматирование видимости слайдера в зависимотси от pendedTariffChanges
          */
         formatSliderEnable: function (pendedTariffChanges) {
-            return !pendedTariffChanges.length > 0;
+            return pendedTariffChanges.length === 0;
         },
 
         /**
@@ -130,25 +130,7 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
             var adressNpfUpper = adressNpf.toUpperCase();
             var currentNpfAdressUpper = currentNpfAdress.toUpperCase();
 
-            return !(currentNpfAdressUpper === adressNpfUpper)
-        },
-
-        /**
-         * @description Форматирование видимости кнопки "Выбрать НПФ" в зависимости от pendedNpfChanges
-         */
-        formatButtonNpfEnable: function (pendedNpfChanges, newTimestamp) {
-            function func() {
-                return true
-            }
-            //var nNow = new Date().getMilliseconds();
-            if(pendedNpfChanges.length !== 0){
-                return false                           // Если в обработке есть что то кнопка не доступна
-            }else if(pendedNpfChanges.length === 0 && new Date() > newTimestamp){
-                return true
-            }else if(pendedNpfChanges.length === 0 && new Date() < newTimestamp){
-                var time = newTimestamp - new Date();
-                setTimeout(func,time)
-            }
+            return currentNpfAdressUpper !== adressNpfUpper;
         }
     }
 
