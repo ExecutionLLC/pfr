@@ -17,7 +17,7 @@ sap.ui.define([
                     isButtonShowApply: false
                 },
                 changeTariffTab: {
-                    selectedTariff: 0,
+                    selectedTariff: 6,
                     changeTariffMessage: "",
                     isButtonChangeTariffEnabled: false,
                     isSliderChangeTariffEnabled: false
