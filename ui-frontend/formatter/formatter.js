@@ -69,13 +69,6 @@ sap.ui.define([
         /**
          * @description Форматирование видимости любого контрола в зависимотси от pendedTariffChanges
          */
-        formatSliderEnable: function (pendedTariffChanges) {
-            return (pendedTariffChanges && pendedTariffChanges.length === 0);
-        },
-
-        /**
-         * @description Форматирование видимости любого контрола в зависимотси от pendedTariffChanges
-         */
         formatStatusTextEnable: function (pendedTariffChanges) {
             return (pendedTariffChanges && pendedTariffChanges.length !== 0);
         },

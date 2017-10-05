@@ -1,151 +1,129 @@
-<mvc:View
-        controllerName="personal.account.controller.TabBarControllers.NPF"
-        xmlns="sap.m"
-        xmlns:mvc="sap.ui.core.mvc"
-        xmlns:form="sap.ui.layout.form"
-        xmlns:core="sap.ui.core"
-        xmlns:layout="sap.ui.layout"
-        displayBlock="true">
-    <Page
-            showHeader="false">
-        <layout:Grid
-                width="100%">
-            <Label
-                    class="sapUiSmallMarginTop"
-                    text="Текущий НПФ:">
+<mvc:View controllerName="personal.account.controller.TabBarControllers.NPF"
+          xmlns="sap.m"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns:form="sap.ui.layout.form"
+          xmlns:core="sap.ui.core"
+          xmlns:layout="sap.ui.layout"
+          displayBlock="true"
+>
+    <Page showHeader="false">
+        <layout:Grid width="100%">
+            <Label class="sapUiSmallMarginTop"
+                   text="Текущий НПФ:">
                 <layoutData>
-                    <layout:GridData
-                            span="L2 M4 S4"
-                            indent="L1 M1 S1"/>
+                    <layout:GridData span="L2 M4 S4" indent="L1 M1 S1"/>
                 </layoutData>
             </Label>
             <Text
                     class="sapUiSmallMarginTop text-bold"
                     text="{
-                path:'mainModel>/npf',
-                formatter:'.formatter.formatNpfAddressToName'
-            }">
+                        path:'mainModel>/npf',
+                        formatter:'.formatter.formatNpfAddressToName'
+                    }"
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L4 M4 S4"/>
+                    <layout:GridData span="L4 M4 S4"/>
                 </layoutData>
             </Text>
             <Label
                     class="sapUiSmallMarginTop"
                     text="Рейтинг надежности:">
                 <layoutData>
-                    <layout:GridData
-                            span="L2 M4 S4"/>
+                    <layout:GridData span="L2 M4 S4"/>
                 </layoutData>
             </Label>
-            <Text
-                    class="sapUiSmallMarginTop"
-                    text="{
+            <Text class="sapUiSmallMarginTop"
+                  text="{
                     path:'mainModel>/npf',
                     formatter:'.formatter.formatNpfRating'
-                    }">
+                  }">
                 <layoutData>
                     <layout:GridData
                             span="L1 M4 S4"/>
                 </layoutData>
             </Text>
         </layout:Grid>
-        <layout:Grid
-                width="100%">
-            <Label
-                    class="sapUiSmallMarginTop"
-                    text="Новый НПФ:">
+        <layout:Grid width="100%">
+            <Label class="sapUiSmallMarginTop"
+                   text="Новый НПФ:"
+                   visible="{techModel>/tech/changeNpfTab/isSelectedNpfLabelVisible}"
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L2 M4 S4"
-                            indent="L1 M1 S1"/>
+                    <layout:GridData span="L2 M4 S4" indent="L1 M1 S1"/>
                 </layoutData>
             </Label>
-            <Text
-                    class="sapUiSmallMarginTop text-bold"
-                    text="{techModel>/changeNPF/newNPF}">
+            <Text class="sapUiSmallMarginTop text-bold"
+                  text="{techModel>/tech/changeNpfTab/selectedNpf}"
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L4 M4 S4"/>
+                    <layout:GridData span="L4 M4 S4"/>
                 </layoutData>
             </Text>
-            <Label
-                    id="changeNpfLabel"
-                    class="sapUiSmallMarginTop"
-                    text="Возможная дата смены НПФ:">
+            <Label id="changeNpfLabel"
+                   class="sapUiSmallMarginTop"
+                   text="Возможная дата смены НПФ:"
+                   visible="{techModel>/tech/changeNpfTab/isNextMinTimeForChangeLabelVisible}"
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L2 M4 S4"/>
+                    <layout:GridData span="L2 M4 S4"/>
                 </layoutData>
             </Label>
-            <Text
-                    id="changeNpfText"
-                    class="sapUiSmallMarginTop">
+            <Text class="sapUiSmallMarginTop"
+                  text="{techModel>/tech/changeNpfTab/nextMinTimeForChangeMessage}"
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L1 M4 S4"/>
+                    <layout:GridData span="L1 M4 S4"/>
                 </layoutData>
             </Text>
-            <ToggleButton
-                    id="changeNpfButton"
-                    width="100%"
-                    pressed="{techModel>/tech/isButtonShowNPFApply}"
-                    text="Выбрать НПФ">
+            <Button width="100%"
+                    press="onSelectButton"
+                    text="Выбрать НПФ"
+                    enabled="{techModel>/tech/changeNpfTab/isSelectButtonEnabled}"
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L2 M3 S7"/>
+                    <layout:GridData span="L2 M3 S7"/>
                 </layoutData>
-            </ToggleButton>
+            </Button>
         </layout:Grid>
 
         <!--Таблица для выбора нового НПФ-->
-        <Table
-                visible="{techModel>/tech/isButtonShowNPFApply}"
-                items="{
-        path:'npfModel>/'}">
+        <Table visible="{techModel>/tech/changeNpfTab/isNextNpfTableVisible}"
+               items="{path:'npfModel>/'}"
+        >
             <columns>
-                <Column
-                        hAlign="Center">
-                    <Text
-                            text="НПФ"/>
+                <Column hAlign="Center">
+                    <Text text="НПФ"/>
                 </Column>
-                <Column
-                        hAlign="Center">
-                    <Text
-                            text="Рейтинг надежности"/>
+                <Column hAlign="Center">
+                    <Text text="Рейтинг надежности"/>
                 </Column>
-                <Column
-                        hAlign="Center">
-                    <Text
-                            text="Рейтинг доходности"/>
+                <Column hAlign="Center">
+                    <Text text="Рейтинг доходности"/>
                 </Column>
-                <Column
-                        hAlign="Center">
-                    <Text
-                            text="Перейти на сайт"/>
+                <Column hAlign="Center">
+                    <Text text="Перейти на сайт"/>
                 </Column>
             </columns>
+
             <items>
-                <ColumnListItem
-                        visible="{
-                parts:[
-                    {path:'npfModel>address'},
-                    {path:'mainModel>/npf'}
-                ],
-                formatter:'.formatter.formatColumnListItem'
-                }"
-                        type="Active"
-                        press="onColumnListItemPress">
+                <ColumnListItem visible="{
+                                    parts:[
+                                        {path:'npfModel>address'},
+                                        {path:'mainModel>/npf'}
+                                    ],
+                                    formatter:'.formatter.formatColumnListItem'
+                                }"
+                                type="Active"
+                                press="onSelectNpfTableItem"
+                >
                     <cells>
-                        <Text
-                                text="{npfModel>name}"/>
-                        <Text
-                                text="{
-                    path:'npfModel>address',
-                    formatter:'.formatter.formatNpfRating'
-                    }"/>
-                        <Text
-                                text="{npfModel>ratingOfIncomeRate}"/>
+                        <Text text="{npfModel>name}"/>
+                        <Text text="{
+                                        path:'npfModel>address',
+                                        formatter:'.formatter.formatNpfRating'
+                                    }"
+                        />
+                        <Text text="{npfModel>ratingOfIncomeRate}"/>
                         <core:Icon
                                 src="sap-icon://hello-world"
                                 press="onIconPress"
@@ -161,9 +139,8 @@
         <layout:Grid>
             <ObjectStatus
                     class="sapUiSmallMarginTop"
-                    visible="{techModel>/changeNPF/isWarningTextVisible}"
-                    text="{techModel>/changeNPF/warningText}"
-                    state="{techModel>/changeNPF/state}">
+                    text="{techModel>/tech/changeNpfTab/changeNpfMessage}"
+                    state="{techModel>/tech/changeNpfTab/changeNpfMessageType}">
                 <layoutData>
                     <layout:GridData
                             span="L5 M3 S7"
@@ -172,9 +149,9 @@
             </ObjectStatus>
             <Button
                     width="100%"
-                    press="onChangeNPF"
-                    text="{techModel>/changeNPF/buttonText}"
-                    visible="{techModel>/tech/isCustomListSelected}">
+                    press="onApplyButton"
+                    text="{techModel>/tech/changeNpfTab/applyButtonText}"
+                    visible="{techModel>/tech/changeNpfTab/isApplyButtonVisible}">
                 <layoutData>
                     <layout:GridData
                             span="L2 M3 S7"

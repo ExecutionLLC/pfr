@@ -10,6 +10,31 @@ sap.ui.define([
             this.oComponent = this.getOwnerComponent();
             this.oTechModel = this.oComponent.getModel("techModel");
             this.oMainModel = this.oComponent.getModel("mainModel");
+
+            var mainModelBinding = new sap.ui.model.Binding(
+                this.oMainModel, "/pendedTariffChanges", this.oMainModel.getContext("/pendedTariffChanges")
+            );
+            mainModelBinding.attachChange(this.onMainModelChanges.bind(this));
+        },
+
+        onMainModelChanges: function () {
+            var snils = this.oMainModel.getProperty("/metadata/snils");
+            if (!snils) {
+                // user is logged off
+                return;
+            }
+
+            var pendedTariffChanges = this.oMainModel.getProperty("/pendedTariffChanges");
+            if (pendedTariffChanges.length === 0) {
+                this.oTechModel.setProperty("/tech/changeTariffTab/isSliderChangeTariffEnabled", true);
+                // fake event, which should restore right state of the button
+                this.onChangeTariff();
+                this.oTechModel.setProperty("techModel>/tech/changeTariffTab/changeTariffMessage", "");
+            } else {
+                this.oTechModel.setProperty("/tech/changeTariffTab/isButtonChangeTariffEnabled", false);
+                this.oTechModel.setProperty("/tech/changeTariffTab/isSliderChangeTariffEnabled", false);
+                this.oTechModel.setProperty("techModel>/tech/changeTariffTab/changeTariffMessage", "Заявка на рассмотрении");
+            }
         },
 
         /**
@@ -19,10 +44,11 @@ sap.ui.define([
             var snils = this.oMainModel.getProperty("/metadata/snils");
             var baseUrl = Const.const.BASE_URL;
             var changeTariffUrl = baseUrl + "/person/" + snils;
-            var nNewTariff = this.oTechModel.getProperty("/tech/tariff");
+
+            var selectedTariff = this.oTechModel.getProperty("/tech/changeTariffTab/selectedTariff");
             var pendedTariffChanges = this.oMainModel.getProperty("/pendedTariffChanges");
             var oNewTariff = {
-                "tariff": nNewTariff
+                "tariff": selectedTariff
             };
             $.ajax({
                 url: changeTariffUrl + "/tariff",
@@ -31,17 +57,17 @@ sap.ui.define([
                 data: JSON.stringify(oNewTariff),
                 jsonp: false
             });
-            this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([{tariff: nNewTariff}]));
-            this.oTechModel.setProperty("/tech/isButtonChangeTariffEnable", false);
+            this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([oNewTariff]));
+            this.oTechModel.setProperty("/tech/changeTariffTab/isButtonChangeTariffEnabled", false);
         },
 
         /**
          * @description Смена значения слайдера для выбора тарифа
          */
-        onChangeTariff: function (oEvent) {
-            var nNewTariff = oEvent.getParameter("value");
-            var nOldTarrif = this.oMainModel.getProperty("/tariff");
-            this.oTechModel.setProperty("/tech/isButtonChangeTariffEnable", nNewTariff !== nOldTarrif);
+        onChangeTariff: function () {
+            var selectedTariff = this.oTechModel.getProperty("/tech/changeTariffTab/selectedTariff");
+            var currentTarrif = this.oMainModel.getProperty("/tariff");
+            this.oTechModel.setProperty("/tech/changeTariffTab/isButtonChangeTariffEnabled", selectedTariff !== currentTarrif);
         }
     });
 });

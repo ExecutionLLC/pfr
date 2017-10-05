@@ -12,24 +12,28 @@ sap.ui.define([
             //техническая модель приложения
             tech:{
                 isButtonShowApply:false,				                                    // Индикатор который показывает нажата ли кнопка показать во вкладке "Получить выписку"
-                currentValueSlider: null,                                                   // Значение слайдера
-                isButtonShowNPFApply:false,                                                 // Индикатор который показывает нажата ли кнопка "Выбрать НПФ" во вкладке "Сменить НПФ"
-                isCustomListSelected:false,                                                 // Индикатор состояния таблицы выбора НПФ во вкладке "Сменить НПФ"
                 currencyCode: "рублей",                                                     // код валюты
                 selectedKey:"",                                                             // выбранная вкладка
-                tariff: null,                                                               // значение тарифа для конкретного пользователя (вставляется из бэка при загрузке страницы)
-                isButtonChangeTariffEnable: false,                                          // Доступность кнопки "Сменить тариф" во вкладке "Сменить тариф"
-                isSliderChangeTariffEnable: false                                           // Доступность слайдера на вкладке "Сменить тариф"
-            },
-            // модель для хранения значений для изменений НПФ (последняя вкладка)
-            changeNPF:{
-                currentNPF: "",
-                newNPF: "",
-                buttonText: "Сменить НПФ",
-                warningText: "Вы уверены? Отменить операцию будет невозможно!",
-                isWarningTextVisible: false,
-                state: "Error",
-                buttonPressCount: 0
+
+                changeTariffTab: {
+                    selectedTariff: 0,
+                    changeTariffMessage: "",
+                    isButtonChangeTariffEnabled: false,
+                    isSliderChangeTariffEnabled: false
+                },
+                changeNpfTab: {
+                    selectedNpf: "",
+                    isSelectButtonEnabled: true,
+                    isSelectedNpfLabelVisible: false,
+                    needConformation: true,
+                    isNextNpfTableVisible: false,
+                    applyButtonText: "Сменить НПФ",
+                    isApplyButtonVisible: false,
+                    changeNpfMessage: "",
+                    changeNpfMessageType: "Error",
+                    nextMinTimeForChangeMessage: "",
+                    isNextMinTimeForChangeLabelVisible: false
+                }
             },
             // Настройки диаграммы
             diagrammProperties:{

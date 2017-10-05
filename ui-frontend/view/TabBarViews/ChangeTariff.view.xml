@@ -1,105 +1,84 @@
-<mvc:View
-    controllerName="personal.account.controller.TabBarControllers.ChangeTariff"
-    xmlns="sap.m"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns:layout="sap.ui.layout"
-    xmlns:core="sap.ui.core">
-    <Page
-        showHeader="false">
-        <layout:Grid
-                width="100%">
-            <Label
-                    text="Ваш текущий тариф"
-                    class="label-margin-top">
+<mvc:View controllerName="personal.account.controller.TabBarControllers.ChangeTariff"
+          xmlns="sap.m"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns:layout="sap.ui.layout"
+          xmlns:core="sap.ui.core">
+    <Page showHeader="false">
+        <layout:Grid width="100%">
+            <Label text="Ваш текущий тариф"
+                   class="label-margin-top"
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L2 M4 S4"/>
+                    <layout:GridData span="L2 M4 S4"/>
                 </layoutData>
             </Label>
-            <Input
-                    value="{=${mainModel>/tariff} + '%'}"
-                    width="34%"
-                    type = "Text"
-                    enabled="false">
+            <Input value="{=${mainModel>/tariff} + '%'}"
+                   width="34%"
+                   type="Text"
+                   enabled="false"
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L8 M4 S4"/>
+                    <layout:GridData span="L8 M4 S4"/>
                 </layoutData>
             </Input>
-            <Slider
-                    value="{techModel>/tech/tariff}"
+            <Slider value="{techModel>/tech/changeTariffTab/selectedTariff}"
                     min="0"
                     max="6"
                     enableTickmarks="true"
                     change="onChangeTariff"
-                    enabled="{
-                        path:'mainModel>/pendedTariffChanges',
-                        formatter:'.formatter.formatSliderEnable'}">
+                    enabled="{techModel>/tech/changeTariffTab/isSliderChangeTariffEnabled}"
+            >
                 <ResponsiveScale tickmarksBetweenLabels="1"/>
                 <layoutData>
-                    <layout:GridData
-                            span="L5 M4 S4"/>
+                    <layout:GridData span="L5 M4 S4"/>
                 </layoutData>
             </Slider>
-            <Button
-                    text="Сменить тариф"
+            <Button text="Сменить тариф"
                     press="onApplyChangeTariff"
-                    enabled="{techModel>/tech/isButtonChangeTariffEnable}">
+                    enabled="{techModel>/tech/changeTariffTab/isButtonChangeTariffEnabled}"
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L2 M4 S4"
-                            indent="L1 M3 S3"/>
+                    <layout:GridData span="L2 M4 S4" indent="L1 M3 S3"/>
                 </layoutData>
             </Button>
             <ObjectStatus
                     class="sapUiSmallMarginTop"
-                    text="Заявка на рассмотрении"
+                    text="{techModel>/tech/changeTariffTab/changeTariffMessage}"
                     state="Warning"
-                    visible="{
-                        path:'mainModel>/pendedTariffChanges',
-                        formatter:'.formatter.formatStatusTextEnable'}">
+            >
                 <layoutData>
-                    <layout:GridData
-                            span="L3 M3 S7"
-                            indent="L1 M8 S8"/>
+                    <layout:GridData span="L3 M3 S7" indent="L1 M8 S8"/>
                 </layoutData>
             </ObjectStatus>
         </layout:Grid>
 
 
-
-        <Label
-            text="История смены тарифа"
-            class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
-        <Table
-                items="{
-                    path:'mainModel>/tariffHistory'}">
+        <Label text="История смены тарифа"
+               class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"
+        />
+        <Table items="{path:'mainModel>/tariffHistory'}">
             <columns>
-                <Column
-                        hAlign="Center">
+                <Column hAlign="Center">
                     <Text text="Дата операции"/>
                 </Column>
-                <Column
-                        hAlign="Center">
+                <Column hAlign="Center">
                     <Text text="Тариф"/>
                 </Column>
-                <Column
-                        hAlign="Center"/>
+                <Column hAlign="Center"/>
             </columns>
             <items>
                 <ColumnListItem>
                     <cells>
-                        <Text
-                                text="{
+                        <Text text="{
 				                path: 'mainModel>timestamp',
 				                formatter:'.formatter.formatDateForTable'
-			                }"/>
-                        <Text
-                                text="{mainModel>newTariff}"/>
-                        <core:Icon
-                                src="sap-icon://initiative"
-                                press="onIconPress"
-                                size="2rem"/>
+			                  }"
+                        />
+                        <Text text="{mainModel>newTariff}"/>
+                        <core:Icon src="sap-icon://initiative"
+                                   press="onIconPress"
+                                   size="2rem"
+                        />
                     </cells>
                 </ColumnListItem>
             </items>
