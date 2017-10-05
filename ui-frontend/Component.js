@@ -64,9 +64,8 @@ sap.ui.define([
         },
         updateModels: function() {
             var oMainModel = this.getModel("mainModel");
-            var oTechModel = this.getModel("techModel");
-
-            var snils = oTechModel.getProperty("snils");
+            
+            var snils = oMainModel.getProperty("snils");
             var baseUrl = Const.const.BASE_URL;
             var personInfoURL = baseUrl + "/person/" + snils;
 
