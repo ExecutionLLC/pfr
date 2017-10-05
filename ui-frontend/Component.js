@@ -22,8 +22,6 @@ sap.ui.define([
             this.getRouter().initialize();
         },
         initModels: function(snils) {
-            console.log(snils);
-
             if (this.updateTimeoutId) {
                 clearTimeout(this.updateTimeoutId);
                 this.updateTimeoutId = null;
@@ -33,14 +31,11 @@ sap.ui.define([
             var personInfoURL = baseUrl + "/person/" + snils;
             var npfsURL = baseUrl + "/npfs";
 
-            console.log(personInfoURL);
-            console.log(npfsURL);
-
             var oMainModel = this.getModel("mainModel");
             var oTechModel = this.getModel("techModel");
             var oNpfModel = this.getModel("npfModel");
 
-            var scheduleNextUpdate = this.scheduleNextModelsUpdate();
+            var scheduleNextUpdate = this.scheduleNextModelsUpdate.bind(this);
 
             $.ajax({
                 url: personInfoURL,
@@ -53,6 +48,8 @@ sap.ui.define([
                     oNpfModel.setData(npfsResult);
                     oMainModel.setData(personInfoResult);
                     oTechModel.setProperty("/tech/tariff", oMainModel.getData().tariff);
+
+                    scheduleNextUpdate()
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.error('Cannot update model data: textStatus = ', textStatus, ', error = ', errorThrown);
                     MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
@@ -65,7 +62,7 @@ sap.ui.define([
         updateModels: function() {
             var oMainModel = this.getModel("mainModel");
 
-            var snils = oMainModel.getProperty("snils");
+            var snils = oMainModel.getProperty("/snils");
             var baseUrl = Const.const.BASE_URL;
             var personInfoURL = baseUrl + "/person/" + snils;
 
