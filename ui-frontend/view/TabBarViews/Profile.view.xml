@@ -238,7 +238,12 @@
                             <suite:toolbar>
                                 <OverflowToolbar>
                                     <ToolbarSpacer/>
-                                    <Select/>
+                                    <Select>
+                                        <items>
+                                            <core:Item text="За последний год" />
+                                            <core:Item text="За все время" />
+                                        </items>
+                                    </Select>
                                     <suite:ChartContainerToolbarPlaceholder></suite:ChartContainerToolbarPlaceholder>
                                 </OverflowToolbar>
                             </suite:toolbar>

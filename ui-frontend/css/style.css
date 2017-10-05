@@ -60,3 +60,13 @@
 .cstMITHNoBBorder.sapMITH{
 	border-bottom: none;
 }
+
+.button-color{
+	border: none;
+	background-color: transparent;
+}
+
+.visited{
+	color: black;
+	font-weight: bold;
+}

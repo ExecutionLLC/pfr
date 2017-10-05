@@ -5,81 +5,128 @@
     xmlns:layout="sap.ui.layout"
     xmlns:form="sap.ui.layout.form"
     displayBlock="true">
-    <form:Form
-        width = "40%"
-        editable="true"
-        class="form-margin">
-        <form:formContainers>
-            <form:FormContainer>
-                <form:FormElement>
-                    <Label
-                        class="label-position"
-                        text="{i18n>label}"/>
-                </form:FormElement>
-                <form:FormElement>
-                    <Label
-                        text="{i18n>label.enter}"/>
-                    <HBox>
+    <Page
+        showHeader="false">
+        <form:Form
+                width = "40%"
+                editable="true"
+                class="form-margin">
+            <form:formContainers>
+                <form:FormContainer>
+                    <form:FormElement>
+                        <Label
+                                class="label-position"
+                                text="{i18n>label}"/>
+                    </form:FormElement>
+                    <form:FormElement>
+                        <Label
+                                text="{i18n>label.enter}"/>
+                        <HBox>
+                            <Text
+                                    text="{i18n>link.login}"
+                                    class="sapUiSmallMarginEnd visited"/>
+                            <Link
+                                    text="{i18n>link.snils}"
+                                    href="#"/>
+                        </HBox>
+                    </form:FormElement>
+                    <form:FormElement>
+                        <Input
+                                id="loginInput"
+                                placeholder="{i18n>placeholder.mail}"
+                                type = "Text"
+                                submit = "onButtonOk">
+                            <layoutData>
+                                <layout:GridData
+                                        span="L8 M8 S8"/>
+                            </layoutData>
+                        </Input>
+                    </form:FormElement>
+                    <form:FormElement>
+                        <Input
+                                id="passwordInput"
+                                placeholder="{i18n>placeholder.password}"
+                                type = "Password"
+                                submit = "onButtonOk">
+                            <layoutData>
+                                <layout:GridData
+                                        span="L8 M8 S8"/>
+                            </layoutData>
+                        </Input>
                         <Link
-                            text="{i18n>link.login}"
-                            class="sapUiSmallMarginEnd"/>
+                                emphasized="true"
+                                text="{i18n>link.forgotPassword}"/>
+                    </form:FormElement>
+                    <form:FormElement>
+                        <Button
+                                text="{i18n>button.enter}"
+                                type="Emphasized"
+                                press = "onEnter">
+                            <layoutData>
+                                <layout:GridData
+                                        span="L6 M6 S4"/>
+                            </layoutData>
+                        </Button>
                         <Link
-                            text="{i18n>link.snils}"/>
-                    </HBox>
-                </form:FormElement>
-                <form:FormElement>
-                    <Input
-                        id="loginInput"
-                        placeholder="{i18n>placeholder.mail}"
-                        type = "Text"
-                        submit = "onButtonOk">
-                        <layoutData>
-                            <layout:GridData
-                                span="L8 M8 S8"/>
-                        </layoutData>
-                    </Input>
-                </form:FormElement>
-                <form:FormElement>
-                    <Input
-                        id="passwordInput"
-                        placeholder="{i18n>placeholder.password}"
-                        type = "Password"
-                        submit = "onButtonOk">
-                        <layoutData>
-                            <layout:GridData
-                                span="L8 M8 S8"/>
-                        </layoutData>
-                    </Input>
-                    <Link
-                        emphasized="true"
-                        text="{i18n>link.forgotPassword}"/>
-                </form:FormElement>
-                <form:FormElement>
-                    <Button
-                        text="{i18n>button.enter}"
-                        type="Emphasized"
-                        press = "onEnter">
-                        <layoutData>
-                            <layout:GridData
-                                span="L6 M6 S4"/>
-                        </layoutData>
-                    </Button>
-                    <Link
-                        emphasized="true"
-                        text="{i18n>link.reg}">
-                        <layoutData>
-                            <layout:GridData
-                                span="L2 M2 S4"/>
-                        </layoutData>
-                    </Link>
-                </form:FormElement>
-            </form:FormContainer>
-        </form:formContainers>
-        <form:layout>
-            <form:ResponsiveGridLayout
-                columnsL="1"
-                columnsM="1"
-                columnsS="1"/>
-        </form:layout>
-    </form:Form>
+                                emphasized="true"
+                                text="{i18n>link.reg}">
+                            <layoutData>
+                                <layout:GridData
+                                        span="L2 M2 S4"/>
+                            </layoutData>
+                        </Link>
+                    </form:FormElement>
+                </form:FormContainer>
+            </form:formContainers>
+            <form:layout>
+                <form:ResponsiveGridLayout
+                        columnsL="1"
+                        columnsM="1"
+                        columnsS="1"/>
+            </form:layout>
+        </form:Form>
+        <form:Form
+                width = "40%"
+                editable="true"
+                class="form-margin">
+            <form:formContainers>
+                <form:FormContainer>
+                    <form:FormElement>
+                        <Label
+                                text="Войти с помощью:"/>
+                    </form:FormElement>
+                    <form:FormElement>
+                        <VBox>
+                            <Link
+                                    text="Gosuslugi.ru"/>
+                            <Link
+                                    text="Электронной подписи юридическогого лица"/>
+                        </VBox>
+                    </form:FormElement>
+                    <form:FormElement>
+                        <Label
+                                class="sapUiSmallMarginTop"
+                                text="Войти с помощью соц.сетей:"/>
+                        <HBox>
+                            <Image
+                                    class="sapUiSmallMarginEnd"
+                                    src="./test/img/vk.JPG"/>
+                            <Image
+                                    class="sapUiSmallMarginEnd"
+                                    src="./test/img/facebook.JPG"/>
+                            <Image
+                                    src="./test/img/twitter.JPG"/>
+                        </HBox>
+                    </form:FormElement>
+                </form:FormContainer>
+            </form:formContainers>
+            <form:layout>
+                <form:ResponsiveGridLayout
+                        columnsL="1"
+                        columnsM="1"
+                        columnsS="1"/>
+            </form:layout>
+        </form:Form>
+    </Page>
+
 </mvc:View>
