@@ -16,7 +16,7 @@ sap.ui.define([
          * @description Сбор информации о новом тарифе и отправка ее на сервер
          */
         onApplyChangeTariff: function () {
-            var snils = this.oMainModel.getProperty("/snils");
+            var snils = this.oMainModel.getProperty("/metadata/snils");
             var baseUrl = Const.const.BASE_URL;
             var changeTariffUrl = baseUrl + "/person/" + snils;
             var nNewTariff = this.oTechModel.getProperty("/tech/tariff");

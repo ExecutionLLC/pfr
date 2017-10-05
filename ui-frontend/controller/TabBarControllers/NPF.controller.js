@@ -111,7 +111,7 @@ sap.ui.define([
         },
 
         onChangeNPF: function () {
-            var snils = this.oMainModel.getProperty("/snils");
+            var snils = this.oMainModel.getProperty("/metadata/snils");
             var baseUrl = Const.const.BASE_URL;
             var changeNpfURL = baseUrl + "/person/" + snils + "/npf";
 
