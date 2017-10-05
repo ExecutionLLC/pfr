@@ -20,6 +20,12 @@ sap.ui.define([
 
             UIComponent.prototype.init.apply(this, arguments);
             this.getRouter().initialize();
+
+            var storage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            var lastSnils = storage.get("LAST_SNILS");
+            if(lastSnils) {
+                this.initModels(lastSnils);
+            }
         },
         initModels: function(snils) {
             if (this.updateTimeoutId) {
@@ -49,7 +55,10 @@ sap.ui.define([
                     oMainModel.setData(personInfoResult);
                     oTechModel.setProperty("/tech/tariff", oMainModel.getData().tariff);
 
-                    scheduleNextUpdate()
+                    var storage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+                    storage.put("LAST_SNILS", snils);
+
+                    scheduleNextUpdate();
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.error('Cannot update model data: textStatus = ', textStatus, ', error = ', errorThrown);
                     MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
