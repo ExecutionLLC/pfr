@@ -45,6 +45,148 @@ sap.ui.define([], function() {
             return modelData.find(function(item) {
                 return item.address.toUpperCase() === address.toUpperCase();
             });
+        },
+
+        conversionNpfRating: function (int) {
+            var oRating = {
+                symbol: "?",
+                descrition: "Неизвестен"
+            };
+            switch (int){
+                case 0:
+                    oRating = {
+                        symbol: "D",
+                        descrition: "В состоянии дефолта"
+                    };
+                    break;
+                case 1:
+                    oRating = {
+                        symbol: "C",
+                        descrition: "Близки к дефолту"
+                    };
+                    break;
+                case 2:
+                    oRating = {
+                        symbol: "CC",
+                        descrition: "Близки к дефолту"
+                    };
+                    break;
+                case 3:
+                    oRating = {
+                        symbol: "CCC-",
+                        descrition: "Близки к дефолту"
+                    };
+                    break;
+                case 4:
+                    oRating = {
+                        symbol: "CCC",
+                        descrition: "Крайне высокий кредитный риск"
+                    };
+                    break;
+                case 5:
+                    oRating = {
+                        symbol: "CCC+",
+                        descrition: "Очень высокий кредитный риск"
+                    };
+                    break;
+                case 6:
+                    oRating = {
+                        symbol: "B-",
+                        descrition: "Рискованные обязательства в высокой степени спекулятивные"
+                    };
+                    break;
+                case 7:
+                    oRating = {
+                        symbol: "B",
+                        descrition: "Рискованные обязательства в высокой степени спекулятивные"
+                    };
+                    break;
+                case 8:
+                    oRating = {
+                        symbol: "B+",
+                        descrition: "Рискованные обязательства в высокой степени спекулятивные"
+                    };
+                    break;
+                case 9:
+                    oRating = {
+                        symbol: "BB-",
+                        descrition: "Рискованные обязательства с чертами спекулятивных"
+                    };
+                    break;
+                case 10:
+                    oRating = {
+                        symbol: "BB",
+                        descrition: "Рискованные обязательства с чертами спекулятивных"
+                    };
+                    break;
+                case 11:
+                    oRating = {
+                        symbol: "BB+",
+                        descrition: "Рискованные обязательства с чертами спекулятивных"
+                    };
+                    break;
+                case 12:
+                    oRating = {
+                        symbol: "BBB-",
+                        descrition: "Надежность ниже среднего"
+                    };
+                    break;
+                case 13:
+                    oRating = {
+                        symbol: "BBB",
+                        descrition: "Надежность ниже среднего"
+                    };
+                    break;
+                case 14:
+                    oRating = {
+                        symbol: "BBB+",
+                        descrition: "Надежность ниже среднего"
+                    };
+                    break;
+                case 15:
+                    oRating = {
+                        symbol: "A-",
+                        descrition: "Надежность выше среднего"
+                    };
+                    break;
+                case 16:
+                    oRating = {
+                        symbol: "A",
+                        descrition: "Надежность выше среднего"
+                    };
+                    break;
+                case 17:
+                    oRating = {
+                        symbol: "A+",
+                        descrition: "Надежность выше среднего"
+                    };
+                    break;
+                case 18:
+                    oRating = {
+                        symbol: "AA-",
+                        descrition: "Высокая надежность"
+                    };
+                    break;
+                case 19:
+                    oRating = {
+                        symbol: "AA",
+                        descrition: "Высокая надежность"
+                    };
+                    break;
+                case 20:
+                    oRating = {
+                        symbol: "AA+",
+                        descrition: "Высокая надежность"
+                    };
+                    break;
+                case 21:
+                    oRating = {
+                        symbol: "AAA",
+                        descrition: "Наивысша надежность"
+                    };
+                    break;
+            }
+            return oRating;
         }
     };
 
