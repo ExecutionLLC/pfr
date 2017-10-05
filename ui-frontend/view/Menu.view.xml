@@ -1,51 +1,55 @@
 <mvc:View
-    controllerName="personal.account.controller.Menu"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m"
-    xmlns:layout="sap.ui.layout"
-    xmlns:core="sap.ui.core"
-    xmlns:tnt="sap.tnt">
+        controllerName="personal.account.controller.Menu"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:layout="sap.ui.layout"
+        xmlns:core="sap.ui.core"
+        xmlns:tnt="sap.tnt">
 
     <tnt:ToolHeader>
         <core:Icon
-            src="sap-icon://home"
-            size="2rem"
-            class="sapUiMediumMarginBeginEnd"/>
+                src="sap-icon://home"
+                size="2rem"
+                class="sapUiMediumMarginBeginEnd"/>
         <IconTabHeader class="cstMITHNoBBorder"
-            showOverflowSelectList="true"
-            backgroundDesign="Transparent"
-            select="onSelectTab"
-            selectedKey="{techModel>/tech/selectedKey}">
+                       showOverflowSelectList="true"
+                       backgroundDesign="Transparent"
+                       select="onSelectTab"
+                       selectedKey="{techModel>/tech/selectedKey}">
             <layoutData>
                 <OverflowToolbarLayoutData
                         shrinkable="true"/>
             </layoutData>
             <items>
                 <IconTabFilter
-                    text="{i18n>toolbarIcon.profile}"
-                    key="Profile"/>
+                        text="{i18n>toolbarIcon.profile}"
+                        key="Profile"/>
                 <IconTabFilter
-                    text="{i18n>toolbarIcon.report}"
-                    key="Report"/>
+                        text="{i18n>toolbarIcon.report}"
+                        key="Report"/>
                 <IconTabFilter
-                    text="{i18n>toolbarIcon.rate}"
-                    key="Rate"/>
+                        text="{i18n>toolbarIcon.rate}"
+                        key="Rate"/>
                 <IconTabFilter
-                    text="{i18n>toolbarIcon.NPF}"
-                    key="NPF"/>
+                        text="{i18n>toolbarIcon.NPF}"
+                        key="NPF"/>
             </items>
         </IconTabHeader>
+        <ToolbarSpacer/>
+        <Button
+                class="button-color"
+                text="Logout"/>
     </tnt:ToolHeader>
 
 
     <NavContainer
-        id="navCon"
-        width="100%"
-        height="calc(100% - 3rem - 1px)">
-        <mvc:XMLView  id="Profile" viewName="personal.account.view.TabBarViews.Profile"></mvc:XMLView>
-        <mvc:XMLView  id="Report" viewName="personal.account.view.TabBarViews.Report"></mvc:XMLView>
-        <mvc:XMLView  id="Rate" viewName="personal.account.view.TabBarViews.ChangeTariff"></mvc:XMLView>
-        <mvc:XMLView  id="NPF" viewName="personal.account.view.TabBarViews.NPF"></mvc:XMLView>
+            id="navCon"
+            width="100%"
+            height="calc(100% - 3rem - 1px)">
+        <mvc:XMLView id="Profile" viewName="personal.account.view.TabBarViews.Profile"></mvc:XMLView>
+        <mvc:XMLView id="Report" viewName="personal.account.view.TabBarViews.Report"></mvc:XMLView>
+        <mvc:XMLView id="Rate" viewName="personal.account.view.TabBarViews.ChangeTariff"></mvc:XMLView>
+        <mvc:XMLView id="NPF" viewName="personal.account.view.TabBarViews.NPF"></mvc:XMLView>
 
     </NavContainer>
 
