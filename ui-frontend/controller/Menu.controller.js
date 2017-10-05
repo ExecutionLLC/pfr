@@ -35,6 +35,10 @@ sap.ui.define([
                     tab: oEvent.getParameter("selectedKey")
                 }
             }, true);
+        },
+
+        onLogout: function () {
+            this.oRouter.navTo("loginPage");
         }
     });
 });

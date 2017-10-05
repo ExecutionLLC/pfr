@@ -65,6 +65,9 @@
 	border: none;
 	background-color: transparent;
 }
+.logout-color{
+	color: gray;
+}
 
 .visited{
 	color: black;

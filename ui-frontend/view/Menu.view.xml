@@ -37,8 +37,9 @@
         </IconTabHeader>
         <ToolbarSpacer/>
         <Button
-                class="button-color"
-                text="Logout"/>
+                type="Transparent"
+                text="Logout"
+                press="onLogout"/>
     </tnt:ToolHeader>
 
 

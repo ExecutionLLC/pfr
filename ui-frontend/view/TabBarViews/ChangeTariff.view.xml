@@ -56,7 +56,14 @@
         <Label text="История смены тарифа"
                class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"
         />
-        <Table items="{path:'mainModel>/tariffHistory'}">
+        <Table
+                items="{
+                path:'mainModel>/tariffHistory',
+                sorter : {
+                        path : 'timestamp',
+                        descending:true
+                    }
+                }">
             <columns>
                 <Column hAlign="Center">
                     <Text text="Дата операции"/>
@@ -64,7 +71,9 @@
                 <Column hAlign="Center">
                     <Text text="Тариф"/>
                 </Column>
-                <Column hAlign="Center"/>
+                <Column hAlign="Center">
+                    <Text text="Проверить операцию"/>
+                </Column>
             </columns>
             <items>
                 <ColumnListItem>

@@ -50,9 +50,10 @@ sap.ui.define([
             var oBinding = oTable.getBinding("items");
 
             oBinding.filter(this._oFilterSet.dateFilter);
+        },
 
-
-
+        onPrint: function () {
+            $("#table--report").print();
         }
     });
 });

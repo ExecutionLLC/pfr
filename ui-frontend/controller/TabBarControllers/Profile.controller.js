@@ -7,8 +7,9 @@ sap.ui.define([
         formatter: formatter,
 
         onNavToNPF:function () {
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("changeNpf");
+            /*var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("changeNpf");*/
+
         }
     });
 });

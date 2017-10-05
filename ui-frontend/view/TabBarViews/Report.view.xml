@@ -12,7 +12,7 @@
                 width="100%">
             <Label
                     class="label-margin-top"
-                    text="Движение средств за период:">
+                    text="Всего накоплено:">
                 <layoutData>
                     <layout:GridData
                             span="L3 M5 S4"
@@ -35,10 +35,10 @@
                 width="100%">
             <Label
                     class="sapUiSmallMarginTop"
-                    text="{i18n>totalMany}">
+                    text="Движение средств за период:">
                 <layoutData>
                     <layout:GridData
-                            span="L2 M4 S4"
+                            span="L3 M4 S4"
                             indent="L1 M1 S1"/>
                 </layoutData>
             </Label>
@@ -48,7 +48,7 @@
                 <layoutData>
                     <layout:GridData
                             span="L4 M5 S4"
-                            indent="L1 M0 S0"/>
+                            indent="L0 M0 S0"/>
                 </layoutData>
             </DateRangeSelection>
             <ToggleButton
@@ -151,7 +151,11 @@
         <Table
                 id="table--report"
                 items="{
-                    path:'mainModel>/operationsHistory'
+                    path:'mainModel>/operationsHistory',
+                    sorter : {
+                        path : 'timestamp',
+                        descending:true
+                    }
                 }">
             <columns>
                 <Column
@@ -176,7 +180,7 @@
                 </Column>
                 <Column
                     hAlign="Center">
-                    <Text text="ПНФ"/>
+                    <Text text="НПФ"/>
                 </Column>
                 <Column
                     hAlign="Center">

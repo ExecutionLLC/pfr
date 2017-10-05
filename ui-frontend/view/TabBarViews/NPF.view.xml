@@ -46,7 +46,6 @@
         <layout:Grid width="100%">
             <Label class="sapUiSmallMarginTop"
                    text="Новый НПФ:"
-                   visible="{techModel>/tech/changeNpfTab/isSelectedNpfLabelVisible}"
             >
                 <layoutData>
                     <layout:GridData span="L2 M4 S4" indent="L1 M1 S1"/>
@@ -88,7 +87,10 @@
 
         <!--Таблица для выбора нового НПФ-->
         <Table visible="{techModel>/tech/changeNpfTab/isNextNpfTableVisible}"
-               items="{path:'npfModel>/'}"
+               items="{
+                    path:'npfModel>/'
+
+               }"
         >
             <columns>
                 <Column hAlign="Center">
@@ -165,7 +167,11 @@
                 class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
         <Table
                 items="{
-            path:'mainModel>/npfHistory'
+            path:'mainModel>/npfHistory',
+            sorter : {
+                        path : 'timestamp',
+                        descending:true
+                    }
         }">
             <columns>
                 <Column
@@ -179,7 +185,9 @@
                             text="НПФ"/>
                 </Column>
                 <Column
-                        hAlign="Center"/>
+                        hAlign="Center">
+                    <Text text="Проверить операцию"/>
+                </Column>
             </columns>
             <items>
                 <ColumnListItem>
