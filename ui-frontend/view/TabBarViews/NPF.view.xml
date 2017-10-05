@@ -1,31 +1,33 @@
 <mvc:View
-    controllerName="personal.account.controller.TabBarControllers.NPF"
-    xmlns="sap.m"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns:form="sap.ui.layout.form"
-    xmlns:core="sap.ui.core"
-    xmlns:layout="sap.ui.layout"
-    displayBlock="true">
+        controllerName="personal.account.controller.TabBarControllers.NPF"
+        xmlns="sap.m"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:form="sap.ui.layout.form"
+        xmlns:core="sap.ui.core"
+        xmlns:layout="sap.ui.layout"
+        displayBlock="true">
+    <Page
+            showHeader="false">
     <layout:Grid
-        width="100%">
+            width="100%">
         <Label
-            class="sapUiSmallMarginTop"
-            text="Текущий НПФ:">
+                class="sapUiSmallMarginTop"
+                text="Текущий НПФ:">
             <layoutData>
                 <layout:GridData
-                    span="L2 M4 S4"
-                    indent="L1 M1 S1"/>
+                        span="L2 M4 S4"
+                        indent="L1 M1 S1"/>
             </layoutData>
         </Label>
         <Text
-            class="sapUiSmallMarginTop text-bold"
-            text="{
+                class="sapUiSmallMarginTop text-bold"
+                text="{
                 path:'mainModel>/npf',
                 formatter:'.formatter.formatNPFadressToName'
             }">
             <layoutData>
                 <layout:GridData
-                    span="L4 M4 S4"/>
+                        span="L4 M4 S4"/>
             </layoutData>
         </Text>
         <Label
@@ -37,8 +39,8 @@
             </layoutData>
         </Label>
         <Text
-            class="sapUiSmallMarginTop"
-            text="А++">
+                class="sapUiSmallMarginTop"
+                text="А++">
             <layoutData>
                 <layout:GridData
                         span="L1 M4 S4"/>
@@ -73,8 +75,8 @@
             </layoutData>
         </Label>
         <Text
-            class="sapUiSmallMarginTop"
-            text="">
+                class="sapUiSmallMarginTop"
+                text="{techModel>/changeNPF/dateChangeNpf}">
             <layoutData>
                 <layout:GridData
                         span="L1 M4 S4"/>
@@ -83,47 +85,63 @@
         <ToggleButton
                 width="100%"
                 pressed="{techModel>/tech/isButtonShowNPFApply}"
-                text="Выбрать НПФ">
+                text="Выбрать НПФ"
+                enabled="{
+                parts:[
+                    {path:'mainModel>/pendedNpfChanges'},
+                    {path:'techModel>/changeNPF/NewTimestamp'}
+                ],
+
+                        formatter:'.formatter.formatButtonNpfEnable'}">
             <layoutData>
                 <layout:GridData
                         span="L2 M3 S7"/>
             </layoutData>
         </ToggleButton>
     </layout:Grid>
+
+    <!--Таблица для выбора нового НПФ-->
     <Table
-        visible="{techModel>/tech/isButtonShowNPFApply}"
-        items="{
+            visible="{techModel>/tech/isButtonShowNPFApply}"
+            items="{
         path:'npfModel>/'}">
         <columns>
             <Column
-                hAlign="Center">
+                    hAlign="Center">
                 <Text
-                    text="НПФ"/>
+                        text="НПФ"/>
             </Column>
             <Column
-                hAlign="Center">
+                    hAlign="Center">
                 <Text
-                    text="Рейтинг надежности"/>
+                        text="Рейтинг надежности"/>
             </Column>
             <Column
-                hAlign="Center">
+                    hAlign="Center">
                 <Text
-                    text="Перейти на сайт"/>
+                        text="Перейти на сайт"/>
             </Column>
         </columns>
         <items>
             <ColumnListItem
-                type="Active"
-                press="onColumnListItemPress">
+                    visible="{
+                parts:[
+                    {path:'npfModel>address'},
+                    {path:'mainModel>/npf'}
+                ],
+                formatter:'.formatter.formatColumnListItem'
+                }"
+                    type="Active"
+                    press="onColumnListItemPress">
                 <cells>
                     <Text
-                        text="{npfModel>name}"/>
+                            text="{npfModel>name}"/>
                     <Text
-                        text="{NPF>Rating}"/>
+                            text="{NPF>Rating}"/>
                     <core:Icon
-                        src="sap-icon://hello-world"
-                        press="onIconPress"
-                        size="2rem"/>
+                            src="sap-icon://hello-world"
+                            press="onIconPress"
+                            size="2rem"/>
                 </cells>
             </ColumnListItem>
         </items>
@@ -134,70 +152,36 @@
     <!--доп контейнер подтверждения смены НПФ-->
     <layout:Grid>
         <ObjectStatus
-            class="sapUiSmallMarginTop"
-            visible="{techModel>/changeNPF/isWarningTextVisible}"
-            text="{techModel>/changeNPF/warningText}"
-            state="{techModel>/changeNPF/state}">
+                class="sapUiSmallMarginTop"
+                visible="{techModel>/changeNPF/isWarningTextVisible}"
+                text="{techModel>/changeNPF/warningText}"
+                state="{techModel>/changeNPF/state}">
             <layoutData>
                 <layout:GridData
-                    span="L5 M3 S7"
-                    indent="L1 M8 S8"/>
+                        span="L5 M3 S7"
+                        indent="L1 M8 S8"/>
             </layoutData>
         </ObjectStatus>
         <Button
-            width="100%"
-            press="onChangeNPF"
-            text="{techModel>/changeNPF/buttonText}"
-            visible="{techModel>/tech/isCustomListSelected}">
+                width="100%"
+                press="onChangeNPF"
+                text="{techModel>/changeNPF/buttonText}"
+                visible="{techModel>/tech/isCustomListSelected}">
             <layoutData>
                 <layout:GridData
-                    span="L2 M3 S7"
-                    indent="L4 M8 S8"/>
+                        span="L2 M3 S7"
+                        indent="L4 M8 S8"/>
             </layoutData>
         </Button>
     </layout:Grid>
     <!--конец-->
     <Label
-        text="История смены НПФ"
-        class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
+            text="История смены НПФ"
+            class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
     <Table
-        items="{
+            items="{
             path:'mainModel>/npfHistory'
         }">
-        <columns>
-            <Column
-                hAlign="Center">
-                <Text
-                    text="Дата операции"/>
-            </Column>
-            <Column
-                hAlign="Center">
-                <Text
-                    text="НПФ"/>
-            </Column>
-            <Column
-                hAlign="Center"/>
-        </columns>
-        <items>
-            <ColumnListItem>
-                <cells>
-                    <Text
-                        text="{
-                            path: 'mainModel>timestamp',
-                            formatter:'.formatter.formateDateforTable'
-                        }"/>
-                    <Text
-                        text="{tableModelNPF>NPF}"/>
-                    <core:Icon
-                        src="sap-icon://initiative"
-                        press="onIconPress"
-                        size="2rem"/>
-                </cells>
-            </ColumnListItem>
-        </items>
-    </Table>
-    <!--<Table
-            showNoData="false">
         <columns>
             <Column
                     hAlign="Center">
@@ -212,32 +196,26 @@
             <Column
                     hAlign="Center"/>
         </columns>
-    </Table>
-    <ListBase
-            items="{
-                path:'mainModel>/npfHistory'
-        }">
         <items>
-            <CustomListItem>
-                <Panel
-                        expandable="true">
-                    <headerToolbar>
-                        <Toolbar>
-                            <Text
-                                    text="{
-                                        path: 'mainModel>timestamp',
-                                        formatter:'.formatter.formateDateforTable'
-                            }"/>
-                            <Text
-                                    text="{tableModelNPF>NPF}"/>
-                            <core:Icon
-                                    src="sap-icon://initiative"
-                                    press="onIconPress"
-                                    size="2rem"/>
-                        </Toolbar>
-                    </headerToolbar>
-                </Panel>
-            </CustomListItem>
+            <ColumnListItem>
+                <cells>
+                    <Text
+                            text="{
+                            path: 'mainModel>timestamp',
+                            formatter:'.formatter.formateDateforTable'
+                        }"/>
+                    <Text
+                            text="{
+                            path:'mainModel>newNpf',
+                            formatter:'.formatter.formatNPFadressToName'
+                        }"/>
+                    <core:Icon
+                            src="sap-icon://initiative"
+                            press="onIconPress"
+                            size="2rem"/>
+                </cells>
+            </ColumnListItem>
         </items>
-    </ListBase>-->
+    </Table>
+    </Page>
 </mvc:View>

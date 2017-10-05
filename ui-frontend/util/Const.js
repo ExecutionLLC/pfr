@@ -8,9 +8,10 @@ sap.ui.define([
     var oModule = {
         //структура технической модели приложения
         const:{
-            ASYNC_UPDATE_TIMEOUT: 30*1000,                       // время, через которое обновляются данные
-            BASE_URL: "https://executiona4038b30e.hana.ondemand.com/PFR/pfr.xsjs"
-
+            ASYNC_UPDATE_TIMEOUT: 30*1000,                                                  // время, через которое обновляются данные
+            BASE_URL: "https://executiona4038b30e.hana.ondemand.com/PFR/pfr.xsjs",
+            TIME_NEXT_CHANGE_NPF:120*1000,                                                    // время следующей смены НПФ
+            LOGIN_URL: "https://executiona4038b30e.hana.ondemand.com/PFR/simple_login.xsjs"
         }
     };
 

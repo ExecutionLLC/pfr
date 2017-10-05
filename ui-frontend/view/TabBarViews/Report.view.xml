@@ -229,7 +229,8 @@
                                 number="{
 						        parts:[
 						            {path:'mainModel>amount'},
-						            {path:'mainModel>tariff'}
+						            {path:'mainModel>tariff'},
+						            {path:'techModel>/tech/currencyCode'}
                                 ],
 						        formatter:'.formatter.formateAmountToSalary'
 					    }"/>

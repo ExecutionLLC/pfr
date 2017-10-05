@@ -29,6 +29,7 @@
                 </form:FormElement>
                 <form:FormElement>
                     <Input
+                        id="loginInput"
                         placeholder="{i18n>placeholder.mail}"
                         type = "Text"
                         submit = "onButtonOk">
@@ -40,6 +41,7 @@
                 </form:FormElement>
                 <form:FormElement>
                     <Input
+                        id="passwordInput"
                         placeholder="{i18n>placeholder.password}"
                         type = "Password"
                         submit = "onButtonOk">

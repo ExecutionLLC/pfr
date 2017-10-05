@@ -27,7 +27,7 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
         },
         // изменять цвет кружочков в таблице во вкладке "Получить выписку"
         formatIconColorByStatus: function (sStatus) {
-              return sStatus == 'done' ? 'green' : 'red'
+              return sStatus === 'done' ? 'green' : 'red'
         },
         // изменить название кнопки по щелчку на нее во вкладке "Получить выписку"
         formatButtonName: function (bIsButtonShowApply) {
@@ -42,7 +42,7 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
             var oComponent = this.getOwnerComponent();
             var oListNPFModel = oComponent.getModel("npfModel");                        // Получили набор данных пользователя
             var NPF = adress;                                                           // Текущий НПФ
-        var aNpfs = oListNPFModel.getData();                                            // Получили массив НПФ
+            var aNpfs = oListNPFModel.getData();                                            // Получили массив НПФ
             var NPFDesc = aNpfs.find(function (npfs) {                                  // В каждом эл массива ищем объект в котором
                 return npfs.address === NPF;                                            // адресс совпадает с нашим текущим
             });
@@ -116,10 +116,39 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
         /**
          * @description Форматирование значения зарплаты
          */
-        formateAmountToSalary: function (amount, tariff) {
+        formateAmountToSalary: function (amount, tariff, currencyCode) {
             var sallary = amount/tariff*100.0;
-            var formatSallary = this.formatter.oCurrencyFormat.format(sallary,"рублей");
+            var formatSallary = this.formatter.oCurrencyFormat.format(sallary,currencyCode);
             return formatSallary
+        },
+
+        /**
+         * @description Форматирование рядов в таблице возможных НПФ для вкладки "Смена НПФ"
+         * @param name
+         */
+        formatColumnListItem: function (adressNpf, currentNpfAdress) {
+            var adressNpfUpper = adressNpf.toUpperCase();
+            var currentNpfAdressUpper = currentNpfAdress.toUpperCase();
+
+            return !(currentNpfAdressUpper === adressNpfUpper)
+        },
+
+        /**
+         * @description Форматирование видимости кнопки "Выбрать НПФ" в зависимости от pendedNpfChanges
+         */
+        formatButtonNpfEnable: function (pendedNpfChanges, newTimestamp) {
+            function func() {
+                return true
+            }
+            //var nNow = new Date().getMilliseconds();
+            if(pendedNpfChanges.length !== 0){
+                return false                           // Если в обработке есть что то кнопка не доступна
+            }else if(pendedNpfChanges.length === 0 && new Date() > newTimestamp){
+                return true
+            }else if(pendedNpfChanges.length === 0 && new Date() < newTimestamp){
+                var time = newTimestamp - new Date();
+                setTimeout(func,time)
+            }
         }
     }
 

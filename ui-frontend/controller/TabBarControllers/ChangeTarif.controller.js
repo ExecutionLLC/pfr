@@ -25,14 +25,14 @@ sap.ui.define([
                 "tariff": nNewTariff
             };
             $.ajax({
-                url:personInfoURL + "/tariff",
+                url     : personInfoURL + "/tariff",
                 dataType: "json",
-                type:"PUT",
-                data: JSON.stringify(oNewTariff),
-                jsonp: false
+                type    : "PUT",
+                data    : JSON.stringify(oNewTariff),
+                jsonp   : false
             });
             this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([{tariff: nNewTariff}]));
-            this.oTechModel.setProperty("/tech/isButtonChangeTariffEnable", false);                                        // Сделали слайдер невидимым
+            this.oTechModel.setProperty("/tech/isButtonChangeTariffEnable", false);                            // Сделали слайдер невидимым
         },
 
         /**
@@ -42,9 +42,9 @@ sap.ui.define([
             var nNewTariff = oEvent.getParameter("value");                                                  // выбранное значение на слайдере
             var nOldTarrif = this.oMainModel.getProperty("/tariff");                                             // Текущее значение тарифа для конкретного пользователя
 
-            if(nNewTariff === nOldTarrif){
+            if (nNewTariff === nOldTarrif) {
                 this.oTechModel.setProperty("/tech/isButtonChangeTariffEnable", false);                     // Сделали кнопку "Сменить тариф" невидимой
-            }else {
+            } else {
                 this.oTechModel.setProperty("/tech/isButtonChangeTariffEnable", true);                      // Сделали кнопку "Сменить тариф" видимой
             }
         }
