@@ -29,11 +29,11 @@ sap.ui.define([
                 this.oTechModel.setProperty("/tech/changeTariffTab/isSliderChangeTariffEnabled", true);
                 // fake event, which should restore right state of the button
                 this.onChangeTariff();
-                this.oTechModel.setProperty("techModel>/tech/changeTariffTab/changeTariffMessage", "");
+                this.oTechModel.setProperty("/tech/changeTariffTab/changeTariffMessage", "");
             } else {
                 this.oTechModel.setProperty("/tech/changeTariffTab/isButtonChangeTariffEnabled", false);
                 this.oTechModel.setProperty("/tech/changeTariffTab/isSliderChangeTariffEnabled", false);
-                this.oTechModel.setProperty("techModel>/tech/changeTariffTab/changeTariffMessage", "Заявка на рассмотрении");
+                this.oTechModel.setProperty("/tech/changeTariffTab/changeTariffMessage", "Заявка на рассмотрении");
             }
         },
 
@@ -43,7 +43,7 @@ sap.ui.define([
         onApplyChangeTariff: function () {
             var snils = this.oMainModel.getProperty("/metadata/snils");
             var baseUrl = Const.const.BASE_URL;
-            var changeTariffUrl = baseUrl + "/person/" + snils;
+            var changeTariffUrl = baseUrl + "/person/" + snils + "/tariff";
 
             var selectedTariff = this.oTechModel.getProperty("/tech/changeTariffTab/selectedTariff");
             var pendedTariffChanges = this.oMainModel.getProperty("/pendedTariffChanges");
@@ -51,14 +51,13 @@ sap.ui.define([
                 "tariff": selectedTariff
             };
             $.ajax({
-                url: changeTariffUrl + "/tariff",
+                url: changeTariffUrl,
                 dataType: "json",
                 type: "PUT",
                 data: JSON.stringify(oNewTariff),
                 jsonp: false
             });
             this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([oNewTariff]));
-            this.oTechModel.setProperty("/tech/changeTariffTab/isButtonChangeTariffEnabled", false);
         },
 
         /**
