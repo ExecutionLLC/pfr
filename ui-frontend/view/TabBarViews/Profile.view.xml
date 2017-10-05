@@ -45,7 +45,7 @@
                                 <Text
                                     text ="{
                                         path:'mainModel>/npf',
-                                        formatter:'.formatter.formatNPFadressToName'}"
+                                        formatter:'.formatter.formatNpfAddressToName'}"
                                     class = "coloredText sapUiTinyMarginTop"/>
                             </VBox>
 

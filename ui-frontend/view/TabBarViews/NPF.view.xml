@@ -23,7 +23,7 @@
                 class="sapUiSmallMarginTop text-bold"
                 text="{
                 path:'mainModel>/npf',
-                formatter:'.formatter.formatNPFadressToName'
+                formatter:'.formatter.formatNpfAddressToName'
             }">
             <layoutData>
                 <layout:GridData
@@ -202,7 +202,7 @@
                     <Text
                             text="{
                             path:'mainModel>newNpf',
-                            formatter:'.formatter.formatNPFadressToName'
+                            formatter:'.formatter.formatNpfAddressToName'
                         }"/>
                     <core:Icon
                             src="sap-icon://initiative"

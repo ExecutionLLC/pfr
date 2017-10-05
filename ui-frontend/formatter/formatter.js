@@ -19,29 +19,18 @@ sap.ui.define([
         },
         // изменить название кнопки по щелчку на нее во вкладке "Получить выписку"
         formatButtonName: function (bIsButtonShowApply) {
-            return bIsButtonShowApply === true ? 'Спрятать' : 'Показать'
+            return bIsButtonShowApply ? 'Спрятать' : 'Показать'
         },
 
-        /**
-         * @description Возвращает имя НПФ при наличии его адресса
-         * 
-         */
-        formatNPFadressToName: function (adress) {
+        formatNpfAddressToName: function (address) {
             var oComponent = this.getOwnerComponent();
-            var oListNPFModel = oComponent.getModel("npfModel");                        // Получили набор данных пользователя
-            var NPF = adress;                                                           // Текущий НПФ
-            var aNpfs = oListNPFModel.getData();                                            // Получили массив НПФ
-            var NPFDesc = aNpfs.find(function (npfs) {                                  // В каждом эл массива ищем объект в котором
-                return npfs.address === NPF;                                            // адресс совпадает с нашим текущим
-            });
+            var oModel = oComponent.getModel("npfModel");
 
-            return NPFDesc.name                                                         // Возвращаем название НПФ
+            var item = Utils.getNpfObjectByAddress(address, oModel);
+
+            return item ? item.name : '?';
         },
 
-        /**
-         * @description Возвращает рейтинг надежности НПФ при наличии его адресса
-         *
-         */
         formatNpfAddressToReliability: function (address) {
             var oComponent = this.getOwnerComponent();
             var oModel = oComponent.getModel("npfModel");
@@ -51,10 +40,6 @@ sap.ui.define([
             return item ? item.ratingOfReliability : '?';
         },
 
-        /**
-         * @description Возвращает рейтинг доходности НПФ при наличии его адресса
-         *
-         */
         formatNpfAddressToIncomeRate: function (address) {
             var oComponent = this.getOwnerComponent();
             var oModel = oComponent.getModel("npfModel");
@@ -85,12 +70,9 @@ sap.ui.define([
          * @description Форматирование видимости слайдера в зависимотси от pendedTariffChanges
          */
         formatSliderEnable: function (pendedTariffChanges) {
-            return pendedTariffChanges.length === 0;
+            return (pendedTariffChanges && pendedTariffChanges.length === 0);
         },
 
-        /**
-         * @description Форматирование значения зарплаты
-         */
         formatAmountToSalary: function (amount, tariff, currencyCode) {
             var salary = amount/tariff*100.0;
             return this.formatter.oCurrencyFormat.format(salary,currencyCode);
@@ -101,6 +83,10 @@ sap.ui.define([
          * @param name
          */
         formatColumnListItem: function (npfAddress, currentNpfAddress) {
+            if (!npfAddress || !currentNpfAddress) {
+                return true;
+            }
+
             return npfAddress.toUpperCase() !== currentNpfAddress.toUpperCase();
         }
     }

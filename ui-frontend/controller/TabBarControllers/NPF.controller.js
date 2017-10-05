@@ -15,9 +15,6 @@ sap.ui.define([
             this.oMainModel = this.oComponent.getModel("mainModel");
             this.enableChangeNpfButtonTimerId = null;
 
-            // fill current values
-            this.onMainModelChanges();
-
             var mainModelBinding = new sap.ui.model.Binding(
                 this.oMainModel, "/", this.oMainModel.getContext("/")
             );
@@ -61,6 +58,11 @@ sap.ui.define([
         },
 
         onMainModelChanges: function() {
+            if(!this.oMainModel.getProperty("/snils")) {
+                // user is logged out
+                return;
+            }
+
             var npfHistory = this.oMainModel.getProperty("/npfHistory");
             var pendedNpfChanges = this.oMainModel.getProperty("/pendedNpfChanges");
 
@@ -109,9 +111,9 @@ sap.ui.define([
         },
 
         onChangeNPF: function () {
-            var SNILS = "00000000101";
-            var BASE_URL = Const.const.BASE_URL;
-            var changeNpfURL = BASE_URL + "/person/" + SNILS + "/npf";
+            var snils = this.oMainModel.getProperty("/snils");
+            var baseUrl = Const.const.BASE_URL;
+            var changeNpfURL = baseUrl + "/person/" + snils + "/npf";
 
             // Получаем значение счетчика нажатия кнопки "Сменить НПФ"
             this.count = this.oTechModel.getProperty("/changeNPF/buttonPressCount");

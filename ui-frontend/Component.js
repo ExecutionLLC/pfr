@@ -11,62 +11,81 @@ sap.ui.define([
             manifest: "json"
         },
         init : function () {
-            var ASYNC_UPDATE_TIMEOUT = Const.const.ASYNC_UPDATE_TIMEOUT;            // 30s
-            // Снилс пользователя, который мы получили из окна авторизации
-            var SNILS = "00000000101";
-            var BASE_URL = Const.const.BASE_URL;
-
-            // call the init function of the parent
+            var oMainModel = new JSONModel();
+            this.setModel(oMainModel, "mainModel");
             var oTechModel = new JSONModel(Model.modelStructure);
             this.setModel(oTechModel, "techModel");
+            var oListNpfModel = new JSONModel();
+            this.setModel(oListNpfModel,"npfModel");
 
-            // Получаем адресс с данными для конкретного пользователя
-            var personInfoURL = BASE_URL + "/person/" + SNILS;
-            var npfsURL = BASE_URL + "/npfs";
+            UIComponent.prototype.init.apply(this, arguments);
+            this.getRouter().initialize();
+        },
+        initModels: function(snils) {
+            console.log(snils);
 
-            var oComponent = this;
-            var oMainModel = new JSONModel();
-            oComponent.setModel(oMainModel, "mainModel");
-
-            var oListNPFModel = new JSONModel();
-            oComponent.setModel(oListNPFModel,"npfModel");
-
-            function updateModelAsync() {
-                $.ajax({
-                    url: personInfoURL,
-                    dataType: "json"
-                }).done(function (result) {
-                    oMainModel.setData(result);
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
-                }).always(function () {
-                    setTimeout(updateModelAsync.bind(this), ASYNC_UPDATE_TIMEOUT);
-                });
+            if (this.updateTimeoutId) {
+                clearTimeout(this.updateTimeoutId);
+                this.updateTimeoutId = null;
             }
+
+            var baseUrl = Const.const.BASE_URL;
+            var personInfoURL = baseUrl + "/person/" + snils;
+            var npfsURL = baseUrl + "/npfs";
+
+            console.log(personInfoURL);
+            console.log(npfsURL);
+
+            var oMainModel = this.getModel("mainModel");
+            var oTechModel = this.getModel("techModel");
+            var oNpfModel = this.getModel("npfModel");
+
+            var scheduleNextUpdate = this.scheduleNextModelsUpdate();
 
             $.ajax({
                 url: personInfoURL,
                 dataType: "json"
-            }).done(function (result) {
-                oMainModel.setData(result);
-                oTechModel.setProperty("/tech/tariff",oMainModel.getData().tariff);                                     // установили тариф в тех модель
+            }).done(function (personInfoResult) {
                 $.ajax({
                     url: npfsURL,
                     dataType: "json"
-                }).done(function (result) {
-                    oListNPFModel.setData(result);
-                    oComponent.getRouter().initialize();
-                    setTimeout(updateModelAsync.bind(this), ASYNC_UPDATE_TIMEOUT);
+                }).done(function (npfsResult) {
+                    oNpfModel.setData(npfsResult);
+                    oMainModel.setData(personInfoResult);
+                    oTechModel.setProperty("/tech/tariff", oMainModel.getData().tariff);
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
+                    console.error('Cannot update model data: textStatus = ', textStatus, ', error = ', errorThrown);
                     MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
                 });
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
                 MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
             });
+        },
+        updateModels: function() {
+            var oMainModel = this.getModel("mainModel");
+            var oTechModel = this.getModel("techModel");
 
-            UIComponent.prototype.init.apply(this, arguments);
+            var snils = oTechModel.getProperty("snils");
+            var baseUrl = Const.const.BASE_URL;
+            var personInfoURL = baseUrl + "/person/" + snils;
+
+            var onAlways = this.scheduleNextModelsUpdate;
+            $.ajax({
+                url: personInfoURL,
+                dataType: "json"
+            }).done(function (result) {
+                oMainModel.setData(result);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
+            }).always(onAlways.bind(this));
+        },
+        scheduleNextModelsUpdate: function() {
+            if (this.updateTimeoutId) {
+                clearTimeout(this.updateTimeoutId);
+            }
+            var timeout = Const.const.ASYNC_UPDATE_TIMEOUT || 60*1000;
+            this.updateTimeoutId = setTimeout(this.updateModels.bind(this), timeout);
         }
     });
 });

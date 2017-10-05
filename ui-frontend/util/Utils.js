@@ -33,11 +33,15 @@ sap.ui.define([], function() {
             return result;
         },
         getNpfObjectByAddress: function(address, model) {
-            if (!address) {
+            if (!address || !model) {
                 return null;
             }
 
             var modelData = model.getData();
+            if (!modelData || !modelData.find) {
+                return null;
+            }
+
             return modelData.find(function(item) {
                 return item.address.toUpperCase() === address.toUpperCase();
             });
