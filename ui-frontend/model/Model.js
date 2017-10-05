@@ -11,10 +11,11 @@ sap.ui.define([
         modelStructure:{
             //техническая модель приложения
             tech:{
-                isButtonShowApply:false,				                                    // Индикатор который показывает нажата ли кнопка показать во вкладке "Получить выписку"
-                currencyCode: "рублей",                                                     // код валюты
-                selectedKey:"",                                                             // выбранная вкладка
-
+                currencyCode: "рублей",
+                selectedKey: "",
+                profileTab: {
+                    isButtonShowApply: false
+                },
                 changeTariffTab: {
                     selectedTariff: 0,
                     changeTariffMessage: "",

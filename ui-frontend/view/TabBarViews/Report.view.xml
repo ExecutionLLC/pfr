@@ -52,10 +52,10 @@
                 </layoutData>
             </DateRangeSelection>
             <ToggleButton
-                    pressed="{techModel>/tech/isButtonShowApply}"
+                    pressed="{techModel>/tech/profileTab/isButtonShowApply}"
                     width="100%"
                     text="{
-                                path:'techModel>/tech/isButtonShowApply',
+                                path:'techModel>/tech/profileTab/isButtonShowApply',
                                 formatter:'.formatter.formatButtonName'
                             }">
                 <layoutData>
@@ -76,7 +76,7 @@
         </layout:Grid>
         <!--дополнительное поле информации при нажатой кнопке-->
         <form:Form
-            visible="{techModel>/tech/isButtonShowApply}"
+            visible="{techModel>/tech/profileTab/isButtonShowApply}"
             editable="true">
             <form:formContainers>
                 <form:FormContainer>
