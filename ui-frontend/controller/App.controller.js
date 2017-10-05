@@ -29,6 +29,7 @@ sap.ui.define([
                 oRouter.navTo("menuPage");
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 MessageBox.error("Неверный логин или пароль.");
+            }).always(function () {
                 oLoginInput.setEnabled(true);
                 oPasswordInput.setEnabled(true);
             });
