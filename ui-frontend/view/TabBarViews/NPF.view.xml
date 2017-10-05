@@ -67,6 +67,7 @@
             </layoutData>
         </Text>
         <Label
+                id="changeNpfLabel"
                 class="sapUiSmallMarginTop"
                 text="Возможная дата смены НПФ:">
             <layoutData>
@@ -75,24 +76,18 @@
             </layoutData>
         </Label>
         <Text
-                class="sapUiSmallMarginTop"
-                text="{techModel>/changeNPF/dateChangeNpf}">
+                id="changeNpfText"
+                class="sapUiSmallMarginTop">
             <layoutData>
                 <layout:GridData
                         span="L1 M4 S4"/>
             </layoutData>
         </Text>
         <ToggleButton
+                id="changeNpfButton"
                 width="100%"
                 pressed="{techModel>/tech/isButtonShowNPFApply}"
-                text="Выбрать НПФ"
-                enabled="{
-                parts:[
-                    {path:'mainModel>/pendedNpfChanges'},
-                    {path:'techModel>/changeNPF/NewTimestamp'}
-                ],
-
-                        formatter:'.formatter.formatButtonNpfEnable'}">
+                text="Выбрать НПФ">
             <layoutData>
                 <layout:GridData
                         span="L2 M3 S7"/>

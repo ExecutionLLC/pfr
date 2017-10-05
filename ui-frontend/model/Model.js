@@ -23,14 +23,14 @@ sap.ui.define([
             },
             // модель для хранения значений для изменений НПФ (последняя вкладка)
             changeNPF:{
-                currentNPF:"Флокс",
-                newNPF:"",
-                buttonText:"Сменить НПФ",
-                warningText:"Вы уверены? Отменить операцию будет невозможно!",
-                isWarningTextVisible:false,
-                state:"Error",
-                buttonPressCount:0,                                                          // Счетчик нажатия кнопки "Сменить НПФ"
-                dateChangeNpf:"",
+                currentNPF: "",
+                newNPF: "",
+                buttonText: "Сменить НПФ",
+                warningText: "Вы уверены? Отменить операцию будет невозможно!",
+                isWarningTextVisible: false,
+                state: "Error",
+                buttonPressCount: 0,                                                          // Счетчик нажатия кнопки "Сменить НПФ"
+                dateChangeNpf: "",
                 NewTimestamp: null
             },
             // Настройки диаграммы

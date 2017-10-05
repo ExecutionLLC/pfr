@@ -11,32 +11,102 @@ sap.ui.define([
             this.oComponent = this.getOwnerComponent();
             this.oTechModel = this.oComponent.getModel("techModel");
             this.oMainModel = this.oComponent.getModel("mainModel");
+            this.enableChangeNpfButtonTimerId = null;
+
+            // fill current values
+            this.onMainModelChanges();
+
+            var mainModelBinding = new sap.ui.model.Binding(
+                this.oMainModel, "/", this.oMainModel.getContext("/")
+            );
+            mainModelBinding.attachChange(this.onMainModelChanges.bind(this));
         },
 
         _returnNpfAdress: function (npfName) {
-            var oListNPFModel = this.oComponent.getModel("npfModel");                        // Получили набор данных пользователя
-            var NPF = npfName;                                                               // Текущий НПФ
-            var aNpfs = oListNPFModel.getData();                                            // Получили массив НПФ
-            var NPFDesc = aNpfs.find(function (npfs) {                                      // В каждом эл массива ищем объект в котором
-                return npfs.name === NPF;                                                   // имя совпадает с нашим текущим
+            // Получили набор данных пользователя
+            var oListNPFModel = this.oComponent.getModel("npfModel");
+            // Текущий НПФ
+            var NPF = npfName;
+            // Получили массив НПФ
+            var aNpfs = oListNPFModel.getData();
+            // В каждом эл массива ищем объект в котором
+            var npfDesc = aNpfs.find(function (npfs) {
+                // имя совпадает с нашим текущим
+                return npfs.name === NPF;
             });
-            return NPFDesc.address
+
+            return npfDesc.address;
         },
 
+        enableChangeNpfButton: function(enable, nextMinTimeForChanges) {
+            var oView = this.getView();
+
+            var oButton = oView.byId('changeNpfButton');
+            var oLabel = oView.byId('changeNpfLabel');
+            var oText = oView.byId('changeNpfText');
+
+            oButton.setEnabled(enable);
+
+            if (nextMinTimeForChanges) {
+                oLabel.setVisible(true);
+                var date = new Date(nextMinTimeForChanges);
+                oText.setText(this.formatDateTime(date));
+            } else {
+                oLabel.setVisible(false);
+                oText.setText('');
+            }
+        },
+
+        onMainModelChanges: function() {
+            var npfHistory = this.oMainModel.getProperty("/npfHistory");
+            var pendedNpfChanges = this.oMainModel.getProperty("/pendedNpfChanges");
+
+            var nextMinTimeForChanges = null;
+            if (pendedNpfChanges.length !== 0) {
+                var lastItem = pendedNpfChanges[pendedNpfChanges.length - 1];
+                nextMinTimeForChanges = lastItem.timestamp + Const.const.TIME_NEXT_CHANGE_NPF;
+            } else if (npfHistory.length !== 0) {
+                var lastItem = npfHistory[npfHistory.length - 1];
+                nextMinTimeForChanges = lastItem.timestamp + Const.const.TIME_NEXT_CHANGE_NPF;
+            }
+
+            var currentTime = (new Date()).valueOf();
+            if (nextMinTimeForChanges && currentTime < nextMinTimeForChanges) {
+                if (this.enableChangeNpfButtonTimerId) {
+                    clearTimeout(this.enableChangeNpfButtonTimerId);
+                }
+
+                this.enableChangeNpfButton(false, nextMinTimeForChanges);
+
+                this.enableChangeNpfButtonTimerId = setTimeout(function () {
+                    this.enableChangeNpfButton(true);
+                    this.enableChangeNpfButtonTimerId = null;
+                }.bind(this), nextMinTimeForChanges - currentTime);
+            } else {
+                this.enableChangeNpfButton(true);
+            }
+        },
 
         onColumnListItemPress: function (oEvent) {
-            var oItem = oEvent.getSource();                                                                 // Находим элемент на котором произошел клик
-            var aCells = oItem.getAggregation("cells");                                                     // Находим все клетки в выбранной строке
-            var nameNewNPF = aCells[0].getProperty("text");                                                 // Берем название нового НПФ
+            // Находим элемент на котором произошел клик
+            var oItem = oEvent.getSource();
+            // Находим все клетки в выбранной строке
+            var aCells = oItem.getAggregation("cells");
+            // Берем название нового НПФ
+            var nameNewNPF = aCells[0].getProperty("text");
 
-            this.oTechModel.setProperty("/changeNPF/newNPF", nameNewNPF);                                    // Записываем имя нового НПФ в модель
-            this.oTechModel.setProperty("/tech/isButtonShowNPFApply", false);                                // В свойстве кнопки ставим "не нажата", тем самым скрываем список НПФ
-            this.oTechModel.setProperty("/tech/isCustomListSelected", true);                                 // При выборе в таблице НПФа, устанавливаем видимость кнопки подтверждения true
-            this.oTechModel.setProperty("/changeNPF/buttonPressCount", 0);                                   // Сбрасываем счетчик нажатий на кнопке "Сменить НПФ"
+            // Записываем имя нового НПФ в модель
+            this.oTechModel.setProperty("/changeNPF/newNPF", nameNewNPF);
+            // В свойстве кнопки ставим "не нажата", тем самым скрываем список НПФ
+            this.oTechModel.setProperty("/tech/isButtonShowNPFApply", false);
+            // При выборе в таблице НПФа, устанавливаем видимость кнопки подтверждения true
+            this.oTechModel.setProperty("/tech/isCustomListSelected", true);
+            // Сбрасываем счетчик нажатий на кнопке "Сменить НПФ"
+            this.oTechModel.setProperty("/changeNPF/buttonPressCount", 0);
         },
 
 
-        formateDate: function (timestamp) {
+        formatDateTime: function (timestamp) {
             var oDate = new Date(timestamp);
             var nDay = _addLeadingZeroIfNeedIt(oDate.getDate());
             var nMonth = _addLeadingZeroIfNeedIt(oDate.getMonth() + 1);
@@ -44,65 +114,70 @@ sap.ui.define([
 
             function _addLeadingZeroIfNeedIt(value) {
                 if (value < 10) {
-                    return "0" + value
+                    return "0" + value;
                 }
                 return value;
             }
-            return nDay + "." + nMonth + "." + nYear
+
+            return nDay + "." + nMonth + "." + nYear;
         },
 
 
         onChangeNPF: function () {
             var SNILS = "00000000101";
             var BASE_URL = Const.const.BASE_URL;
-            var personInfoURL = BASE_URL + "/person/" + SNILS;
-            function changeVisible(model) {
-                model.setProperty("/changeNPF/isWarningTextVisible", false);
-            }
+            var changeNpfURL = BASE_URL + "/person/" + SNILS + "/npf";
 
-            this.count = this.oTechModel.getProperty("/changeNPF/buttonPressCount");                        // Получаем значение счетчика нажатия кнопки "Сменить НПФ"
+            // Получаем значение счетчика нажатия кнопки "Сменить НПФ"
+            this.count = this.oTechModel.getProperty("/changeNPF/buttonPressCount");
             // Если кнопка не была нажата ни разу
             if (this.count === 0) {
-                this.oTechModel.setProperty("/changeNPF/buttonText", "Все равно сменить");                   // Меняем текст кнопки
+                // Меняем текст кнопки
+                this.oTechModel.setProperty("/changeNPF/buttonText", "Все равно сменить");
                 this.oTechModel.setProperty("/changeNPF/warningText", "Вы уверены? Отменить операцию будет невозможно!");
                 this.oTechModel.setProperty("/changeNPF/state", "Error");
-                this.oTechModel.setProperty("/changeNPF/isWarningTextVisible", true);                        // Показываем сообщение с предупреждением
+                // Показываем сообщение с предупреждением
+                this.oTechModel.setProperty("/changeNPF/isWarningTextVisible", true);
             } else {
 
                 // Формируем время след. возможной смены НПФ
-                var sNewNpf = this.oTechModel.getProperty("/changeNPF/newNPF");                             // Забрали новый НПФ из модели
-                var aNpfHistory = this.oMainModel.getProperty("/npfHistory");                                 // Получили историю смены НПФ
-                var nLastTimestamp = aNpfHistory[aNpfHistory.length - 1].timestamp;                           // Получили последнее значение
-                var nNewTimestamp = nLastTimestamp + Const.const.TIME_NEXT_CHANGE_NPF;                        // Высчитали время следующей смены НПФ
+
+                // Забрали новый НПФ из модели
+                var sNewNpf = this.oTechModel.getProperty("/changeNPF/newNPF");
+
                 var pendedNpfChanges = this.oMainModel.getProperty("/pendedTariffChanges");
-                var nNewNpfAddress = this._returnNpfAdress(sNewNpf);                                              // Получаем адресс по имени НПФ
-                var oNewNpfAddress = {                                                                            // Формируем требуемый объект для отправки на сервер
+                // Получаем адресс по имени НПФ
+                var nNewNpfAddress = this._returnNpfAdress(sNewNpf);
+                // Формируем требуемый объект для отправки на сервер
+                var oNewNpfAddress = {
                     "npf": nNewNpfAddress
                 };
+
                 $.ajax({
-                    url     : personInfoURL + "/npf",
+                    url     : changeNpfURL,
                     dataType: "json",
                     type    : "PUT",
                     data    : JSON.stringify(oNewNpfAddress),
                     jsonp   : false
                 });
 
+                var now = (new Date()).valueOf();
+                this.oMainModel.setProperty("/pendedNpfChanges", pendedNpfChanges.concat([{npf: nNewNpfAddress, timestamp: now}]));
 
-
-
-                var nNow = new Date();
-                this.oTechModel.setProperty("/changeNPF/NewTimestamp", nNewTimestamp);
-                var sFormatDate = this.formateDate(nNewTimestamp);
-                this.oTechModel.setProperty("/changeNPF/dateChangeNpf", sFormatDate);                           // Установили в модель дату след смены нпф (отформатирована)
-                this.oMainModel.setProperty("/pendedNpfChanges", pendedNpfChanges.concat([{npf: nNewNpfAddress, timestamp: nNow}]));
+                // Установили в модель дату след смены нпф (отформатирована)
                 this.oTechModel.setProperty("/changeNPF/warningText", "Ваш НПФ успешно сменен на новый");
                 this.oTechModel.setProperty("/changeNPF/state", "Success");
-                this.oTechModel.setProperty("/tech/isCustomListSelected", false);                               // Скрываем кнопку "Сменить НПФ"
-                this.oTechModel.setProperty("/changeNPF/newNPF","");                                            // сбрасываем графу "новый НПФ"
+                // Скрываем кнопку "Сменить НПФ"
+                this.oTechModel.setProperty("/tech/isCustomListSelected", false);
+                // сбрасываем графу "новый НПФ"
+                this.oTechModel.setProperty("/changeNPF/newNPF","");
+
                 //todo передача параметров не работает в IE9-
-                setTimeout(changeVisible, 2000, this.oTechModel);                                               // Устанавливаем время через которое пропадет фраза о успешной смене НПФ
+                setTimeout(function changeVisible(model) {
+                    model.setProperty("/changeNPF/isWarningTextVisible", false);
+                }, 2000, this.oTechModel);
             }
-            ;
+
             this.oTechModel.setProperty("/changeNPF/buttonPressCount", 1);
         }
     });
