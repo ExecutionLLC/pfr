@@ -56,7 +56,7 @@
                                 <Text
                                     text = "{
                                         path:'mainModel>/npf',
-                                        formatter:'.formatter.formatNPFadressToReliability'}"
+                                        formatter:'.formatter.formatNpfAddressToReliability'}"
                                     textAlign = "End"
                                     width="90%"
                                     class="green H2"/>
@@ -80,7 +80,7 @@
                                 <Text
                                         text = "{
                                         path:'mainModel>/npf',
-                                        formatter:'.formatter.formatNPFadressToIncomeRate'}"
+                                        formatter:'.formatter.formatNpfAddressToIncomeRate'}"
                                     textAlign = "End"
                                     width="100%"
                                     class="red H2"/>

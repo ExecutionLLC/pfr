@@ -197,7 +197,7 @@
                         <Text
                             text="{
 				                path: 'mainModel>timestamp',
-				                formatter:'.formatter.formateDateforTable'
+				                formatter:'.formatter.formatDateForTable'
 			                }"/>
                         <Text
                             text="{mainModel>comment}"/>
@@ -232,7 +232,7 @@
 						            {path:'mainModel>tariff'},
 						            {path:'techModel>/tech/currencyCode'}
                                 ],
-						        formatter:'.formatter.formateAmountToSalary'
+						        formatter:'.formatter.formatAmountToSalary'
 					    }"/>
                         <core:Icon
                             src="sap-icon://initiative"

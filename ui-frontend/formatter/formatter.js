@@ -1,5 +1,7 @@
-sap.ui.define(["sap/ui/core/format/NumberFormat"
-], function (NumberFormat) {
+sap.ui.define([
+    "sap/ui/core/format/NumberFormat",
+    "personal/account/util/Utils"
+], function (NumberFormat, Utils) {
     "use strict";
     return {
 
@@ -7,20 +9,6 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
          * @description объект для форматирования валюты
          */
         oCurrencyFormat: NumberFormat.getCurrencyInstance(),
-
-
-        /**
-         * @description Внутренняя функция для добавления "0" вначало числа которое < 10
-         * @param value
-         * @return {string}
-         */
-        _addLeadingZeroIfNeedIt: function(value) {
-            if (value < 10) {
-                return "0" + value
-            }
-                return value;
-        },
-
 
         formatFooterString: function (text) {
 
@@ -54,31 +42,26 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
          * @description Возвращает рейтинг надежности НПФ при наличии его адресса
          *
          */
-        formatNPFadressToReliability: function (adress) {
+        formatNpfAddressToReliability: function (address) {
             var oComponent = this.getOwnerComponent();
-            var oListNPFModel = oComponent.getModel("npfModel");                        // Получили набор данных пользователя
-            var NPF = adress;                                                           // Текущий НПФ
-            var aNpfs = oListNPFModel.getData();                                        // Получили массив НПФ
-            var NPFDesc = aNpfs.find(function (npfs) {                                  // В каждом эл массива ищем объект в котором
-                return npfs.address === NPF;                                            // адресс совпадает с нашим текущим
-            });
-            return   NPFDesc.ratingOfReliability                                                         // Возвращаем рейтинг надежности
+            var oModel = oComponent.getModel("npfModel");
+
+            var item = Utils.getNpfObjectByAddress(address, oModel);
+            // Возвращаем рейтинг доходности
+            return item ? item.ratingOfReliability : '?';
         },
 
         /**
          * @description Возвращает рейтинг доходности НПФ при наличии его адресса
          *
          */
-        formatNPFadressToIncomeRate: function (adress) {
+        formatNpfAddressToIncomeRate: function (address) {
             var oComponent = this.getOwnerComponent();
-            var oListNPFModel = oComponent.getModel("npfModel");                        // Получили набор данных пользователя
-            var NPF = adress;                                                           // Текущий НПФ
-            var aNpfs = oListNPFModel.getData();                                        // Получили массив НПФ
-            var NPFDesc = aNpfs.find(function (npfs) {                                  // В каждом эл массива ищем объект в котором
-                return npfs.address === NPF;                                            // адресс совпадает с нашим текущим
-            });
+            var oModel = oComponent.getModel("npfModel");
 
-            return NPFDesc.ratingOfIncomeRate;                                          // Возвращаем рейтинг доходности
+            var item = Utils.getNpfObjectByAddress(address, oModel);
+            // Возвращаем рейтинг доходности
+            return item ? item.ratingOfIncomeRate : '?';
         },
 
         /**
@@ -86,24 +69,16 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
          *
          */
         formatDate: function (timestamp) {
-                var oDate = new Date(timestamp);
-                var nMonth = this.formatter._addLeadingZeroIfNeedIt(oDate.getMonth() + 1);
-                var nYear = oDate.getFullYear();
-
-                return nMonth + "." + nYear
+            var result = Utils.timestampToString(timestamp);
+            return result.split('.').slice(1).join('.');
         },
 
         /**
          * @description Форматирование входящих чисел в дату для использования в таблице
           *
          */
-        formateDateforTable: function (timestamp) {
-                var oDate = new Date(timestamp);
-                var nDay = this.formatter._addLeadingZeroIfNeedIt(oDate.getDate());
-                var nMonth = this.formatter._addLeadingZeroIfNeedIt(oDate.getMonth() + 1);
-                var nYear = oDate.getFullYear();
-
-                return nDay + "." + nMonth + "." + nYear
+        formatDateForTable: function (timestamp) {
+            return Utils.timestampToString(timestamp);
         },
 
         /**
@@ -116,21 +91,17 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"
         /**
          * @description Форматирование значения зарплаты
          */
-        formateAmountToSalary: function (amount, tariff, currencyCode) {
-            var sallary = amount/tariff*100.0;
-            var formatSallary = this.formatter.oCurrencyFormat.format(sallary,currencyCode);
-            return formatSallary
+        formatAmountToSalary: function (amount, tariff, currencyCode) {
+            var salary = amount/tariff*100.0;
+            return this.formatter.oCurrencyFormat.format(salary,currencyCode);
         },
 
         /**
          * @description Форматирование рядов в таблице возможных НПФ для вкладки "Смена НПФ"
          * @param name
          */
-        formatColumnListItem: function (adressNpf, currentNpfAdress) {
-            var adressNpfUpper = adressNpf.toUpperCase();
-            var currentNpfAdressUpper = currentNpfAdress.toUpperCase();
-
-            return currentNpfAdressUpper !== adressNpfUpper;
+        formatColumnListItem: function (npfAddress, currentNpfAddress) {
+            return npfAddress.toUpperCase() !== currentNpfAddress.toUpperCase();
         }
     }
 

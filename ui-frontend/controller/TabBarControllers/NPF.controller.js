@@ -1,9 +1,11 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "personal/account/formatter/formatter",
-    "personal/account/util/Const"
-], function (Controller, formatter, Const) {
+    "personal/account/util/Const",
+    "personal/account/util/Utils"
+], function (Controller, formatter, Const, Utils) {
     "use strict";
+
     return Controller.extend("personal.account.controller.TabBarControllers.NPF", {
         formatter: formatter,
 
@@ -49,10 +51,11 @@ sap.ui.define([
 
             if (nextMinTimeForChanges) {
                 oLabel.setVisible(true);
-                var date = new Date(nextMinTimeForChanges);
-                oText.setText(this.formatDateTime(date));
+                oText.setText(Utils.timestampToString(nextMinTimeForChanges, true));
+                oText.setVisible(true);
             } else {
                 oLabel.setVisible(false);
+                oText.setVisible(false);
                 oText.setText('');
             }
         },
@@ -104,24 +107,6 @@ sap.ui.define([
             // Сбрасываем счетчик нажатий на кнопке "Сменить НПФ"
             this.oTechModel.setProperty("/changeNPF/buttonPressCount", 0);
         },
-
-
-        formatDateTime: function (timestamp) {
-            var oDate = new Date(timestamp);
-            var nDay = _addLeadingZeroIfNeedIt(oDate.getDate());
-            var nMonth = _addLeadingZeroIfNeedIt(oDate.getMonth() + 1);
-            var nYear = oDate.getFullYear();
-
-            function _addLeadingZeroIfNeedIt(value) {
-                if (value < 10) {
-                    return "0" + value;
-                }
-                return value;
-            }
-
-            return nDay + "." + nMonth + "." + nYear;
-        },
-
 
         onChangeNPF: function () {
             var SNILS = "00000000101";

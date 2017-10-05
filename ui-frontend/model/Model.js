@@ -29,9 +29,7 @@ sap.ui.define([
                 warningText: "Вы уверены? Отменить операцию будет невозможно!",
                 isWarningTextVisible: false,
                 state: "Error",
-                buttonPressCount: 0,                                                          // Счетчик нажатия кнопки "Сменить НПФ"
-                dateChangeNpf: "",
-                NewTimestamp: null
+                buttonPressCount: 0
             },
             // Настройки диаграммы
             diagrammProperties:{

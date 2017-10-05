@@ -197,7 +197,7 @@
                     <Text
                             text="{
                             path: 'mainModel>timestamp',
-                            formatter:'.formatter.formateDateforTable'
+                            formatter:'.formatter.formatDateForTable'
                         }"/>
                     <Text
                             text="{
