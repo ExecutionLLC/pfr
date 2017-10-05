@@ -77,7 +77,7 @@ sap.ui.define([
          * @description Форматирование видимости любого контрола в зависимотси от pendedTariffChanges
          */
         formatStatusTextEnable: function (pendedTariffChanges) {
-            return pendedTariffChanges.length !== 0;
+            return (pendedTariffChanges && pendedTariffChanges.length !== 0);
         },
 
         /**
