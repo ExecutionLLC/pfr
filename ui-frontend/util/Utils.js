@@ -44,7 +44,10 @@ sap.ui.define([], function() {
         },
 
         conversionNpfRating: function (int) {
-            var oRating = null;
+            var oRating = {
+                symbol: "?",
+                descrition: "Неизвестен"
+            };
             switch (int){
                 case 0:
                     oRating = {
