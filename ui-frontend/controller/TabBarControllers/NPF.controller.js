@@ -58,7 +58,7 @@ sap.ui.define([
         },
 
         onMainModelChanges: function() {
-            if(!this.oMainModel.getProperty("/snils")) {
+            if(!this.oMainModel.getProperty("/metadata/snils")) {
                 // user is logged out
                 return;
             }
@@ -141,11 +141,11 @@ sap.ui.define([
                 };
 
                 $.ajax({
-                    url     : changeNpfURL,
+                    url: changeNpfURL,
                     dataType: "json",
-                    type    : "PUT",
-                    data    : JSON.stringify(oNewNpfAddress),
-                    jsonp   : false
+                    type: "PUT",
+                    data: JSON.stringify(oNewNpfAddress),
+                    jsonp: false
                 });
 
                 var now = (new Date()).valueOf();
