@@ -185,6 +185,12 @@ sap.ui.define([], function() {
                         descrition: "Наивысша надежность"
                     };
                     break;
+                case 22:
+                    oRating = {
+                        symbol: "AAA+",
+                        descrition: "Наивысша надежность"
+                    };
+                    break;
             }
             return oRating;
         }
