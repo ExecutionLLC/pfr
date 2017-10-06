@@ -96,7 +96,7 @@ sap.ui.define([
         },
 
         formatTableItemStatus: function (isFinished) {
-            return isFinished ? "green" : "yellow";
+            return isFinished ? "green" : "#f4d742";
         }
     }
 
