@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "personal/account/formatter/formatter",
     "personal/account/util/Const",
-    "personal/account/util/Utils"
-], function (Controller, formatter, Const, Utils) {
+    "personal/account/util/Utils",
+    "sap/ui/model/json/JSONModel"
+], function (Controller, formatter, Const, Utils, JSONModel) {
     "use strict";
 
     return Controller.extend("personal.account.controller.TabBarControllers.NPF", {
@@ -19,7 +20,126 @@ sap.ui.define([
                 this.oMainModel, "/", this.oMainModel.getContext("/")
             );
             mainModelBinding.attachChange(this.onMainModelChanges.bind(this));
+
+            /*для таблицы*/
+            var oController = this;
+            var oModel = new JSONModel();
+            oModel.loadData("./test/TableDataNPF.json");
+            oModel.attachRequestCompleted(function(){
+                oController.bindTable(oModel);
+            });
         },
+
+        bindTable : function(oModel) {
+            //this.createOnlyColumnsTable(oModel);
+            this.createOnlyRowsTable(oModel);
+        },
+
+
+    /*createOnlyColumnsTable:function(oModel){
+        var oColumnsTable = this.getView().byId("ColumnsTable");
+        oColumnsTable.setShowNoData(false);
+        oColumnsTable.setModel(oModel, "tableModel");
+
+        oColumnsTable.bindAggregation("columns", {
+            path:"tableModel>/columns",
+            factory: function(sId, oCtx){
+                var oCol=new sap.m.Column({
+                    width:'{tableModel>width}',
+                    header : new sap.m.Label({ text : '{tableModel>colName}'})
+                });
+                return oCol;
+            }
+        });
+    },*/
+
+
+    createOnlyRowsTable:function(oModel){
+        var oTable = this.getView().byId("RowsTable");
+        oTable.setModel(oModel, "tableModel");
+        var columnData = {
+            "columns":[{
+                columnName: "firstName",
+                width: "10px"
+            }, {
+                columnName: "lastName",
+                width: "10px"
+            }, {
+                columnName: "department",
+                width: "10px"
+            }]
+        };
+
+
+        var oColumnModel = new JSONModel(columnData);
+
+
+        oTable.setModel(oColumnModel, "columnData");
+
+        oTable.bindAggregation("columns", {
+            path:"columnData>/columns",
+            factory: function(sId, oCtx){
+                var oCol = new sap.m.Column({
+                    width:'{columnData>width}'
+                });
+                return oCol;
+            }
+        });
+
+        oTable.bindAggregation("items",{
+            path:"tableModel>/Rows",
+            factory : this.rowFactory
+        });
+    },
+
+
+    rowFactory : function(sId, oCtx){
+
+        var oToolbar = new sap.m.Toolbar({
+            width : "100%",
+            content : [
+                new sap.m.Text({
+                    text : "ewrerr",
+                    width : "16%"
+                }),
+                new sap.m.Text({
+                    text : "ewrerr",
+                    width : "16%"
+                }),
+                new sap.m.Text({
+                    text : "ewrerr",
+                    width : "16%"
+                })]
+        });
+
+        var aContent = [new sap.m.Text({
+            text : "ID Транзакции",
+            width : "30%"
+        }),
+            new sap.m.Text({
+                text : "Отправитель",
+                width : "30%"
+            }),
+            new sap.m.Text({
+                text : "Количество подтверждений",
+                width : "30%"
+            })];
+        var oPanel = new sap.m.Panel({
+            expandable :true,
+            expanded : false,
+            width : "auto",
+            headerToolbar : oToolbar,
+            content : aContent
+        });
+
+
+        var oItem = new sap.m.CustomListItem({
+            content : oPanel
+        });
+
+        return oItem;
+    },
+/*----------------------------------------------------------------------------------------------------------------------*/
 
         // FIXME
         _returnNpfAdress: function (npfName) {

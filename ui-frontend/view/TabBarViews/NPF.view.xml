@@ -165,57 +165,54 @@
         <Label
                 text="История смены НПФ"
                 class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
-        <Table
-                items="{
-            path:'mainModel>/npfHistory',
-            sorter : {
-                        path : 'timestamp',
-                        descending:true
-                    }
-        }">
-            <columns>
-                <Column
-                        hAlign="Center">
-                    <Text
-                            text="Дата операции"/>
-                </Column>
-                <Column
-                        hAlign="Center">
-                    <Text
-                            text="НПФ"/>
-                </Column>
-                <Column
-                        hAlign="Center">
-                    <Text text="Статус"/>
-                </Column>
-                <Column
-                        hAlign="Center">
-                    <Text text="Проверить операцию"/>
-                </Column>
-            </columns>
-            <items>
-                <ColumnListItem>
-                    <cells>
-                        <Text
-                                text="{
-                            path: 'mainModel>timestamp',
-                            formatter:'.formatter.formatDateForTable'
-                        }"/>
-                        <Text
-                                text="{
-                            path:'mainModel>newNpf',
-                            formatter:'.formatter.formatNpfAddressToName'
-                        }"/>
-                        <core:Icon
-                                src="sap-icon://overlay"
-                                color= "green"/>
-                        <core:Icon
-                                src="sap-icon://initiative"
-                                press="onIconPress"
-                                size="2rem"/>
-                    </cells>
-                </ColumnListItem>
-            </items>
-        </Table>
+        <!--Таблица-->
+        <ScrollContainer vertical="false" horizontal = "true">
+            <Table
+            showNoData="false">
+                <columns>
+                    <Column hAlign="Center">
+                        <Text text="Дата операции"/>
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="Тариф"/>
+                    </Column>
+                    <Column
+                            hAlign="Center">
+                        <Text text="Статус"/>
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="Проверить операцию"/>
+                    </Column>
+                </columns>
+            </Table>
+            <ScrollContainer vertical = "true" horizontal="false">
+                <Table id = "RowsTable" />
+                <!--<Table items="{
+                    path:'mainModel>/tariffHistory',
+                    sorter : {
+                            path : 'timestamp',
+                            descending:true
+                        }
+                    }">
+                    <columns>
+                        <Column hAlign="Center"
+                            width="10px">
+                        </Column>
+                        <Column hAlign="Center"
+                                width="10px">
+                        </Column>
+                        <Column
+                                hAlign="Center"
+                                width="10px">
+                        </Column>
+                        <Column hAlign="Center"
+                                width="10px">
+                        </Column>
+                    </columns>
+                    <items>
+                    </items>
+                </Table>-->
+            </ScrollContainer>
+        </ScrollContainer>
     </Page>
 </mvc:View>
