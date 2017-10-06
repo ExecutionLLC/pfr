@@ -166,9 +166,9 @@
                 text="История смены НПФ"
                 class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
         <!--Таблица-->
-        <ScrollContainer vertical="false" horizontal = "true">
+        <ScrollContainer vertical="false" horizontal="true">
             <Table
-            showNoData="false">
+                    showNoData="false">
                 <columns>
                     <Column hAlign="Center">
                         <Text text="Дата операции"/>
@@ -185,7 +185,7 @@
                     </Column>
                 </columns>
             </Table>
-            <ScrollContainer vertical = "true" horizontal="false">
+            <ScrollContainer vertical="true" horizontal="false">
 
                 <Table
                         items="{
@@ -217,26 +217,26 @@
                                     width="auto">
                                 <headerToolbar>
                                     <Toolbar
-                                        width="100%">
+                                            width="100%">
                                         <content>
                                             <Text
-                                                textAlign="Center"
-                                                width="17%"
-                                                text="{
+                                                    textAlign="Center"
+                                                    width="17%"
+                                                    text="{
                                                 path: 'techModel>timestamp',
                                                 formatter:'.formatter.formatDateForTable'
                                             }"/>
                                             <Text
-                                                textAlign="Center"
-                                                width="32%"
-                                                text="{
+                                                    textAlign="Center"
+                                                    width="32%"
+                                                    text="{
                                                 path:'techModel>npf',
                                                 formatter:'.formatter.formatNpfAddressToName'
                                             }"/>
                                             <core:Icon
                                                     width="17%"
                                                     src="sap-icon://overlay"
-                                                    color= "{
+                                                    color="{
                                         path: 'techModel>isFinished',
                                         formatter: '.formatter.formatTableItemStatus'
                                    }"/>

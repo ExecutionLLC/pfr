@@ -262,7 +262,7 @@
                                             <core:Icon
                                                     width="5%"
                                                     src="sap-icon://overlay"
-                                                    color= "green"/>
+                                                    color="green"/>
                                             <Text
                                                     width="7%"
                                                     textAlign="Center"
