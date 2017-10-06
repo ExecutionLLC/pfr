@@ -12,7 +12,7 @@ sap.ui.define([
             var oPasswordInput = this.getView().byId('passwordInput');
 
             var authData = {
-                login: oLoginInput.getValue(),
+                login: oLoginInput.getValue().replace(/[- ]/g, ''),
                 password: oPasswordInput.getValue()
             };
             oLoginInput.setEnabled(false);

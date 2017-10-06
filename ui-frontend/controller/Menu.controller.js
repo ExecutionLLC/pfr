@@ -27,9 +27,6 @@ sap.ui.define([
         },
 
         onSelectTab: function (oEvent) {
-            var oNavCon = this.getView().byId('navCon');
-            var sKey = oEvent.getParameter('key');
-            oNavCon.to(this.getView().byId(sKey),"show");
             this.oRouter.navTo("menuPage", {
                 query: {
                     tab: oEvent.getParameter("selectedKey")

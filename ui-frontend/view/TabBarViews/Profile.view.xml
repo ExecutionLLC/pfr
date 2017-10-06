@@ -124,6 +124,7 @@
                                     text ="Мой тариф:"
                                     class = "H2"  />
                                 <core:Icon
+                                    press="onChangeTariff"
                                     src="sap-icon://edit-outside"
                                     color = "#346187"
                                     width = "2rem"

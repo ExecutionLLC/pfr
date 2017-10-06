@@ -32,6 +32,7 @@
                     </form:FormElement>
                     <form:FormElement>
                         <MaskInput
+                                id="loginInput"
                                 mask = "999-999-999 99"
                                 placeholderSymbol = "_"
                                 placeholder = "Ведите номер СНИЛС">
