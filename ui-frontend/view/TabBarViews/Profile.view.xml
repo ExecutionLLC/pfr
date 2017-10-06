@@ -64,7 +64,7 @@
                                     alignItems = "Center"
                                     justifyContent = "SpaceAround">
                                     <Image
-                                        src="./test/img/aRate.JPG"
+                                        src="./image/aRate.JPG"
                                         width = '4rem'
                                         height = "4rem"
                                         class = "sapUiSmallMarginBeginEnd"/>
@@ -88,7 +88,7 @@
                                     alignItems = "Center"
                                     justifyContent = "SpaceAround">
                                     <Image
-                                        src="./test/img/rate.JPG"
+                                        src="./image/rate.JPG"
                                         width = '4rem'
                                         height = "4rem"
                                         class = "sapUiSmallMarginBeginEnd"/>

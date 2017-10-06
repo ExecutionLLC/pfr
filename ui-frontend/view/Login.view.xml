@@ -110,12 +110,12 @@
                         <HBox>
                             <Image
                                     class="sapUiSmallMarginEnd"
-                                    src="./test/img/vk.JPG"/>
+                                    src="./image/vk.JPG"/>
                             <Image
                                     class="sapUiSmallMarginEnd"
-                                    src="./test/img/facebook.JPG"/>
+                                    src="./image/facebook.JPG"/>
                             <Image
-                                    src="./test/img/twitter.JPG"/>
+                                    src="./image/twitter.JPG"/>
                         </HBox>
                     </form:FormElement>
                 </form:FormContainer>

@@ -186,6 +186,10 @@
                 </Column>
                 <Column
                         hAlign="Center">
+                    <Text text="Статус"/>
+                </Column>
+                <Column
+                        hAlign="Center">
                     <Text text="Проверить операцию"/>
                 </Column>
             </columns>
@@ -202,6 +206,9 @@
                             path:'mainModel>newNpf',
                             formatter:'.formatter.formatNpfAddressToName'
                         }"/>
+                        <core:Icon
+                                src="sap-icon://overlay"
+                                color= "green"/>
                         <core:Icon
                                 src="sap-icon://initiative"
                                 press="onIconPress"
