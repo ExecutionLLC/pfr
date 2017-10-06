@@ -53,7 +53,7 @@ sap.ui.define([
                 }).done(function (npfsResult) {
                     oNpfModel.setData(npfsResult);
                     oMainModel.setData(personInfoResult);
-                    oTechModel.setProperty("/tech/tariff", oMainModel.getData().tariff);
+                    oTechModel.setProperty("/tech/changeTariffTab/selectedTariff", oMainModel.getData().tariff);
 
                     var storage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
                     storage.put("LAST_SNILS", snils);

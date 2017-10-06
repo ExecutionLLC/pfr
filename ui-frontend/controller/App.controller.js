@@ -26,6 +26,8 @@ sap.ui.define([
                 data: JSON.stringify(authData)
             }).done(function (result) {
                 oComponent.initModels(result.snils);
+                oLoginInput.setValue("");
+                oPasswordInput.setValue("");
                 oRouter.navTo("menuPage");
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 MessageBox.error("Неверный логин или пароль.");
