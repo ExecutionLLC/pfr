@@ -71,6 +71,10 @@
                 <Column hAlign="Center">
                     <Text text="Тариф"/>
                 </Column>
+                <Column
+                        hAlign="Center">
+                    <Text text="Статус"/>
+                </Column>
                 <Column hAlign="Center">
                     <Text text="Проверить операцию"/>
                 </Column>
@@ -83,7 +87,10 @@
 				                formatter:'.formatter.formatDateForTable'
 			                  }"
                         />
-                        <Text text="{techModel>tariff}"/>
+                        <Text text="{mainModel>newTariff}"/>
+                        <core:Icon
+                                src="sap-icon://overlay"
+                                color= "green"/>
                         <core:Icon src="sap-icon://initiative"
                                    press="onIconPress"
                                    size="2rem"

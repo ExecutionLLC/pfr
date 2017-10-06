@@ -38,7 +38,7 @@
         <ToolbarSpacer/>
         <Button
                 type="Transparent"
-                text="Logout"
+                text="Выход"
                 press="onLogout"/>
     </tnt:ToolHeader>
 

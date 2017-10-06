@@ -53,7 +53,7 @@ sap.ui.define([
         },
 
         onPrint: function () {
-            $("#table--report").print();
+            print();
         }
     });
 });

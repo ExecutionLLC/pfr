@@ -180,7 +180,12 @@
                 <Column hAlign="Center">
                     <Text text="НПФ"/>
                 </Column>
-                <Column hAlign="Center">
+                <Column
+                        hAlign="Center">
+                    <Text text="Статус"/>
+                </Column>
+                <Column
+                        hAlign="Center">
                     <Text text="Проверить операцию"/>
                 </Column>
             </columns>
@@ -194,14 +199,21 @@
                         />
                         <Text
                                 text="{
-                                    path:'techModel>npf',
-                                    formatter:'.formatter.formatNpfAddressToName'
-                                }"
-                        />
-                        <core:Icon src="sap-icon://initiative"
-                                   press="onIconPress"
-                                   size="2rem"
-                        />
+                            path: 'mainModel>timestamp',
+                            formatter:'.formatter.formatDateForTable'
+                        }"/>
+                        <Text
+                                text="{
+                            path:'mainModel>newNpf',
+                            formatter:'.formatter.formatNpfAddressToName'
+                        }"/>
+                        <core:Icon
+                                src="sap-icon://overlay"
+                                color= "green"/>
+                        <core:Icon
+                                src="sap-icon://initiative"
+                                press="onIconPress"
+                                size="2rem"/>
                     </cells>
                 </ColumnListItem>
             </items>
