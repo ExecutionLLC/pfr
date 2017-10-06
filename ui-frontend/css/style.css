@@ -81,3 +81,7 @@
 .tableReport .sapMPanelExpandableIcon.sapUiIcon{
 	right: 4%;
 }
+
+.image-pointer{
+	cursor: pointer;
+}
