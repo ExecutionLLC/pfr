@@ -6,7 +6,7 @@ sap.ui.define([
     return Controller.extend("personal.account.controller.TabBarControllers.Profile", {
         formatter: formatter,
 
-        onNavToNPF: function () {
+        onNavigateToNPF: function () {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("menuPage", {
                 query: {
@@ -15,7 +15,7 @@ sap.ui.define([
             }, true);
         },
 
-        onChangeTariff: function () {
+        onNavigateChangeTariff: function () {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("menuPage", {
                 query: {

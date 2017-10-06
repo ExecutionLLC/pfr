@@ -40,7 +40,7 @@
                                         width = "2rem"
                                         height = "2rem"
                                         size= "2rem"
-                                        press="onNavToNPF"/>
+                                        press="onNavigateToNPF"/>
                                 </HBox>
                                 <Text
                                     text ="{
@@ -124,7 +124,7 @@
                                     text ="Мой тариф:"
                                     class = "H2"  />
                                 <core:Icon
-                                    press="onChangeTariff"
+                                    press="onNavigateChangeTariff"
                                     src="sap-icon://edit-outside"
                                     color = "#346187"
                                     width = "2rem"
