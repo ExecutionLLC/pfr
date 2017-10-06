@@ -58,8 +58,8 @@
         />
         <Table
                 items="{
-                path:'mainModel>/tariffHistory',
-                sorter : {
+                    path:'techModel>/tech/changeTariffTab/tariffTableData',
+                    sorter : {
                         path : 'timestamp',
                         descending:true
                     }
@@ -79,11 +79,11 @@
                 <ColumnListItem>
                     <cells>
                         <Text text="{
-				                path: 'mainModel>timestamp',
+				                path: 'techModel>timestamp',
 				                formatter:'.formatter.formatDateForTable'
 			                  }"
                         />
-                        <Text text="{mainModel>newTariff}"/>
+                        <Text text="{techModel>tariff}"/>
                         <core:Icon src="sap-icon://initiative"
                                    press="onIconPress"
                                    size="2rem"

@@ -12,7 +12,7 @@ sap.ui.define([
             this.oMainModel = this.oComponent.getModel("mainModel");
 
             var mainModelBinding = new sap.ui.model.Binding(
-                this.oMainModel, "/pendedTariffChanges", this.oMainModel.getContext("/pendedTariffChanges")
+                this.oMainModel, "/", this.oMainModel.getContext("/")
             );
             mainModelBinding.attachChange(this.onMainModelChanges.bind(this));
         },
@@ -25,6 +25,26 @@ sap.ui.define([
             }
 
             var pendedTariffChanges = this.oMainModel.getProperty("/pendedTariffChanges");
+            var tariffHistory = this.oMainModel.getProperty("/tariffHistory");
+
+            var tariffTableData = pendedTariffChanges.map(function (value) {
+                return {
+                    tariff: value.tariff,
+                    timestamp: value.timestamp,
+                    transactionHash: value.transactionHash,
+                    isFinished: false
+                };
+            });
+            tariffTableData = tariffTableData.concat(tariffHistory.map(function (value) {
+                return {
+                    tariff: value.newTariff,
+                    timestamp: value.timestamp,
+                    transactionHash: value.transactionHash,
+                    isFinished: true
+                }
+            }));
+            this.oTechModel.setProperty('/tech/changeTariffTab/tariffTableData', tariffTableData);
+
             if (pendedTariffChanges.length === 0) {
                 this.oTechModel.setProperty("/tech/changeTariffTab/isSliderChangeTariffEnabled", true);
                 // fake event, which should restore right state of the button
@@ -47,17 +67,20 @@ sap.ui.define([
 
             var selectedTariff = this.oTechModel.getProperty("/tech/changeTariffTab/selectedTariff");
             var pendedTariffChanges = this.oMainModel.getProperty("/pendedTariffChanges");
-            var oNewTariff = {
-                "tariff": selectedTariff
-            };
+
             $.ajax({
                 url: changeTariffUrl,
                 dataType: "json",
                 type: "PUT",
-                data: JSON.stringify(oNewTariff),
+                data: JSON.stringify({ "tariff": selectedTariff }),
                 jsonp: false
             });
-            this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([oNewTariff]));
+
+            var now = (new Date()).valueOf();
+            this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([{
+                "tariff": selectedTariff,
+                "timestamp": now
+            }]));
         },
 
         /**
