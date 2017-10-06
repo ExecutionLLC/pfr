@@ -151,7 +151,7 @@
         <Table
                 id="table--report"
                 items="{
-                    path:'mainModel>/operationsHistory',
+                    path:'techModel>/tech/profileTab/operationsTableData',
                     sorter : {
                         path : 'timestamp',
                         descending:true
@@ -200,41 +200,37 @@
                     <cells>
                         <Text
                             text="{
-				                path: 'mainModel>timestamp',
+				                path: 'techModel>timestamp',
 				                formatter:'.formatter.formatDateForTable'
 			                }"/>
                         <Text
-                            text="{mainModel>comment}"/>
-                        <!--todo временная заглушка. потом будет использоваться код ниже-->
-                        <core:Icon
-                            src="sap-icon://overlay"
-                            color= "green"/>
-                        <!--<core:Icon
-                            src="sap-icon://overlay"
-                            color= "{
-                                path:'tableModel>Status',
-                                formatter: '.formatter.formatIconColorByStatus'
-                            }"/>-->
+                            text="{techModel>comment}"/>
+                        <core:Icon src="sap-icon://overlay"
+                                   color="{
+                                        path: 'techModel>isFinished',
+                                        formatter: '.formatter.formatTableItemStatus'
+                                   }"
+                        />
                         <Text
-                            text="{= ${mainModel>tariff} + '%'}"/>
+                            text="{= ${techModel>tariff} + '%'}"/>
                         <Text
-                            text="{mainModel>contractor}"/>
+                            text="{techModel>contractor}"/>
                         <Text
                             text="{
-                                path:'mainModel>npf',
+                                path:'techModel>npf',
                                 formatter:'.formatter.formatNpfAddressToName'
                                 }"/>
                         <ObjectNumber
                                 number="{
-						        parts:[{path:'mainModel>amount'},{path:'techModel>/tech/currencyCode'}],
+						        parts:[{path:'techModel>amount'},{path:'techModel>/tech/currencyCode'}],
 						        type: 'sap.ui.model.type.Currency'
 					    }"/>
                         <ObjectNumber
                                 number="{
 						        parts:[
-						            {path:'mainModel>amount'},
-						            {path:'mainModel>tariff'},
-						            {path:'techModel>/tech/currencyCode'}
+						            {path:'techModel>amount'},
+						            {path:'techModel>tariff'},
+						            {path:'mainModel>/tech/currencyCode'}
                                 ],
 						        formatter:'.formatter.formatAmountToSalary'
 					    }"/>

@@ -180,8 +180,7 @@
                 <Column hAlign="Center">
                     <Text text="НПФ"/>
                 </Column>
-                <Column
-                        hAlign="Center">
+                <Column hAlign="Center">
                     <Text text="Статус"/>
                 </Column>
                 <Column

@@ -14,7 +14,8 @@ sap.ui.define([
                 currencyCode: "рублей",
                 selectedKey: "",
                 profileTab: {
-                    isButtonShowApply: false
+                    isButtonShowApply: false,
+                    operationsTableData: []
                 },
                 changeTariffTab: {
                     selectedTariff: 6,
