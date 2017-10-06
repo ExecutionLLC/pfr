@@ -93,10 +93,14 @@ sap.ui.define([
             return npfAddress.toUpperCase() !== currentNpfAddress.toUpperCase();
         },
 
-        formatNpfRating:function (npfAddress) {
+        formatNpfRating: function (npfAddress) {
             var ratingOfReliability = this.formatter.formatNpfAddressToReliability.call(this,npfAddress);
             var oNpfRating = Utils.conversionNpfRating(ratingOfReliability);
             return oNpfRating.symbol;
+        },
+
+        formatTableItemStatus: function (isFinished) {
+            return isFinished ? "green" : "yellow";
         }
     }
 

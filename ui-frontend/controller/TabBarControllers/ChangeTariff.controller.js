@@ -78,8 +78,9 @@ sap.ui.define([
 
             var now = (new Date()).valueOf();
             this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([{
-                "tariff": selectedTariff,
-                "timestamp": now
+                tariff: selectedTariff,
+                timestamp: now,
+                isFinished: false
             }]));
         },
 

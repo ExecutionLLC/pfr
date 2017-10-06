@@ -88,9 +88,12 @@
 			                  }"
                         />
                         <Text text="{techModel>tariff}"/>
-                        <core:Icon
-                                src="sap-icon://overlay"
-                                color= "green"/>
+                        <core:Icon src="sap-icon://overlay"
+                                   color="{
+                                        path: 'techModel>isFinished',
+                                        formatter: '.formatter.formatTableItemStatus'
+                                   }"
+                        />
                         <core:Icon src="sap-icon://initiative"
                                    press="onIconPress"
                                    size="2rem"

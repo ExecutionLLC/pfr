@@ -165,7 +165,8 @@ sap.ui.define([
                 // состояние кнопок/лейблов/... следует состоянию модели, все изменения состояния GUI произойдут в onMainModelChanges
                 this.oMainModel.setProperty("/pendedNpfChanges", pendedNpfChanges.concat([{
                     npf: selectedNpfAddress,
-                    timestamp: now
+                    timestamp: now,
+                    isFinished: false
                 }]));
             }
         }

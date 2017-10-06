@@ -198,17 +198,20 @@
                               }"
                         />
                         <Text text="{
-                                    path:'techModel>npf',
-                                    formatter:'.formatter.formatNpfAddressToName'
+                                    path: 'techModel>npf',
+                                    formatter: '.formatter.formatNpfAddressToName'
                                 }"
                         />
-                        <core:Icon
-                                src="sap-icon://overlay"
-                                color= "green"/>
-                        <core:Icon
-                                src="sap-icon://initiative"
-                                press="onIconPress"
-                                size="2rem"/>
+                        <core:Icon src="sap-icon://overlay"
+                                   color= "{
+                                        path: 'techModel>isFinished',
+                                        formatter: '.formatter.formatTableItemStatus'
+                                   }"
+                        />
+                        <core:Icon src="sap-icon://initiative"
+                                   press="onIconPress"
+                                   size="2rem"
+                        />
                     </cells>
                 </ColumnListItem>
             </items>
