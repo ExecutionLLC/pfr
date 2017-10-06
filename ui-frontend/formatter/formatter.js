@@ -13,10 +13,6 @@ sap.ui.define([
         formatFooterString: function (text) {
 
         },
-        // изменять цвет кружочков в таблице во вкладке "Получить выписку"
-        formatIconColorByStatus: function (sStatus) {
-              return sStatus === 'done' ? 'green' : 'red'
-        },
         // изменить название кнопки по щелчку на нее во вкладке "Получить выписку"
         formatButtonName: function (bIsButtonShowApply) {
             return bIsButtonShowApply ? 'Спрятать' : 'Показать'
@@ -93,10 +89,14 @@ sap.ui.define([
             return npfAddress.toUpperCase() !== currentNpfAddress.toUpperCase();
         },
 
-        formatNpfRating:function (npfAddress) {
+        formatNpfRating: function (npfAddress) {
             var ratingOfReliability = this.formatter.formatNpfAddressToReliability.call(this,npfAddress);
             var oNpfRating = Utils.conversionNpfRating(ratingOfReliability);
             return oNpfRating.symbol;
+        },
+
+        formatTableItemStatus: function (isFinished) {
+            return isFinished ? "green" : "#f4d742";
         }
     }
 

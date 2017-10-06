@@ -202,7 +202,7 @@
 
                 <Table
                         items="{
-                            path:'mainModel>/operationsHistory',
+                            path: 'techModel>/tech/profileTab/operationsTableData',
                             sorter : {
                                 path : 'timestamp',
                                 descending:true
@@ -253,40 +253,40 @@
                                                     textAlign="Left"
                                                     width="6%"
                                                     text="{
-                                                        path: 'mainModel>timestamp',
+                                                        path: 'techModel>timestamp',
                                                         formatter:'.formatter.formatDateForTable'}"/>
                                             <Text
                                                     width="20%"
                                                     textAlign="Center"
-                                                    text="{mainModel>comment}"/>
+                                                    text="{techModel>comment}"/>
                                             <core:Icon
                                                     width="5%"
                                                     src="sap-icon://overlay"
-                                                    color= "green"/>
+                                                    color="green"/>
                                             <Text
                                                     width="7%"
                                                     textAlign="Center"
-                                                    text="{= ${mainModel>tariff} + '%'}"/>
+                                                    text="{= ${techModel>tariff} + '%'}"/>
                                             <Text
                                                     width="10%"
                                                     textAlign="Center"
-                                                    text="{mainModel>contractor}"/>
+                                                    text="{techModel>contractor}"/>
                                             <Text
                                                     width="10%"
                                                     textAlign="Center"
                                                     text="{
-                                                        path:'mainModel>npf',
+                                                        path:'techModel>npf',
                                                         formatter:'.formatter.formatNpfAddressToName'}"/>
                                             <ObjectNumber
                                                     class="sapUiLargeMarginEnd"
                                                     number="{
-                                                        parts:[{path:'mainModel>amount'},{path:'techModel>/tech/currencyCode'}],
+                                                        parts:[{path:'techModel>amount'},{path:'techModel>/tech/currencyCode'}],
                                                         type: 'sap.ui.model.type.Currency'}"/>
                                             <ObjectNumber
                                                     number="{
                                                         parts:[
-                                                            {path:'mainModel>amount'},
-                                                            {path:'mainModel>tariff'},
+                                                            {path:'techModel>amount'},
+                                                            {path:'techModel>tariff'},
                                                             {path:'techModel>/tech/currencyCode'}
                                                         ],
                                                         formatter:'.formatter.formatAmountToSalary'}"/>

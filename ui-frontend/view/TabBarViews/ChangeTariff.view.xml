@@ -56,7 +56,7 @@
         <Label text="История смены тарифа"
                class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"
         />
-        <ScrollContainer vertical="false" horizontal = "true">
+        <ScrollContainer vertical="false" horizontal="true">
             <Table
                     showNoData="false">
                 <columns>
@@ -75,72 +75,76 @@
                     </Column>
                 </columns>
             </Table>
-            <ScrollContainer vertical = "true" horizontal="false">
-        <Table
-                items="{
-                            path:'mainModel>/tariffHistory',
-                            sorter : {
-                                path : 'timestamp',
-                                descending:true
-                            }
-                        }">
-            <columns>
-                <Column
-                        hAlign="Center">
-                </Column>
-                <Column
-                        hAlign="Center">
-                </Column>
-                <Column
-                        hAlign="Center">
-                </Column>
-                <Column
-                        hAlign="Center">
-                </Column>
-            </columns>
-            <items>
-                <CustomListItem>
-                    <Panel
-                            expandable="true"
-                            expand="false"
-                            width="auto">
-                        <headerToolbar>
-                            <Toolbar
-                                    width="100%">
-                                <content>
-                                    <Text
-                                            textAlign="Center"
-                                            width="17%"
-                                            text="{
-                                                path: 'mainModel>timestamp',
+            <ScrollContainer vertical="true" horizontal="false">
+                <Table
+                        items="{
+                    path:'techModel>/tech/changeTariffTab/tariffTableData',
+                    sorter : {
+                        path : 'timestamp',
+                        descending:true
+                    }
+                }">
+                    <columns>
+                        <Column
+                                hAlign="Center">
+                        </Column>
+                        <Column
+                                hAlign="Center">
+                        </Column>
+                        <Column
+                                hAlign="Center">
+                        </Column>
+                        <Column
+                                hAlign="Center">
+                        </Column>
+                    </columns>
+                    <items>
+                        <CustomListItem>
+                            <Panel
+                                    expandable="true"
+                                    expand="false"
+                                    width="auto">
+                                <headerToolbar>
+                                    <Toolbar
+                                            width="100%">
+                                        <content>
+                                            <Text
+                                                    textAlign="Center"
+                                                    width="17%"
+                                                    text="{
+                                                path: 'techModel>timestamp',
                                                 formatter:'.formatter.formatDateForTable'
                                             }"/>
+                                            <Text
+                                                    textAlign="Center"
+                                                    width="32%"
+                                                    text="{techModel>tariff}"/>
+                                            <core:Icon
+                                                    width="17%"
+                                                    src="sap-icon://overlay"
+                                                    color="{
+                                        path: 'techModel>isFinished',
+                                        formatter: '.formatter.formatTableItemStatus'
+                                   }"
+                                            />
+                                        </content>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <content>
                                     <Text
-                                            textAlign="Center"
-                                            width="32%"
-                                            text="{mainModel>newTariff}"/>
-                                    <core:Icon
-                                            width="17%"
-                                            src="sap-icon://overlay"
-                                            color= "green"/>
+                                            text="ID Транзакции"/>
+                                    <Text
+                                            text="Отправитель"/>
+                                    <Text
+                                            text="Количество подтверждений"/>
                                 </content>
-                            </Toolbar>
-                        </headerToolbar>
-                        <content>
-                            <Text
-                                    text="ID Транзакции"/>
-                            <Text
-                                    text="Отправитель"/>
-                            <Text
-                                    text="Количество подтверждений"/>
-                        </content>
-                    </Panel>
-                </CustomListItem>
-            </items>
-        </Table>
+                            </Panel>
+                        </CustomListItem>
+                    </items>
+                </Table>
 
-    </ScrollContainer>
-</ScrollContainer>
+            </ScrollContainer>
+        </ScrollContainer>
     </Page>
 
 </mvc:View>

@@ -156,7 +156,7 @@
                                 textAlign = "Begin"
                                 width = "100%"/>
                             <Text
-                                text ="10.830 ₽/мес."
+                                text ="{mainModel>/pensionForecast} ₽/мес."
                                 textAlign = "Center"
                                 width = "100%"
                                 class = "H1"/>
