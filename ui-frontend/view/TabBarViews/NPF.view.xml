@@ -162,50 +162,46 @@
             </Button>
         </layout:Grid>
         <!--конец-->
-        <Label
-                text="История смены НПФ"
-                class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
-        <Table
-                items="{
-            path:'mainModel>/npfHistory',
-            sorter : {
+        <Label text="История смены НПФ"
+               class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"
+        />
+        <Table items="{
+                    path:'techModel>/tech/changeNpfTab/npfTableData',
+                    sorter: {
                         path : 'timestamp',
                         descending:true
                     }
-        }">
+                }"
+        >
             <columns>
-                <Column
-                        hAlign="Center">
-                    <Text
-                            text="Дата операции"/>
+                <Column hAlign="Center">
+                    <Text text="Дата операции"/>
                 </Column>
-                <Column
-                        hAlign="Center">
-                    <Text
-                            text="НПФ"/>
+                <Column hAlign="Center">
+                    <Text text="НПФ"/>
                 </Column>
-                <Column
-                        hAlign="Center">
+                <Column hAlign="Center">
                     <Text text="Проверить операцию"/>
                 </Column>
             </columns>
             <items>
                 <ColumnListItem>
                     <cells>
+                        <Text text="{
+                                path: 'techModel>timestamp',
+                                formatter:'.formatter.formatDateForTable'
+                              }"
+                        />
                         <Text
                                 text="{
-                            path: 'mainModel>timestamp',
-                            formatter:'.formatter.formatDateForTable'
-                        }"/>
-                        <Text
-                                text="{
-                            path:'mainModel>newNpf',
-                            formatter:'.formatter.formatNpfAddressToName'
-                        }"/>
-                        <core:Icon
-                                src="sap-icon://initiative"
-                                press="onIconPress"
-                                size="2rem"/>
+                                    path:'techModel>npf',
+                                    formatter:'.formatter.formatNpfAddressToName'
+                                }"
+                        />
+                        <core:Icon src="sap-icon://initiative"
+                                   press="onIconPress"
+                                   size="2rem"
+                        />
                     </cells>
                 </ColumnListItem>
             </items>

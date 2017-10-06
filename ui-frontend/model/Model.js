@@ -20,7 +20,8 @@ sap.ui.define([
                     selectedTariff: 6,
                     changeTariffMessage: "",
                     isButtonChangeTariffEnabled: false,
-                    isSliderChangeTariffEnabled: false
+                    isSliderChangeTariffEnabled: false,
+                    tariffTableData: []
                 },
                 changeNpfTab: {
                     selectedNpf: "",
@@ -33,7 +34,8 @@ sap.ui.define([
                     changeNpfMessage: "",
                     changeNpfMessageType: "Error",
                     nextMinTimeForChangeMessage: "",
-                    isNextMinTimeForChangeLabelVisible: false
+                    isNextMinTimeForChangeLabelVisible: false,
+                    npfTableData: []
                 }
             },
             // Настройки диаграммы

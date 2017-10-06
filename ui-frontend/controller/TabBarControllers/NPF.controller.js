@@ -60,6 +60,24 @@ sap.ui.define([
             var npfHistory = this.oMainModel.getProperty("/npfHistory");
             var pendedNpfChanges = this.oMainModel.getProperty("/pendedNpfChanges");
 
+            var npfTableData = pendedNpfChanges.map(function (value) {
+                return {
+                    npf: value.npf,
+                    timestamp: value.timestamp,
+                    transactionHash: value.transactionHash,
+                    isFinished: false
+                };
+            });
+            npfTableData = npfTableData.concat(npfHistory.map(function (value) {
+                return {
+                    npf: value.newNpf,
+                    timestamp: value.timestamp,
+                    transactionHash: value.transactionHash,
+                    isFinished: true
+                }
+            }));
+            this.oTechModel.setProperty('/tech/changeNpfTab/npfTableData', npfTableData);
+
             if (pendedNpfChanges.length !== 0) {
                 this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpf", "");
                 this.oTechModel.setProperty("/tech/changeNpfTab/isNextNpfTableVisible", false);
