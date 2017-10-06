@@ -174,7 +174,7 @@
                         <Text text="Дата операции"/>
                     </Column>
                     <Column hAlign="Center">
-                        <Text text="Тариф"/>
+                        <Text text="НПФ"/>
                     </Column>
                     <Column
                             hAlign="Center">
@@ -186,32 +186,73 @@
                 </columns>
             </Table>
             <ScrollContainer vertical = "true" horizontal="false">
-                <Table id = "RowsTable" />
-                <!--<Table items="{
-                    path:'mainModel>/tariffHistory',
-                    sorter : {
-                            path : 'timestamp',
-                            descending:true
-                        }
-                    }">
+
+                <Table
+                        items="{
+                            path:'mainModel>/npfHistory',
+                            sorter : {
+                                path : 'timestamp',
+                                descending:true
+                            }
+                        }">
                     <columns>
-                        <Column hAlign="Center"
-                            width="10px">
-                        </Column>
-                        <Column hAlign="Center"
-                                width="10px">
+                        <Column
+                                hAlign="Center">
                         </Column>
                         <Column
-                                hAlign="Center"
-                                width="10px">
+                                hAlign="Center">
                         </Column>
-                        <Column hAlign="Center"
-                                width="10px">
+                        <Column
+                                hAlign="Center">
+                        </Column>
+                        <Column
+                                hAlign="Center">
                         </Column>
                     </columns>
                     <items>
+                        <CustomListItem>
+                            <Panel
+                                    expandable="true"
+                                    expand="false"
+                                    width="auto">
+                                <headerToolbar>
+                                    <Toolbar
+                                        width="100%">
+                                        <content>
+                                            <Text
+                                                textAlign="Center"
+                                                width="17%"
+                                                text="{
+                                                path: 'mainModel>timestamp',
+                                                formatter:'.formatter.formatDateForTable'
+                                            }"/>
+                                            <Text
+                                                textAlign="Center"
+                                                width="32%"
+                                                text="{
+                                                path:'mainModel>newNpf',
+                                                formatter:'.formatter.formatNpfAddressToName'
+                                            }"/>
+                                            <core:Icon
+                                                    width="17%"
+                                                    src="sap-icon://overlay"
+                                                    color= "green"/>
+                                        </content>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <content>
+                                    <Text
+                                            text="ID Транзакции"/>
+                                    <Text
+                                            text="Отправитель"/>
+                                    <Text
+                                            text="Количество подтверждений"/>
+                                </content>
+                            </Panel>
+                        </CustomListItem>
                     </items>
-                </Table>-->
+                </Table>
+
             </ScrollContainer>
         </ScrollContainer>
     </Page>

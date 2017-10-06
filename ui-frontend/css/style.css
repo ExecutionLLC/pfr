@@ -73,3 +73,11 @@
 	color: black;
 	font-weight: bold;
 }
+
+.sapMPanelExpandableIcon.sapUiIcon{
+	right: 10%;
+}
+
+.tableReport .sapMPanelExpandableIcon.sapUiIcon{
+	right: 4%;
+}
