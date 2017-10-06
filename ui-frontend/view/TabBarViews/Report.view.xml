@@ -284,13 +284,17 @@
                                             <ObjectNumber
                                                     class="sapUiLargeMarginEnd"
                                                     number="{
-                                                        parts:[{path:'techModel>amount'},{path:'techModel>/tech/currencyCode'}],
+                                                        parts:[
+                                                            {path:'techModel>amount'},
+                                                            {path:'techModel>/tech/currencyCode'}
+                                                        ],
                                                         type: 'sap.ui.model.type.Currency'}"/>
                                             <ObjectNumber
                                                     number="{
                                                         parts:[
                                                             {path:'techModel>amount'},
                                                             {path:'techModel>tariff'},
+                                                            {path:'techModel>comment'},
                                                             {path:'techModel>/tech/currencyCode'}
                                                         ],
                                                         formatter:'.formatter.formatAmountToSalary'}"/>

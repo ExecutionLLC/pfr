@@ -72,7 +72,10 @@ sap.ui.define([
         /**
          * @description Форматирование значения зарплаты
          */
-        formatAmountToSalary: function (amount, tariff, currencyCode) {
+        formatAmountToSalary: function (amount, tariff, comment, currencyCode) {
+            if (/.*процент.*/.test(comment)) {
+                return "";
+            }
             var salary = amount/tariff*100.0;
             return this.formatter.oCurrencyFormat.format(salary,currencyCode);
         },
