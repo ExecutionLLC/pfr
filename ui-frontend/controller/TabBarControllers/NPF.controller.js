@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "personal/account/formatter/formatter",
     "personal/account/util/Const",
-    "personal/account/util/Utils"
-], function (Controller, formatter, Const, Utils) {
+    "personal/account/util/Utils",
+    "sap/ui/model/json/JSONModel"
+], function (Controller, formatter, Const, Utils, JSONModel) {
     "use strict";
 
     return Controller.extend("personal.account.controller.TabBarControllers.NPF", {
