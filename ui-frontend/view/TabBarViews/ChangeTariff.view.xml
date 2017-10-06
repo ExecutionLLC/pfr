@@ -119,8 +119,10 @@
                                                     textAlign="Center"
                                                     width="32%"
                                                     text="{techModel>tariff}"/>
-                                            <core:Icon src="sap-icon://overlay"
-                                                       color="{
+                                            <core:Icon
+                                                    width="17%"
+                                                    src="sap-icon://overlay"
+                                                    color="{
                                         path: 'techModel>isFinished',
                                         formatter: '.formatter.formatTableItemStatus'
                                    }"

@@ -253,7 +253,7 @@
                                                     textAlign="Left"
                                                     width="6%"
                                                     text="{
-                                                        path: 'mainModel>timestamp',
+                                                        path: 'techModel>timestamp',
                                                         formatter:'.formatter.formatDateForTable'}"/>
                                             <Text
                                                     width="20%"
