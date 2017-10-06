@@ -197,16 +197,11 @@
                                 formatter:'.formatter.formatDateForTable'
                               }"
                         />
-                        <Text
-                                text="{
-                            path: 'mainModel>timestamp',
-                            formatter:'.formatter.formatDateForTable'
-                        }"/>
-                        <Text
-                                text="{
-                            path:'mainModel>newNpf',
-                            formatter:'.formatter.formatNpfAddressToName'
-                        }"/>
+                        <Text text="{
+                                    path:'techModel>npf',
+                                    formatter:'.formatter.formatNpfAddressToName'
+                                }"
+                        />
                         <core:Icon
                                 src="sap-icon://overlay"
                                 color= "green"/>
