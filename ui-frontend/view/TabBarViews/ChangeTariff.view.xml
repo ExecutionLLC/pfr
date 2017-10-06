@@ -56,49 +56,91 @@
         <Label text="История смены тарифа"
                class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"
         />
+        <ScrollContainer vertical="false" horizontal = "true">
+            <Table
+                    showNoData="false">
+                <columns>
+                    <Column hAlign="Center">
+                        <Text text="Дата операции"/>
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="Тариф"/>
+                    </Column>
+                    <Column
+                            hAlign="Center">
+                        <Text text="Статус"/>
+                    </Column>
+                    <Column hAlign="Center">
+                        <Text text="Проверить операцию"/>
+                    </Column>
+                </columns>
+            </Table>
+            <ScrollContainer vertical = "true" horizontal="false">
         <Table
                 items="{
-                path:'mainModel>/tariffHistory',
-                sorter : {
-                        path : 'timestamp',
-                        descending:true
-                    }
-                }">
+                            path:'mainModel>/tariffHistory',
+                            sorter : {
+                                path : 'timestamp',
+                                descending:true
+                            }
+                        }">
             <columns>
-                <Column hAlign="Center">
-                    <Text text="Дата операции"/>
-                </Column>
-                <Column hAlign="Center">
-                    <Text text="Тариф"/>
+                <Column
+                        hAlign="Center">
                 </Column>
                 <Column
                         hAlign="Center">
-                    <Text text="Статус"/>
                 </Column>
-                <Column hAlign="Center">
-                    <Text text="Проверить операцию"/>
+                <Column
+                        hAlign="Center">
+                </Column>
+                <Column
+                        hAlign="Center">
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
-                    <cells>
-                        <Text text="{
-				                path: 'mainModel>timestamp',
-				                formatter:'.formatter.formatDateForTable'
-			                  }"
-                        />
-                        <Text text="{mainModel>newTariff}"/>
-                        <core:Icon
-                                src="sap-icon://overlay"
-                                color= "green"/>
-                        <core:Icon src="sap-icon://initiative"
-                                   press="onIconPress"
-                                   size="2rem"
-                        />
-                    </cells>
-                </ColumnListItem>
+                <CustomListItem>
+                    <Panel
+                            expandable="true"
+                            expand="false"
+                            width="auto">
+                        <headerToolbar>
+                            <Toolbar
+                                    width="100%">
+                                <content>
+                                    <Text
+                                            textAlign="Center"
+                                            width="17%"
+                                            text="{
+                                                path: 'mainModel>timestamp',
+                                                formatter:'.formatter.formatDateForTable'
+                                            }"/>
+                                    <Text
+                                            textAlign="Center"
+                                            width="32%"
+                                            text="{mainModel>newTariff}"/>
+                                    <core:Icon
+                                            width="17%"
+                                            src="sap-icon://overlay"
+                                            color= "green"/>
+                                </content>
+                            </Toolbar>
+                        </headerToolbar>
+                        <content>
+                            <Text
+                                    text="ID Транзакции"/>
+                            <Text
+                                    text="Отправитель"/>
+                            <Text
+                                    text="Количество подтверждений"/>
+                        </content>
+                    </Panel>
+                </CustomListItem>
             </items>
         </Table>
+
+    </ScrollContainer>
+</ScrollContainer>
     </Page>
 
 </mvc:View>
