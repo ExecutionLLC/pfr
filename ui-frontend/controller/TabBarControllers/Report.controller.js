@@ -72,22 +72,21 @@ sap.ui.define([
             var aFilters = [];
             if (sFrom && sTo) {
                 aFilters.push(new Filter({
-                            path    : "timestamp",
-                            operator: sap.ui.model.FilterOperator.GE,
-                            value1  : sFromMS
-                        })
-                );
+                    path: "timestamp",
+                    operator: sap.ui.model.FilterOperator.GE,
+                    value1: sFromMS
+                }));
                 aFilters.push(new Filter({
                     path: "timestamp",
                     operator: sap.ui.model.FilterOperator.LE,
-                    value1  : sToMS
+                    value1: sToMS
                 }));
                 // Запишем фильтр в массив фильтров
                 this._oFilterSet.dateFilter = new Filter({
                     filters: aFilters,
                     and: true
                 });
-            }else {
+            } else {
                 this._oFilterSet.dateFilter = null
             }
 
