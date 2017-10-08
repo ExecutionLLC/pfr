@@ -33,7 +33,7 @@ sap.ui.define([
             var oModel = oComponent.getModel("npfModel");
 
             var item = Utils.getNpfObjectByAddress(address, oModel);
-            // Возвращаем рейтинг доходности
+            // Возвращаем рейтинг надежности
             return item ? item.ratingOfReliability : '?';
         },
 
@@ -64,13 +64,6 @@ sap.ui.define([
         },
 
         /**
-         * @description Форматирование видимости любого контрола в зависимотси от pendedTariffChanges
-         */
-        formatStatusTextEnable: function (pendedTariffChanges) {
-            return (pendedTariffChanges && pendedTariffChanges.length !== 0);
-        },
-
-        /**
          * @description Форматирование значения зарплаты
          */
         formatAmountToSalary: function (amount, tariff, comment, currencyCode) {
@@ -78,7 +71,7 @@ sap.ui.define([
                 return "";
             }
             var salary = amount/tariff*100.0;
-            return this.formatter.oCurrencyFormat.format(salary,currencyCode);
+            return this.formatter.oCurrencyFormat.format(salary, currencyCode);
         },
 
         /**
