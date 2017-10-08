@@ -59,6 +59,26 @@ sap.ui.define([
             dateFilter: null
         },
 
+
+        transformDateToString: function (date) {
+            if(!date)return "";
+            var sYearFrom = date.getFullYear();
+            var sMonthFrom = date.getMonth() + 1;						// Месяцы считаются от 0 до 11, добавим +1
+            var sDayFrom = date.getDate();
+
+            //Форматируем значение месяца
+            if (sMonthFrom < 10) {
+                sMonthFrom = "0" + sMonthFrom  							// Если в месяце только одна цифра,добавим в начало "0"
+            }
+
+            // Форматиуем значение числа
+            if (sDayFrom < 10) {
+                sDayFrom = "0" + sDayFrom  								// Если в дне только одна цифра,добавим в начало "0"
+            }
+            return sDayFrom + "." + sMonthFrom + "." + sYearFrom
+        },
+
+
         /**
          * @description Составление фильтра по датам
          */
@@ -69,6 +89,10 @@ sap.ui.define([
             var sFromMS = +new Date(sFrom);
             // Преобразованная строка даты периода "по"
             var sToMS = +new Date(sTo);
+            var sNewDateFrom = this.transformDateToString(sFrom);
+            var sNewDateTo = this.transformDateToString(sTo);
+            this.oTechModel.setProperty("/tech/getReportTab/dateFrom",sNewDateFrom);
+            this.oTechModel.setProperty("/tech/getReportTab/dateTo",sNewDateTo);
             var aFilters = [];
             if (sFrom && sTo) {
                 aFilters.push(new Filter({
@@ -96,6 +120,37 @@ sap.ui.define([
             var oBinding = oTable.getBinding("items");
 
             oBinding.filter(this._oFilterSet.dateFilter);
+
+            /*Изменение значений выпадающего поля*/
+            var aOperationsTableData = this.oTechModel.getProperty("/tech/profileTab/operationsTableData");
+            var aAmountIncome = [];
+            var aAmountOutgoing = [];
+            // Получили массив с начислениями до выбранного периода
+            aOperationsTableData.forEach(function (data) {
+                if(sFromMS >= data.timestamp){
+                    aAmountIncome.push(data.amount)
+                }
+            });
+            // Получили массив с начислениями во время выбранного периода
+            aOperationsTableData.forEach(function (data) {
+                if(data.timestamp <= sToMS){
+                    aAmountOutgoing.push(data.amount)
+                }
+            });
+            function sumOfArrayElement(array) {
+                var sum = 0;
+                for(var i = 0; i < array.length; i++){
+                    sum += array[i];
+                }
+                return sum;
+            }
+            var amountSumIncome = sumOfArrayElement(aAmountIncome);
+            var amountSumOutgoing = sumOfArrayElement(aAmountOutgoing);
+            var amountDifference = amountSumOutgoing - amountSumIncome;
+            this.oTechModel.setProperty("/tech/getReportTab/AmountIncome",amountSumIncome);
+            this.oTechModel.setProperty("/tech/getReportTab/AmountOutgoing",amountSumOutgoing);
+            this.oTechModel.setProperty("/tech/getReportTab/AmountDifference",amountDifference);
+
         },
 
         onPrint: function () {

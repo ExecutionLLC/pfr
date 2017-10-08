@@ -22,8 +22,8 @@
             <ObjectNumber
                     class="label-margin-top"
                     number="{
-						        parts:[{path:'mainModel>/balance'},{path:'techModel>/tech/currencyCode'}],
-						type: 'sap.ui.model.type.Currency'
+                            parts:[{path:'mainModel>/balance'},{path:'techModel>/tech/currencyCode'}],
+						    type: 'sap.ui.model.type.Currency'
 					    }">
                 <layoutData>
                     <layout:GridData
@@ -82,7 +82,7 @@
                 <form:FormContainer>
                     <form:FormElement>
                         <Label
-                                text="Входящий остаток на 07.05.2014:"
+                                text="{= 'Входящий остаток на ' + ${techModel>/tech/getReportTab/dateFrom} }"
                                 class="label-margin-top">
                             <layoutData>
                                 <layout:GridData
@@ -90,17 +90,22 @@
                                         indent="L1 M0 S0"/>
                             </layoutData>
                         </Label>
-                        <Text text="174 179, 19 рублей">
+                        <ObjectNumber
+                                number="{
+                            parts:[{path:'techModel>/tech/getReportTab/AmountIncome'},{path:'techModel>/tech/currencyCode'}],
+						    type: 'sap.ui.model.type.Currency'
+					    }">
                             <layoutData>
                                 <layout:GridData
                                         span="L6 M3 S7"
                                         indent="L1 M0 S0"/>
                             </layoutData>
-                        </Text>
+                        </ObjectNumber>
+
                     </form:FormElement>
                     <form:FormElement>
                         <Label
-                                text="Исходящий остаток на 07.05.2017:"
+                                text="{= 'Исходящий остаток на ' + ${techModel>/tech/getReportTab/dateTo} }"
                                 class="label-margin-top">
                             <layoutData>
                                 <layout:GridData
@@ -108,13 +113,17 @@
                                         indent="L1 M0 S0"/>
                             </layoutData>
                         </Label>
-                        <Text text="188 469б 72 рублей">
+                        <ObjectNumber
+                                number="{
+                            parts:[{path:'techModel>/tech/getReportTab/AmountOutgoing'},{path:'techModel>/tech/currencyCode'}],
+						    type: 'sap.ui.model.type.Currency'
+					    }">
                             <layoutData>
                                 <layout:GridData
                                         span="L6 M3 S7"
                                         indent="L1 M0 S0"/>
                             </layoutData>
-                        </Text>
+                        </ObjectNumber>
                     </form:FormElement>
                     <form:FormElement>
                         <Label
@@ -126,12 +135,16 @@
                                         indent="L1 M0 S0"/>
                             </layoutData>
                         </Label>
-                        <Text text="14 317 рублей">
-                            <layoutData>
-                                <layout:GridData
-                                        span="L2 M3 S7"/>
-                            </layoutData>
-                        </Text>
+                        <ObjectNumber
+                                number="{
+                            parts:[{path:'techModel>/tech/getReportTab/AmountDifference'},{path:'techModel>/tech/currencyCode'}],
+						    type: 'sap.ui.model.type.Currency'
+					    }">
+                        <layoutData>
+                            <layout:GridData
+                                    span="L2 M3 S7"/>
+                        </layoutData>
+                        </ObjectNumber>
                     </form:FormElement>
                 </form:FormContainer>
             </form:formContainers>
@@ -201,6 +214,7 @@
             <ScrollContainer vertical="true" horizontal="false">
 
                 <Table
+                        id="table--report"
                         items="{
                             path: 'techModel>/tech/profileTab/operationsTableData',
                             sorter : {
