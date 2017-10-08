@@ -1,7 +1,8 @@
 sap.ui.define([
     "sap/ui/core/format/NumberFormat",
-    "personal/account/util/Utils"
-], function (NumberFormat, Utils) {
+    "personal/account/util/Utils",
+    "personal/account/util/Const"
+], function (NumberFormat, Utils, Const) {
     "use strict";
     return {
 
@@ -100,6 +101,14 @@ sap.ui.define([
 
         formatTableItemStatus: function (isFinished) {
             return isFinished ? "green" : "#f4d742";
+        },
+
+        formatTransactionHashHref: function(transactionHash) {
+            return Const.const.BASE_URL + "/transaction/" + transactionHash;
+        },
+
+        formatNumberOfConformations: function(isFinished) {
+            return isFinished ? 7 : 0;
         }
     }
 

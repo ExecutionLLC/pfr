@@ -244,12 +244,37 @@
                                     </Toolbar>
                                 </headerToolbar>
                                 <content>
-                                    <Text
-                                            text="ID Транзакции"/>
-                                    <Text
-                                            text="Отправитель"/>
-                                    <Text
-                                            text="Количество подтверждений"/>
+                                    <layout:VerticalLayout>
+                                        <layout:HorizontalLayout>
+                                            <Label text="ID транзакции: ">
+                                            </Label>
+                                            <Link text="{techModel>transactionHash}"
+                                                  href="{
+                                                            path: 'techModel>transactionHash',
+                                                            formatter: '.formatter.formatTransactionHashHref'
+                                                        }"
+                                                  target="_blank"
+                                            >
+                                            </Link>
+                                        </layout:HorizontalLayout>
+
+                                        <layout:HorizontalLayout>
+                                            <Label text="Отправитель: ">
+                                            </Label>
+                                            <Text text="{mainModel>/metadata/address}">
+                                            </Text>
+                                        </layout:HorizontalLayout>
+
+                                        <layout:HorizontalLayout width="100%">
+                                            <Label text="Количество подтверждений: ">
+                                            </Label>
+                                            <Text text="{
+                                                            path: 'techModel>isFinished',
+                                                            formatter: '.formatter.formatNumberOfConformations'
+                                                        }"
+                                            />
+                                        </layout:HorizontalLayout>
+                                    </layout:VerticalLayout>
                                 </content>
                             </Panel>
                         </CustomListItem>
