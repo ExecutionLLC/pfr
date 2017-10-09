@@ -13,16 +13,14 @@ sap.ui.define([
             tech:{
                 currencyCode: "рублей",
                 selectedKey: "",
-                profileTab: {
-                    isButtonShowApply: false,
-                    operationsTableData: []
-                },
                 getReportTab:{
+                    isButtonShowApply: false,
                     dateFrom:"",
                     dateTo:"",
                     AmountIncome:0,
                     AmountOutgoing:0,
-                    AmountDifference:0
+                    AmountDifference:0,
+                    operationsTableData: []
                 },
                 changeTariffTab: {
                     selectedTariff: 6,

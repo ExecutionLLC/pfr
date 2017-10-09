@@ -51,7 +51,7 @@ sap.ui.define([
                 }
             }));
 
-            this.oTechModel.setProperty("/tech/profileTab/operationsTableData", operationsTableData);
+            this.oTechModel.setProperty("/tech/getReportTab/operationsTableData", operationsTableData);
         },
 
         // Сохраним фильтры
@@ -122,7 +122,7 @@ sap.ui.define([
             oBinding.filter(this._oFilterSet.dateFilter);
 
             /*Изменение значений выпадающего поля*/
-            var aOperationsTableData = this.oTechModel.getProperty("/tech/profileTab/operationsTableData");
+            var aOperationsTableData = this.oTechModel.getProperty("/tech/getReportTab/operationsTableData");
             var aAmountIncome = [];
             var aAmountOutgoing = [];
             // Получили массив с начислениями до выбранного периода
