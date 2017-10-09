@@ -177,7 +177,7 @@ sap.ui.define([], function() {
                     oRating = {
                         symbol: "AAplus",
                         descrition: "Высокая надежность",
-                        imageSrc: "./image/AA+.jpg"
+                        imageSrc: "./image/AAplus.jpg"
                     };
                     break;
                 case 21:
