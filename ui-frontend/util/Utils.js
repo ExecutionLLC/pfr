@@ -222,12 +222,11 @@ sap.ui.define([
                 if (hashInfo && hashInfo.input) {
                     delete hashInfo.input;
                 }
-                var JsonStr = JSON.stringify(hashInfo, null, 4);
-                var JsonSlice = JsonStr.slice(1,-1);
-                var transactionInfo = JsonSlice.replace(/[" ]/g, '');
-                var transactionInfoFinal = transactionInfo.replace(/[:]/g, ' = ');
+                var transactionInfo = JSON.stringify(hashInfo, null, 4)
+                    .replace(/[" {},]/g, '')
+                    .replace(/[:]/g, ' = ');
 
-                MessageBox.information(transactionInfoFinal);
+                MessageBox.information(transactionInfo);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
                 MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
