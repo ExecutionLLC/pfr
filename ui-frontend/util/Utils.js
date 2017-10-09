@@ -197,10 +197,9 @@ sap.ui.define([], function() {
             }
             return oRating;
         },
-        conversionNpfIncomeRateToImage: function (int) {
+        conversionNpfIncomeRateToImage: function (incomeRate) {
             var sImageSrc;
-            switch (int){
-
+            switch (incomeRate){
                 case 7:
                     sImageSrc = "./image/7.jpg";
                     break;
