@@ -15,8 +15,8 @@ sap.ui.define([
 
         },
         // изменить название кнопки по щелчку на нее во вкладке "Получить выписку"
-        formatButtonName: function (bIsButtonShowApply) {
-            return bIsButtonShowApply ? 'Спрятать' : 'Показать'
+        formatButtonName: function (isShowHideButtonPressed) {
+            return isShowHideButtonPressed ? 'Спрятать' : 'Показать'
         },
 
         formatNpfAddressToName: function (address) {

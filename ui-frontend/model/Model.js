@@ -14,7 +14,8 @@ sap.ui.define([
                 currencyCode: "рублей",
                 selectedKey: "",
                 getReportTab:{
-                    isButtonShowApply: false,
+                    isShowHideButtonPressed: false,
+                    isShowHideButtonEnabled: false,
                     dateFrom:"?",
                     dateTo:"?",
                     AmountIncome:0,

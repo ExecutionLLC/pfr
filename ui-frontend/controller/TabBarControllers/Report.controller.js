@@ -109,6 +109,8 @@ sap.ui.define([
                 this.oTechModel.setProperty("/tech/getReportTab/AmountIncome",amountSumIncome);
                 this.oTechModel.setProperty("/tech/getReportTab/AmountOutgoing",amountSumOutgoing);
                 this.oTechModel.setProperty("/tech/getReportTab/AmountDifference",amountDifference);
+
+                this.oTechModel.setProperty("/tech/getReportTab/isShowHideButtonEnabled", true);
             } else {
                 this._oFilterSet.dateFilter = null;
 
@@ -118,6 +120,9 @@ sap.ui.define([
                 this.oTechModel.setProperty("/tech/getReportTab/AmountIncome", 0);
                 this.oTechModel.setProperty("/tech/getReportTab/AmountOutgoing", 0);
                 this.oTechModel.setProperty("/tech/getReportTab/AmountDifference", 0);
+
+                this.oTechModel.setProperty("/tech/getReportTab/isShowHideButtonPressed", false);
+                this.oTechModel.setProperty("/tech/getReportTab/isShowHideButtonEnabled", false);
             }
 
             var oTable = this.getView().byId("table--report");

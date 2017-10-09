@@ -52,12 +52,14 @@
                 </layoutData>
             </DateRangeSelection>
             <ToggleButton
-                    pressed="{techModel>/tech/getReportTab/isButtonShowApply}"
+                    pressed="{techModel>/tech/getReportTab/isShowHideButtonPressed}"
                     width="100%"
                     text="{
-                                path:'techModel>/tech/getReportTab/isButtonShowApply',
-                                formatter:'.formatter.formatButtonName'
-                            }">
+                            path:'techModel>/tech/getReportTab/isShowHideButtonPressed',
+                            formatter:'.formatter.formatButtonName'
+                          }"
+                    enabled="{techModel>/tech/getReportTab/isShowHideButtonEnabled}"
+            >
                 <layoutData>
                     <layout:GridData
                             span="L2 M3 S7"
@@ -76,7 +78,7 @@
         </layout:Grid>
         <!--дополнительное поле информации при нажатой кнопке-->
         <form:Form
-                visible="{techModel>/tech/getReportTab/isButtonShowApply}"
+                visible="{techModel>/tech/getReportTab/isShowHideButtonPressed}"
                 editable="true">
             <form:formContainers>
                 <form:FormContainer>
