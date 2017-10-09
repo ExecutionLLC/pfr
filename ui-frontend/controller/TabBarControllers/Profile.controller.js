@@ -53,6 +53,9 @@ sap.ui.define([
         },
 
         onChangeSelect: function (oEvent) {
+            var oPopOver = this.getView().byId("idPopOver");
+            var oVizFrame = this.getView().byId("idVizFrame");
+            oPopOver.connect(oVizFrame.getVizUid());
             var oSelect = oEvent.getSource();
             var oItem = oSelect.getSelectedItem();
             var sSelectedKey = oItem.getKey();

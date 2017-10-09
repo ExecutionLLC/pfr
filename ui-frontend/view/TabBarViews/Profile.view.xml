@@ -191,9 +191,12 @@
                 </CustomListItem>
                 <CustomListItem>
                     <content>
+                        <viz:Popover
+                                id="idPopOver">
+                        </viz:Popover>
                         <suite:ChartContainer
                             autoAdjustHeight="false"
-                            title="График поступлений"
+                            title="График накоплений"
                             showLegend="false"
                             showZoom="false"
                             showLegendButton="false">
@@ -221,7 +224,7 @@
                                                     </viz.data:dimensions>
                                                     <viz.data:measures>
                                                         <viz.data:MeasureDefinition
-                                                            name="Salary"
+                                                            name="Накопления"
                                                             value="{techModel>amount}" />
                                                     </viz.data:measures>
                                                 </viz.data:FlattenedDataset>
@@ -231,7 +234,7 @@
                                                     id='valueAxisFeed'
                                                     uid="valueAxis"
                                                     type="Measure"
-                                                    values="Salary"/>
+                                                    values="Накопления"/>
                                                 <viz.feeds:FeedItem
                                                     id='categoryAxisFeed'
                                                     uid="categoryAxis"
