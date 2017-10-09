@@ -6,6 +6,34 @@ sap.ui.define([
     return Controller.extend("personal.account.controller.TabBarControllers.Profile", {
         formatter: formatter,
 
+        onInit: function () {
+            var oComponent = this.getOwnerComponent();
+            this.oTechModel = oComponent.getModel("techModel");
+            this.oMainModel = oComponent.getModel("mainModel");
+            var mainModelBinding = new sap.ui.model.Binding(
+                this.oMainModel, "/", this.oMainModel.getContext("/")
+            );
+            mainModelBinding.attachChange(this.onMainModelChanges.bind(this));
+        },
+
+        onMainModelChanges: function() {
+            var operationsHistory = this.oMainModel.getProperty("/operationsHistory");
+
+            var diagramData = operationsHistory.map(function(value) {
+                return {
+                    amount: value.amount,
+                    timestamp: value.timestamp
+                };
+            });
+
+            for(var i = 1;i < diagramData.length;i++) {
+                var obj = diagramData[i];
+                obj.amount += diagramData[i - 1].amount;
+            }
+
+            this.oTechModel.setProperty("/tech/profileTab/diagramData", diagramData);
+        },
+
         onNavigateToNPF: function () {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("menuPage", {
