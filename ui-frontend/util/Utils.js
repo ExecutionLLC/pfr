@@ -219,6 +219,9 @@ sap.ui.define([
                 url: transactionHashURL,
                 dataType: "json"
             }).done(function (hashInfo) {
+                if (hashInfo && hashInfo.input) {
+                    delete hashInfo.input;
+                }
                 var JsonStr = JSON.stringify(hashInfo, null, 4);
                 var JsonSlice = JsonStr.slice(1,-1);
                 var transactionInfo = JsonSlice.replace(/[" ]/g, '');
