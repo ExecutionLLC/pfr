@@ -222,8 +222,9 @@ sap.ui.define([
                 var JsonStr = JSON.stringify(hashInfo, null, 4);
                 var JsonSlice = JsonStr.slice(1,-1);
                 var transactionInfo = JsonSlice.replace(/[" ]/g, '');
+                var transactionInfoFinal = transactionInfo.replace(/[:]/g, ' = ');
 
-                MessageBox.information(transactionInfo);
+                MessageBox.information(transactionInfoFinal);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
                 MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
