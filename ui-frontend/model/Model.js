@@ -15,8 +15,8 @@ sap.ui.define([
                 selectedKey: "",
                 getReportTab:{
                     isButtonShowApply: false,
-                    dateFrom:"",
-                    dateTo:"",
+                    dateFrom:"?",
+                    dateTo:"?",
                     AmountIncome:0,
                     AmountOutgoing:0,
                     AmountDifference:0,

@@ -1,9 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "personal/account/formatter/formatter",
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
-], function (Controller, formatter, Filter, FilterOperator) {
+    "personal/account/formatter/formatter",
+    "personal/account/util/Utils"
+], function (Controller, Filter, formatter, Utils) {
     "use strict";
     return Controller.extend("personal.account.controller.TabBarControllers.Report", {
         formatter: formatter,
@@ -59,98 +59,71 @@ sap.ui.define([
             dateFilter: null
         },
 
-
-        transformDateToString: function (date) {
-            if(!date)return "";
-            var sYearFrom = date.getFullYear();
-            var sMonthFrom = date.getMonth() + 1;						// Месяцы считаются от 0 до 11, добавим +1
-            var sDayFrom = date.getDate();
-
-            //Форматируем значение месяца
-            if (sMonthFrom < 10) {
-                sMonthFrom = "0" + sMonthFrom  							// Если в месяце только одна цифра,добавим в начало "0"
-            }
-
-            // Форматиуем значение числа
-            if (sDayFrom < 10) {
-                sDayFrom = "0" + sDayFrom  								// Если в дне только одна цифра,добавим в начало "0"
-            }
-            return sDayFrom + "." + sMonthFrom + "." + sYearFrom
-        },
-
-
         /**
          * @description Составление фильтра по датам
          */
         onDateRangeChange: function (oEvent) {
-            var sFrom = oEvent.getParameter("from");
-            var sTo = oEvent.getParameter("to");
-            // Преобразованная строка даты периода "с"
-            var sFromMS = +new Date(sFrom);
-            // Преобразованная строка даты периода "по"
-            var sToMS = +new Date(sTo);
-            var sNewDateFrom = this.transformDateToString(sFrom);
-            var sNewDateTo = this.transformDateToString(sTo);
-            this.oTechModel.setProperty("/tech/getReportTab/dateFrom",sNewDateFrom);
-            this.oTechModel.setProperty("/tech/getReportTab/dateTo",sNewDateTo);
-            var aFilters = [];
-            if (sFrom && sTo) {
+            var from = oEvent.getParameter("from");
+            var to = oEvent.getParameter("to");
+
+            function sumOfAmount(array) {
+                return array.reduce(function(p, v) {
+                    return p + v.amount;
+                }, 0);
+            }
+
+            if (from && to) {
+                var timestampFrom = from.valueOf();
+                var timestampTo = to.valueOf();
+                this.oTechModel.setProperty("/tech/getReportTab/dateFrom", Utils.timestampToString(timestampFrom));
+                this.oTechModel.setProperty("/tech/getReportTab/dateTo", Utils.timestampToString(timestampTo));
+
+                var aFilters = [];
                 aFilters.push(new Filter({
                     path: "timestamp",
                     operator: sap.ui.model.FilterOperator.GE,
-                    value1: sFromMS
+                    value1: timestampFrom
                 }));
                 aFilters.push(new Filter({
                     path: "timestamp",
                     operator: sap.ui.model.FilterOperator.LE,
-                    value1: sToMS
+                    value1: timestampTo
                 }));
                 // Запишем фильтр в массив фильтров
                 this._oFilterSet.dateFilter = new Filter({
                     filters: aFilters,
                     and: true
                 });
+
+                var oTable = this.getView().byId("table--report");
+                var oBinding = oTable.getBinding("items");
+                oBinding.filter(this._oFilterSet.dateFilter);
+
+                var operationsTableData = this.oTechModel.getProperty("/tech/getReportTab/operationsTableData");
+                var aAmountIncome = operationsTableData.filter(function(value) {
+                    return value.timestamp < timestampFrom;
+                });
+                var aAmountOutgoing = operationsTableData.filter(function(value) {
+                    return value.timestamp <= timestampTo;
+                });
+
+
+                var amountSumIncome = sumOfAmount(aAmountIncome);
+                var amountSumOutgoing = sumOfAmount(aAmountOutgoing);
+                var amountDifference = amountSumOutgoing - amountSumIncome;
+                this.oTechModel.setProperty("/tech/getReportTab/AmountIncome",amountSumIncome);
+                this.oTechModel.setProperty("/tech/getReportTab/AmountOutgoing",amountSumOutgoing);
+                this.oTechModel.setProperty("/tech/getReportTab/AmountDifference",amountDifference);
             } else {
-                this._oFilterSet.dateFilter = null
+                this._oFilterSet.dateFilter = null;
+
+                this.oTechModel.setProperty("/tech/getReportTab/dateFrom", "?");
+                this.oTechModel.setProperty("/tech/getReportTab/dateTo", "?");
+
+                this.oTechModel.setProperty("/tech/getReportTab/AmountIncome", 0);
+                this.oTechModel.setProperty("/tech/getReportTab/AmountOutgoing", 0);
+                this.oTechModel.setProperty("/tech/getReportTab/AmountDifference", 0);
             }
-
-            // применение фильтра к таблице
-            //todo узнать когда нужно применять фильтр, по нажатию на кнопку или сразу
-            var oTable = this.getView().byId("table--report");
-            var oBinding = oTable.getBinding("items");
-
-            oBinding.filter(this._oFilterSet.dateFilter);
-
-            /*Изменение значений выпадающего поля*/
-            var aOperationsTableData = this.oTechModel.getProperty("/tech/getReportTab/operationsTableData");
-            var aAmountIncome = [];
-            var aAmountOutgoing = [];
-            // Получили массив с начислениями до выбранного периода
-            aOperationsTableData.forEach(function (data) {
-                if(sFromMS >= data.timestamp){
-                    aAmountIncome.push(data.amount)
-                }
-            });
-            // Получили массив с начислениями во время выбранного периода
-            aOperationsTableData.forEach(function (data) {
-                if(data.timestamp <= sToMS){
-                    aAmountOutgoing.push(data.amount)
-                }
-            });
-            function sumOfArrayElement(array) {
-                var sum = 0;
-                for(var i = 0; i < array.length; i++){
-                    sum += array[i];
-                }
-                return sum;
-            }
-            var amountSumIncome = sumOfArrayElement(aAmountIncome);
-            var amountSumOutgoing = sumOfArrayElement(aAmountOutgoing);
-            var amountDifference = amountSumOutgoing - amountSumIncome;
-            this.oTechModel.setProperty("/tech/getReportTab/AmountIncome",amountSumIncome);
-            this.oTechModel.setProperty("/tech/getReportTab/AmountOutgoing",amountSumOutgoing);
-            this.oTechModel.setProperty("/tech/getReportTab/AmountDifference",amountDifference);
-
         },
 
         onPrint: function () {
