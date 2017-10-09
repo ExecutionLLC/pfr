@@ -202,12 +202,10 @@ sap.ui.define([], function() {
             switch (int){
 
                 case 7:
-                    sImageSrc = "./image/7.png";
-                    break;
+                    sImageSrc = "./image/7.JPG";
                     break;
                 case 8:
-                    sImageSrc = "./image/8.png";
-                    break;
+                    sImageSrc = "./image/8.JPG";
                     break;
                 case 9:
                     sImageSrc = "./image/9.JPG";
