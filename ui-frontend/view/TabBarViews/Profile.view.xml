@@ -204,7 +204,7 @@
                                             uiConfig="{applicationSet:'fiori'}"
                                             vizType='line'
                                             vizProperties="{techModel>/diagrammProperties}">
-                                            <viz:dataset>
+                                          <viz:dataset>
                                                 <viz.data:FlattenedDataset
                                                     data="{
                                                         path:'mainModel>/operationsHistory'
@@ -243,10 +243,12 @@
                             <suite:toolbar>
                                 <OverflowToolbar>
                                     <ToolbarSpacer/>
-                                    <Select>
+                                    <Select
+                                        change="onChangeSelect"
+                                        selectedKey="all-time">
                                         <items>
-                                            <core:Item text="За последний год" />
-                                            <core:Item text="За все время" />
+                                            <core:Item key="all-time" text="За все время"/>
+                                            <core:Item key="last-year" text="За последний год"/>
                                         </items>
                                     </Select>
                                     <suite:ChartContainerToolbarPlaceholder></suite:ChartContainerToolbarPlaceholder>

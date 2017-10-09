@@ -21,7 +21,8 @@ sap.ui.define([
                     AmountIncome:0,
                     AmountOutgoing:0,
                     AmountDifference:0,
-                    operationsTableData: []
+                    operationsTableData: [],
+                    operationsHistoryLastYear:[]
                 },
                 changeTariffTab: {
                     selectedTariff: 6,
