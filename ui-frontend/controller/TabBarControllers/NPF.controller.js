@@ -3,8 +3,9 @@ sap.ui.define([
     "personal/account/formatter/formatter",
     "personal/account/util/Const",
     "personal/account/util/Utils",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, formatter, Const, Utils, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageBox"
+], function (Controller, formatter, Const, Utils, JSONModel, MessageBox) {
     "use strict";
 
     return Controller.extend("personal.account.controller.TabBarControllers.NPF", {
@@ -170,6 +171,13 @@ sap.ui.define([
                     isFinished: false
                 }]));
             }
+        },
+
+        onLinkPress: function (oEvent) {
+            var oLink = oEvent.getSource();
+            var transactionHash = oLink.getProperty("text");
+            var transactionHashURL = Const.const.BASE_URL + "/transaction/" + transactionHash;
+            Utils.showMessageBoxHashInfo(transactionHashURL);
         }
     });
 });

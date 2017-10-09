@@ -1,4 +1,6 @@
-sap.ui.define([], function() {
+sap.ui.define([
+    "sap/m/MessageBox"
+], function(MessageBox) {
     "use strict";
 
     var oModule = {
@@ -211,6 +213,21 @@ sap.ui.define([], function() {
                     break;
             }
             return sImageSrc;
+        },
+        showMessageBoxHashInfo: function (transactionHashURL) {
+            $.ajax({
+                url: transactionHashURL,
+                dataType: "json"
+            }).done(function (hashInfo) {
+                var JsonStr = JSON.stringify(hashInfo, null, 4);
+                var JsonSlice = JsonStr.slice(1,-1);
+                var transactionInfo = JsonSlice.replace(/[" ]/g, '');
+
+                MessageBox.information(transactionInfo);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
+                MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
+            });
         }
     };
 

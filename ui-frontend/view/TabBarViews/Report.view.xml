@@ -324,11 +324,7 @@
                                             <Label text="ID транзакции: ">
                                             </Label>
                                             <Link text="{techModel>transactionHash}"
-                                                  href="{
-                                                            path: 'techModel>transactionHash',
-                                                            formatter: '.formatter.formatTransactionHashHref'
-                                                        }"
-                                                  target="_blank"
+                                                  press="onLinkPress"
                                             >
                                             </Link>
                                         </layout:HorizontalLayout>

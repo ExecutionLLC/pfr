@@ -23,7 +23,7 @@
                             <VBox
                                 height = "7rem"
                                 alignItems ="Center"
-                                width = "31%"
+                                width = "40%"
                                 class="right-border">
                                 <HBox
                                     width = "100%"
@@ -51,16 +51,17 @@
 
                             <VBox
                                 height ="7rem"
-                                width = "34%"
+                                width = "35%"
                                 class = "right-border" >
-                                <Text
+                                <!--<Text
                                     text = "{
                                         path:'mainModel>/npf',
                                         formatter:'.formatter.formatNpfAddressToReliability'}"
                                     textAlign = "End"
                                     width="90%"
-                                    class="green H2"/>
+                                    class="green H2"/>-->
                                 <HBox
+                                    class="sapUiSmallMarginTop"
                                     alignItems = "Center"
                                     justifyContent = "SpaceAround">
                                     <Image
@@ -78,15 +79,16 @@
 
                             <VBox
                                 height ="7rem"
-                                width = "34%">
-                                <Text
+                                width = "25%">
+                                <!--<Text
                                         text = "{
                                         path:'mainModel>/npf',
                                         formatter:'.formatter.formatNpfAddressToIncomeRate'}"
                                     textAlign = "End"
                                     width="100%"
-                                    class="red H2"/>
+                                    class="red H2"/>-->
                                 <HBox
+                                    class="sapUiSmallMarginTop"
                                     alignItems = "Center"
                                     justifyContent = "SpaceAround">
                                     <Image
@@ -97,7 +99,7 @@
                                         height = "4rem"
                                         class = "sapUiSmallMarginBeginEnd"/>
                                     <Text
-                                        text = "Рейтинг доходности"
+                                        text = "Доходность"
                                         class="H2"/>
                                 </HBox>
                             </VBox>

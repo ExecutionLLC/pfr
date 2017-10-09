@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/Filter",
     "personal/account/formatter/formatter",
-    "personal/account/util/Utils"
-], function (Controller, Filter, formatter, Utils) {
+    "personal/account/util/Utils",
+    "personal/account/util/Const"
+], function (Controller, Filter, formatter, Utils, Const) {
     "use strict";
     return Controller.extend("personal.account.controller.TabBarControllers.Report", {
         formatter: formatter,
@@ -132,6 +133,17 @@ sap.ui.define([
 
         onPrint: function () {
             print();
+        },
+
+        /**
+         * @description Переход по ссылке хэша
+         * @param oEvent
+         */
+        onLinkPress: function (oEvent) {
+            var oLink = oEvent.getSource();
+            var transactionHash = oLink.getProperty("text");
+            var transactionHashURL = Const.const.BASE_URL + "/transaction/" + transactionHash;
+            Utils.showMessageBoxHashInfo(transactionHashURL);
         }
     });
 });

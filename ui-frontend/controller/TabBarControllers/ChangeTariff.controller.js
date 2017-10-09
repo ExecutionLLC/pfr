@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "personal/account/formatter/formatter",
-    "personal/account/util/Const"
-], function (Controller, formatter, Const) {
+    "personal/account/util/Const",
+    "personal/account/util/Utils"
+], function (Controller, formatter, Const, Utils) {
     "use strict";
     return Controller.extend("personal.account.controller.TabBarControllers.ChangeTariff", {
         formatter: formatter,
@@ -91,6 +92,13 @@ sap.ui.define([
             var selectedTariff = this.oTechModel.getProperty("/tech/changeTariffTab/selectedTariff");
             var currentTarrif = this.oMainModel.getProperty("/tariff");
             this.oTechModel.setProperty("/tech/changeTariffTab/isButtonChangeTariffEnabled", selectedTariff !== currentTarrif);
+        },
+
+        onLinkPress: function (oEvent) {
+            var oLink = oEvent.getSource();
+            var transactionHash = oLink.getProperty("text");
+            var transactionHashURL = Const.const.BASE_URL + "/transaction/" + transactionHash;
+            Utils.showMessageBoxHashInfo(transactionHashURL);
         }
     });
 });
