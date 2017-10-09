@@ -131,7 +131,8 @@
                                     </Toolbar>
                                 </headerToolbar>
                                 <content>
-                                    <layout:VerticalLayout>
+                                    <layout:VerticalLayout
+                                        class="verticalLayout_tariff_npf-margin_left">
                                         <layout:HorizontalLayout>
                                             <Label text="ID транзакции: ">
                                             </Label>
