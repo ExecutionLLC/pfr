@@ -64,10 +64,12 @@
                                     alignItems = "Center"
                                     justifyContent = "SpaceAround">
                                     <Image
-                                        src="./image/aRate.JPG"
+                                        src="{
+                                            path:'mainModel>/npf',
+                                            formatter:'.formatter.formatNpfRatingToImage'}"
                                         width = '4rem'
                                         height = "4rem"
-                                        class = "sapUiSmallMarginBeginEnd"/>
+                                        />
                                     <Text
                                         text = "Рейтинг надежности"
                                         class="H2"/>
@@ -88,7 +90,9 @@
                                     alignItems = "Center"
                                     justifyContent = "SpaceAround">
                                     <Image
-                                        src="./image/rate.JPG"
+                                            src="{
+                                            path:'mainModel>/npf',
+                                            formatter:'.formatter.formatNPFIncomeRateToImage'}"
                                         width = '4rem'
                                         height = "4rem"
                                         class = "sapUiSmallMarginBeginEnd"/>

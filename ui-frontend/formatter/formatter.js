@@ -92,6 +92,18 @@ sap.ui.define([
             return oNpfRating.symbol;
         },
 
+        formatNpfRatingToImage: function (npfAddress) {
+            var ratingOfReliability = this.formatter.formatNpfAddressToReliability.call(this,npfAddress);
+            var oNpfRating = Utils.conversionNpfRating(ratingOfReliability);
+            return oNpfRating.imageSrc;
+        },
+
+        formatNPFIncomeRateToImage: function (npfAddress) {
+            var incomeRate = this.formatter.formatNpfAddressToIncomeRate.call(this,npfAddress);
+            var oIncomeRateImg = Utils.conversionNpfIncomeRateToImage(incomeRate);
+            return oIncomeRateImg;
+        },
+
         formatTableItemStatus: function (isFinished) {
             return isFinished ? "green" : "#f4d742";
         },

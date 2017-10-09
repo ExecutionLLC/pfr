@@ -175,24 +175,45 @@ sap.ui.define([], function() {
                     break;
                 case 20:
                     oRating = {
-                        symbol: "AA+",
-                        descrition: "Высокая надежность"
+                        symbol: "AAplus",
+                        descrition: "Высокая надежность",
+                        imageSrc: "./image/AA+.jpg"
                     };
                     break;
                 case 21:
                     oRating = {
                         symbol: "AAA",
-                        descrition: "Наивысша надежность"
+                        descrition: "Наивысша надежность",
+                        imageSrc: "./image/AAA.jpg"
                     };
                     break;
                 case 22:
                     oRating = {
                         symbol: "AAA+",
-                        descrition: "Наивысша надежность"
+                        descrition: "Наивысша надежность",
+                        imageSrc: "./image/AAAplus.jpg"
                     };
                     break;
             }
             return oRating;
+        },
+        conversionNpfIncomeRateToImage: function (int) {
+            var sImageSrc;
+            switch (int){
+
+                case 7:
+                    sImageSrc = "./image/7.png";
+                    break;
+                    break;
+                case 8:
+                    sImageSrc = "./image/8.png";
+                    break;
+                    break;
+                case 9:
+                    sImageSrc = "./image/9.JPG";
+                    break;
+            }
+            return sImageSrc;
         }
     };
 
