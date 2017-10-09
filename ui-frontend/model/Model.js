@@ -13,7 +13,10 @@ sap.ui.define([
             tech:{
                 currencyCode: "рублей",
                 selectedKey: "",
-                getReportTab:{
+                profileTab: {
+                    diagramData: []
+                },
+                getReportTab: {
                     isShowHideButtonPressed: false,
                     isShowHideButtonEnabled: false,
                     dateFrom: "?",
