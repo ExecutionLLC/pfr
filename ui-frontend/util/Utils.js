@@ -175,7 +175,7 @@ sap.ui.define([], function() {
                     break;
                 case 20:
                     oRating = {
-                        symbol: "AAplus",
+                        symbol: "AA+",
                         descrition: "Высокая надежность",
                         imageSrc: "./image/AAplus.jpg"
                     };
@@ -202,13 +202,13 @@ sap.ui.define([], function() {
             switch (int){
 
                 case 7:
-                    sImageSrc = "./image/7.JPG";
+                    sImageSrc = "./image/7.jpg";
                     break;
                 case 8:
-                    sImageSrc = "./image/8.JPG";
+                    sImageSrc = "./image/8.jpg";
                     break;
                 case 9:
-                    sImageSrc = "./image/9.JPG";
+                    sImageSrc = "./image/9.jpg";
                     break;
             }
             return sImageSrc;
