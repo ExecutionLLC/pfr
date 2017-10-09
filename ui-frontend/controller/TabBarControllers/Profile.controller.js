@@ -31,8 +31,8 @@ sap.ui.define([
 
             var oBinding = this.getView().byId("idVizFrame").getDataset().getBinding("data");
             if(sSelectedKey === "last-year") {
-                var oneYearBeforeNow = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-                var filter = new sap.ui.model.Filter("timestamp", sap.ui.model.FilterOperator.GT, oneYearBeforeNow);
+                var oneYearBeforeNow = new Date().setFullYear(new Date().getFullYear() - 1);
+                var filter = new sap.ui.model.Filter("timestamp", sap.ui.model.FilterOperator.GE, oneYearBeforeNow);
                 oBinding.filter([filter]);
             } else {
                 oBinding.filter(null);
