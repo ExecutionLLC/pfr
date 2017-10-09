@@ -95,10 +95,6 @@ sap.ui.define([
                     and: true
                 });
 
-                var oTable = this.getView().byId("table--report");
-                var oBinding = oTable.getBinding("items");
-                oBinding.filter(this._oFilterSet.dateFilter);
-
                 var operationsTableData = this.oTechModel.getProperty("/tech/getReportTab/operationsTableData");
                 var aAmountIncome = operationsTableData.filter(function(value) {
                     return value.timestamp < timestampFrom;
@@ -106,7 +102,6 @@ sap.ui.define([
                 var aAmountOutgoing = operationsTableData.filter(function(value) {
                     return value.timestamp <= timestampTo;
                 });
-
 
                 var amountSumIncome = sumOfAmount(aAmountIncome);
                 var amountSumOutgoing = sumOfAmount(aAmountOutgoing);
@@ -124,6 +119,10 @@ sap.ui.define([
                 this.oTechModel.setProperty("/tech/getReportTab/AmountOutgoing", 0);
                 this.oTechModel.setProperty("/tech/getReportTab/AmountDifference", 0);
             }
+
+            var oTable = this.getView().byId("table--report");
+            var oBinding = oTable.getBinding("items");
+            oBinding.filter(this._oFilterSet.dateFilter);
         },
 
         onPrint: function () {
