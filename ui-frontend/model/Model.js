@@ -16,13 +16,12 @@ sap.ui.define([
                 getReportTab:{
                     isShowHideButtonPressed: false,
                     isShowHideButtonEnabled: false,
-                    dateFrom:"?",
-                    dateTo:"?",
-                    AmountIncome:0,
-                    AmountOutgoing:0,
-                    AmountDifference:0,
-                    operationsTableData: [],
-                    operationsHistoryLastYear:[]
+                    dateFrom: "?",
+                    dateTo: "?",
+                    AmountIncome: 0,
+                    AmountOutgoing: 0,
+                    AmountDifference: 0,
+                    operationsTableData: []
                 },
                 changeTariffTab: {
                     selectedTariff: 6,
