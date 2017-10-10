@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="personal.account.controller.App"
+    controllerName="personal.account.controller.Login"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:layout="sap.ui.layout"
@@ -35,8 +35,7 @@
                                 id="loginInput"
                                 mask = "999-999-999 99"
                                 placeholderSymbol = "_"
-                                placeholder = "Ведите номер СНИЛС"
-                                change="onEnter">
+                                placeholder = "Ведите номер СНИЛС">
                                 <layoutData>
                                     <layout:GridData
                                             span="L8 M8 S8"/>
