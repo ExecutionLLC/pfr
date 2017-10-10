@@ -35,7 +35,8 @@
                                 id="loginInput"
                                 mask = "999-999-999 99"
                                 placeholderSymbol = "_"
-                                placeholder = "Ведите номер СНИЛС">
+                                placeholder = "Ведите номер СНИЛС"
+                                change="onEnter">
                                 <layoutData>
                                     <layout:GridData
                                             span="L8 M8 S8"/>
@@ -59,7 +60,7 @@
                                 id="passwordInput"
                                 placeholder="{i18n>placeholder.password}"
                                 type = "Password"
-                                submit = "onButtonOk">
+                                submit = "onEnter">
                             <layoutData>
                                 <layout:GridData
                                         span="L8 M8 S8"/>
