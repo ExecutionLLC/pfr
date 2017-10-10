@@ -10,7 +10,8 @@
         <core:Icon
                 src="sap-icon://home"
                 size="2rem"
-                class="sapUiMediumMarginBeginEnd"/>
+                class="sapUiMediumMarginBeginEnd"
+                press="onHomePress"/>
         <IconTabHeader class="cstMITHNoBBorder"
                        showOverflowSelectList="true"
                        backgroundDesign="Transparent"

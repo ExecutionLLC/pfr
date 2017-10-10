@@ -36,6 +36,15 @@ sap.ui.define([
 
         onLogout: function () {
             this.oRouter.navTo("loginPage");
+        },
+
+        onHomePress: function () {
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("menuPage", {
+                query: {
+                    tab: "Profile"
+                }
+            }, true);
         }
     });
 });
