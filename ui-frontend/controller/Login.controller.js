@@ -7,7 +7,7 @@ sap.ui.define([
     return Controller.extend("personal.account.controller.Login", {
         onInit: function () {
             var oLoginInput = this.byId('loginInput');
-            oLoginInput.__proto__.onkeypress = function (event) {
+            oLoginInput.onkeypress = function (event) {
                 if(event.key === "Enter") {
                     this.onEnter();
                 }
