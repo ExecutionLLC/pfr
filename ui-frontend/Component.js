@@ -89,7 +89,7 @@ sap.ui.define([
             if (this.updateTimeoutId) {
                 clearTimeout(this.updateTimeoutId);
             }
-            var timeout = Const.const.ASYNC_UPDATE_TIMEOUT || 60 * 1000;
+            var timeout = Const.const.ASYNC_UPDATE_TIMEOUT || Const.const.ASYNC_UPDATE_TIMEOUT_DEFAULT;
             this.updateTimeoutId = setTimeout(this.updateModels.bind(this), timeout);
         }
     });
