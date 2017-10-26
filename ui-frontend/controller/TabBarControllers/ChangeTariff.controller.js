@@ -32,7 +32,7 @@ sap.ui.define([
                     .getResourceBundle()
                     .getText("chgtar.requestOnPending");
 
-            var tariffTableData = pendedTariffChanges.map(function (value) {
+            var pendedTariffTableData = pendedTariffChanges.map(function (value) {
                 return {
                     tariff: value.tariff,
                     timestamp: value.timestamp,
@@ -40,15 +40,16 @@ sap.ui.define([
                     isFinished: false
                 };
             });
-            tariffTableData = tariffTableData.concat(tariffHistory.map(function (value) {
+            var historyTariffTableData = tariffHistory.map(function (value) {
                 return {
                     tariff: value.newTariff,
                     timestamp: value.timestamp,
                     transactionHash: value.transactionHash,
                     isFinished: true
                 }
-            }));
-            this.oTechModel.setProperty('/tech/changeTariffTab/tariffTableData', tariffTableData);
+            });
+            var totalTariffTableData = pendedTariffTableData.concat(historyTariffTableData);
+            this.oTechModel.setProperty('/tech/changeTariffTab/tariffTableData', totalTariffTableData);
 
             if (pendedTariffChanges.length === 0) {
                 this.oTechModel.setProperty("/tech/changeTariffTab/isSliderChangeTariffEnabled", true);
