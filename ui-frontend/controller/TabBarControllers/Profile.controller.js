@@ -22,19 +22,14 @@ sap.ui.define([
 
         onMainModelChanges: function() {
             var operationsHistory = this.oMainModel.getProperty("/operationsHistory");
-
-            var diagramData = operationsHistory.map(function(value) {
-                return {
-                    amount: value.amount,
-                    timestamp: value.timestamp
-                };
-            });
-
-            for(var i = 1;i < diagramData.length;i++) {
-                var obj = diagramData[i];
-                obj.amount += diagramData[i - 1].amount;
-            }
-
+            var diagramData = [];
+            operationsHistory.reduce(function (sum, current) {
+                diagramData.push({
+                    amount: sum + current.amount,
+                    timestamp: current.timestamp
+                });
+                return sum + current.amount
+            },0);
             this.oTechModel.setProperty("/tech/profileTab/diagramData", diagramData);
         },
 
