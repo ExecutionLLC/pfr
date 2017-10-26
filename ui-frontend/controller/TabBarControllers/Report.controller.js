@@ -55,15 +55,16 @@ sap.ui.define([
             this.oTechModel.setProperty("/tech/getReportTab/operationsTableData", operationsTableData);
         },
 
-        // Сохраним фильтры
-        _oFilterSet: {
-            dateFilter: null
-        },
+
 
         /**
          * @description Составление фильтра по датам
          */
         onDateRangeChange: function (oEvent) {
+            // Сохраним фильтры
+            var _oFilterSet = {
+                dateFilter: null
+            };
             var from = oEvent.getParameter("from");
             var to = oEvent.getParameter("to");
 
@@ -91,7 +92,7 @@ sap.ui.define([
                     value1: timestampTo
                 }));
                 // Запишем фильтр в массив фильтров
-                this._oFilterSet.dateFilter = new Filter({
+                _oFilterSet.dateFilter = new Filter({
                     filters: aFilters,
                     and: true
                 });
@@ -113,7 +114,7 @@ sap.ui.define([
 
                 this.oTechModel.setProperty("/tech/getReportTab/isShowHideButtonEnabled", true);
             } else {
-                this._oFilterSet.dateFilter = null;
+                _oFilterSet.dateFilter = null;
 
                 this.oTechModel.setProperty("/tech/getReportTab/dateFrom", "?");
                 this.oTechModel.setProperty("/tech/getReportTab/dateTo", "?");
@@ -128,7 +129,7 @@ sap.ui.define([
 
             var oTable = this.getView().byId("table--report");
             var oBinding = oTable.getBinding("items");
-            oBinding.filter(this._oFilterSet.dateFilter);
+            oBinding.filter(_oFilterSet.dateFilter);
         },
 
         onPrint: function () {
