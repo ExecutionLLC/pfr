@@ -235,6 +235,14 @@ sap.ui.define([
                 console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
                 MessageBox.error(sErrorText);
             });
+        },
+        onNavigateToTab: function (tabName) {
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("menuPage", {
+                query: {
+                    tab: tabName
+                }
+            }, true);
         }
     };
 

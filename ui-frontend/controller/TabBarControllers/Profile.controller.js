@@ -1,7 +1,8 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "personal/account/formatter/formatter"
-], function (Controller, formatter) {
+    "personal/account/formatter/formatter",
+    "personal/account/util/Utils"
+], function (Controller, formatter, Utils) {
     "use strict";
     return Controller.extend("personal.account.controller.TabBarControllers.Profile", {
         formatter: formatter,
@@ -34,21 +35,11 @@ sap.ui.define([
         },
 
         onNavigateToNPF: function () {
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("menuPage", {
-                query: {
-                    tab: "NPF"
-                }
-            }, true);
+            Utils.onNavigateToTab.call(this,"NPF");
         },
 
         onNavigateChangeTariff: function () {
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("menuPage", {
-                query: {
-                    tab: "Rate"
-                }
-            }, true);
+            Utils.onNavigateToTab.call(this,"Rate");
         },
 
         onChangeSelect: function (oEvent) {
