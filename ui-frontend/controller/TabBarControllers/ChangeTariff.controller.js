@@ -51,7 +51,7 @@ sap.ui.define([
             var totalTariffTableData = pendedTariffTableData.concat(historyTariffTableData);
             this.oTechModel.setProperty('/tech/changeTariffTab/tariffTableData', totalTariffTableData);
 
-            if (pendedTariffChanges.length === 0) {
+            if (!pendedTariffChanges.length) {
                 this.oTechModel.setProperty("/tech/changeTariffTab/isSliderChangeTariffEnabled", true);
                 // fake event, which should restore right state of the button
                 this.onChangeTariff();
