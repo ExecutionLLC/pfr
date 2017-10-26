@@ -49,7 +49,7 @@ sap.ui.define([
                     timestamp: value.timestamp,
                     transactionHash: value.transactionHash,
                     isFinished: true
-                }
+                };
             }));
 
             this.oTechModel.setProperty("/tech/getReportTab/operationsTableData", operationsTableData);
