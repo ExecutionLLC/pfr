@@ -80,17 +80,18 @@ sap.ui.define([
                 this.oTechModel.setProperty("/tech/getReportTab/dateFrom", Utils.timestampToString(timestampFrom));
                 this.oTechModel.setProperty("/tech/getReportTab/dateTo", Utils.timestampToString(timestampTo));
 
-                var aFilters = [];
-                aFilters.push(new Filter({
-                    path: "timestamp",
-                    operator: sap.ui.model.FilterOperator.GE,
-                    value1: timestampFrom
-                }));
-                aFilters.push(new Filter({
-                    path: "timestamp",
-                    operator: sap.ui.model.FilterOperator.LE,
-                    value1: timestampTo
-                }));
+                var aFilters = [
+                    new Filter({
+                        path: "timestamp",
+                        operator: sap.ui.model.FilterOperator.GE,
+                        value1: timestampFrom
+                    }),
+                    new Filter({
+                        path: "timestamp",
+                        operator: sap.ui.model.FilterOperator.LE,
+                        value1: timestampTo
+                    })
+                ];
                 // Запишем фильтр в массив фильтров
                 _oFilterSet.dateFilter = new Filter({
                     filters: aFilters,
