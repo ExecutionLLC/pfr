@@ -69,8 +69,8 @@ sap.ui.define([
             var to = oEvent.getParameter("to");
 
             function sumOfAmount(array) {
-                return array.reduce(function(p, v) {
-                    return p + v.amount;
+                return array.reduce(function(sum, current) {
+                    return sum + current.amount;
                 }, 0);
             }
 
