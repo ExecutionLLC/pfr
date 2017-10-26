@@ -17,6 +17,7 @@ sap.ui.define([
             this.oMainModel = this.oComponent.getModel("mainModel");
             this.enableSelectButtonTimerId = null;
 
+
             var mainModelBinding = new sap.ui.model.Binding(
                 this.oMainModel, "/", this.oMainModel.getContext("/")
             );
@@ -59,6 +60,10 @@ sap.ui.define([
                 return;
             }
 
+            var sRequestPendingText = this.oComponent
+                    .getModel("i18n")
+                    .getResourceBundle()
+                    .getText("npf.men.exp.requestPendingText");
             var npfHistory = this.oMainModel.getProperty("/npfHistory");
             var pendedNpfChanges = this.oMainModel.getProperty("/pendedNpfChanges");
 
@@ -85,7 +90,7 @@ sap.ui.define([
                 this.oTechModel.setProperty("/tech/changeNpfTab/isNextNpfTableVisible", false);
                 this.oTechModel.setProperty("/tech/changeNpfTab/needConformation", true);
                 this.oTechModel.setProperty("/tech/changeNpfTab/isApplyButtonVisible", false);
-                this.oTechModel.setProperty("/tech/changeNpfTab/changeNpfMessage", "Заявка на рассмотрении");
+                this.oTechModel.setProperty("/tech/changeNpfTab/changeNpfMessage", sRequestPendingText);
                 this.oTechModel.setProperty("/tech/changeNpfTab/changeNpfMessageState", "Warning");
             } else {
                 var changeNpfMessage = this.oTechModel.getProperty("/tech/changeNpfTab/changeNpfMessage");
@@ -130,20 +135,28 @@ sap.ui.define([
             var oItem = oEvent.getSource();
             var aCells = oItem.getAggregation("cells");
             var selectedNpfName = aCells[0].getProperty("text");
-
+            var sApplyButtonTextChange = this.oComponent
+                    .getModel("i18n")
+                    .getResourceBundle()
+                    .getText("npf.men.exp.applyButtonTextChange");
             this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpf", selectedNpfName);
             this.oTechModel.setProperty("/tech/changeNpfTab/isNextNpfTableVisible", false);
-            this.oTechModel.setProperty("/tech/changeNpfTab/applyButtonText", "Сменить НПФ");
+            this.oTechModel.setProperty("/tech/changeNpfTab/applyButtonText", sApplyButtonTextChange);
             this.oTechModel.setProperty("/tech/changeNpfTab/needConformation", true);
             this.oTechModel.setProperty("/tech/changeNpfTab/isApplyButtonVisible", true);
             this.oTechModel.setProperty("/tech/changeNpfTab/changeNpfMessage", "");
         },
 
         onApplyButton: function () {
+            var oBundle = this.oComponent
+                    .getModel("i18n")
+                    .getResourceBundle();
+            var sApplyButtonTextChangeConfirm = oBundle.getText("npf.men.exp.applyButtonTextChangeConfirm");
+            var sConfirmQuestion = oBundle.getText("npf.men.exp.confirmQuestion");
             var needConformation = this.oTechModel.getProperty("/tech/changeNpfTab/needConformation");
             if (needConformation) {
-                this.oTechModel.setProperty("/tech/changeNpfTab/applyButtonText", "Все равно сменить");
-                this.oTechModel.setProperty("/tech/changeNpfTab/changeNpfMessage", "Вы уверены? Отменить операцию будет невозможно!");
+                this.oTechModel.setProperty("/tech/changeNpfTab/applyButtonText", sApplyButtonTextChangeConfirm);
+                this.oTechModel.setProperty("/tech/changeNpfTab/changeNpfMessage", sConfirmQuestion);
                 this.oTechModel.setProperty("/tech/changeNpfTab/changeNpfMessageType", "Error");
                 this.oTechModel.setProperty("/tech/changeNpfTab/needConformation", false);
             } else {

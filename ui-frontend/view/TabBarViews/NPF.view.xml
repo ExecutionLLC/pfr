@@ -9,7 +9,7 @@
     <Page showHeader="false">
         <layout:Grid width="100%">
             <Label class="sapUiSmallMarginTop"
-                   text="Текущий НПФ:">
+                   text="{i18n>npf.currentNpf}">
                 <layoutData>
                     <layout:GridData span="L2 M4 S4" indent="L1 M1 S1"/>
                 </layoutData>
@@ -27,7 +27,7 @@
             </Text>
             <Label
                     class="sapUiSmallMarginTop"
-                    text="Рейтинг надежности:">
+                    text="{i18n>npf.ratingOfReliability}">
                 <layoutData>
                     <layout:GridData span="L2 M4 S4"/>
                 </layoutData>
@@ -45,7 +45,7 @@
         </layout:Grid>
         <layout:Grid width="100%">
             <Label class="sapUiSmallMarginTop"
-                   text="Новый НПФ:"
+                   text="{i18n>npf.newNpf}"
             >
                 <layoutData>
                     <layout:GridData span="L2 M4 S4" indent="L1 M1 S1"/>
@@ -76,7 +76,7 @@
             </Text>
             <Button width="100%"
                     press="onSelectButton"
-                    text="Выбрать НПФ"
+                    text="{i18n>npf.button.chooseNpf}"
                     enabled="{techModel>/tech/changeNpfTab/isSelectButtonEnabled}"
             >
                 <layoutData>
@@ -94,16 +94,16 @@
         >
             <columns>
                 <Column hAlign="Center">
-                    <Text text="НПФ"/>
+                    <Text text="{i18n>npf.chg.tab.npf}"/>
                 </Column>
                 <Column hAlign="Center">
-                    <Text text="Рейтинг надежности"/>
+                    <Text text="{i18n>npf.chg.tab.reliabilityRating}"/>
                 </Column>
                 <Column hAlign="Center">
-                    <Text text="Рейтинг доходности"/>
+                    <Text text="{i18n>npf.chg.tab.revenueRating}"/>
                 </Column>
                 <Column hAlign="Center">
-                    <Text text="Перейти на сайт"/>
+                    <Text text="{i18n>npf.chg.tab.website}"/>
                 </Column>
             </columns>
 
@@ -163,7 +163,7 @@
         </layout:Grid>
         <!--конец-->
         <Label
-                text="История смены НПФ"
+                text="{i18n>npf.npfHistory}"
                 class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"/>
         <!--Таблица-->
         <ScrollContainer vertical="false" horizontal="true">
@@ -171,17 +171,17 @@
                     showNoData="false">
                 <columns>
                     <Column hAlign="Center">
-                        <Text text="Дата операции"/>
+                        <Text text="{i18n>npf.tab.operationDate}"/>
                     </Column>
                     <Column hAlign="Center">
-                        <Text text="НПФ"/>
+                        <Text text="{i18n>npf.tab.npf}"/>
                     </Column>
                     <Column
                             hAlign="Center">
-                        <Text text="Статус"/>
+                        <Text text="{i18n>npf.tab.status}"/>
                     </Column>
                     <Column hAlign="Center">
-                        <Text text="Проверить операцию"/>
+                        <Text text="{i18n>npf.tab.check}"/>
                     </Column>
                 </columns>
             </Table>
@@ -247,7 +247,7 @@
                                     <layout:VerticalLayout
                                             class="verticalLayout_tariff_npf-margin_left">
                                         <layout:HorizontalLayout>
-                                            <Label text="ID транзакции: ">
+                                            <Label text="{i18n>npf.tab.exp.transactionId}">
                                             </Label>
                                             <!--<Link text="{techModel>transactionHash}"
                                                   href="{
@@ -263,14 +263,14 @@
                                         </layout:HorizontalLayout>
 
                                         <layout:HorizontalLayout>
-                                            <Label text="Отправитель: ">
+                                            <Label text="{i18n>npf.tab.exp.sender}">
                                             </Label>
                                             <Text text="{mainModel>/metadata/address}">
                                             </Text>
                                         </layout:HorizontalLayout>
 
                                         <layout:HorizontalLayout width="100%">
-                                            <Label text="Количество подтверждений: ">
+                                            <Label text="{i18n>npf.tab.exp.confirmationsNumber}">
                                             </Label>
                                             <Text text="{
                                                             path: 'techModel>isFinished',

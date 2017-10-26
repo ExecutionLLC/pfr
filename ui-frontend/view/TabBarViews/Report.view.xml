@@ -12,7 +12,7 @@
                 width="100%">
             <Label
                     class="label-margin-top"
-                    text="Всего накоплено:">
+                    text="{i18n>totalAccumulated}">
                 <layoutData>
                     <layout:GridData
                             span="L3 M5 S4"
@@ -22,7 +22,7 @@
             <ObjectNumber
                     class="label-margin-top"
                     number="{
-                            parts:[{path:'mainModel>/balance'},{path:'techModel>/tech/currencyCode'}],
+                            parts:[{path:'mainModel>/balance'},{path:'i18n>currencyCode'}],
 						    type: 'sap.ui.model.type.Currency'
 					    }">
                 <layoutData>
@@ -35,7 +35,7 @@
                 width="100%">
             <Label
                     class="sapUiSmallMarginTop"
-                    text="Движение средств за период:">
+                    text="{i18n>cashFlow}">
                 <layoutData>
                     <layout:GridData
                             span="L3 M4 S4"
@@ -43,7 +43,7 @@
                 </layoutData>
             </Label>
             <DateRangeSelection
-                    placeholder="Выберите диапазон дат"
+                    placeholder="{i18n>dateRangePlaceholder}"
                     change="onDateRangeChange">
                 <layoutData>
                     <layout:GridData
@@ -84,7 +84,7 @@
                 <form:FormContainer>
                     <form:FormElement>
                         <Label
-                                text="{= 'Входящий остаток на ' + ${techModel>/tech/getReportTab/dateFrom} }"
+                                text="{= ${i18n>rep.exp.balance.income} + ' ' + ${techModel>/tech/getReportTab/dateFrom} }"
                                 class="label-margin-top">
                             <layoutData>
                                 <layout:GridData
@@ -94,7 +94,7 @@
                         </Label>
                         <ObjectNumber
                                 number="{
-                            parts:[{path:'techModel>/tech/getReportTab/AmountIncome'},{path:'techModel>/tech/currencyCode'}],
+                            parts:[{path:'techModel>/tech/getReportTab/AmountIncome'},{path:'i18n>currencyCode'}],
 						    type: 'sap.ui.model.type.Currency'
 					    }">
                             <layoutData>
@@ -107,7 +107,7 @@
                     </form:FormElement>
                     <form:FormElement>
                         <Label
-                                text="{= 'Исходящий остаток на ' + ${techModel>/tech/getReportTab/dateTo} }"
+                                text="{= ${i18n>rep.exp.balance.outcome} + ' ' +${techModel>/tech/getReportTab/dateTo} }"
                                 class="label-margin-top">
                             <layoutData>
                                 <layout:GridData
@@ -117,7 +117,7 @@
                         </Label>
                         <ObjectNumber
                                 number="{
-                            parts:[{path:'techModel>/tech/getReportTab/AmountOutgoing'},{path:'techModel>/tech/currencyCode'}],
+                            parts:[{path:'techModel>/tech/getReportTab/AmountOutgoing'},{path:'i18n>currencyCode'}],
 						    type: 'sap.ui.model.type.Currency'
 					    }">
                             <layoutData>
@@ -129,7 +129,7 @@
                     </form:FormElement>
                     <form:FormElement>
                         <Label
-                                text="Итого движения денежных средств по счету за период:"
+                                text="{i18n>rep.exp.balance.total}"
                                 class="label-margin-top">
                             <layoutData>
                                 <layout:GridData
@@ -139,7 +139,7 @@
                         </Label>
                         <ObjectNumber
                                 number="{
-                            parts:[{path:'techModel>/tech/getReportTab/AmountDifference'},{path:'techModel>/tech/currencyCode'}],
+                            parts:[{path:'techModel>/tech/getReportTab/AmountDifference'},{path:'i18n>currencyCode'}],
 						    type: 'sap.ui.model.type.Currency'
 					    }">
                         <layoutData>
@@ -170,46 +170,46 @@
                     <Column
                             width="10%"
                             hAlign="Center">
-                        <Text text="Дата"/>
+                        <Text text="{i18n>rep.tab.date}"/>
                     </Column>
                     <Column
                             width="20%"
                             hAlign="Center">
-                        <Text text="Операция"/>
+                        <Text text="{i18n>rep.tab.operation}"/>
                     </Column>
                     <Column
                             width="7%"
                             hAlign="Center">
-                        <Text text="Статус"/>
+                        <Text text="{i18n>rep.tab.status}"/>
                     </Column>
                     <Column
                             width="7%"
                             hAlign="Center">
-                        <Text text="Тариф"/>
+                        <Text text="{i18n>rep.tab.tariff}"/>
                     </Column>
                     <Column
                             width="12%"
                             hAlign="Center">
-                        <Text text="Контрагент"/>
+                        <Text text="{i18n>rep.tab.contrAgent}"/>
                     </Column>
                     <Column
                             width="8%"
                             hAlign="Center">
-                        <Text text="НПФ"/>
+                        <Text text="{i18n>rep.tab.npf}"/>
                     </Column>
                     <Column
                             width="12%"
                             hAlign="Center">
-                        <Text text="Сумма начисления"/>
+                        <Text text="{i18n>rep.tab.summ}"/>
                     </Column>
                     <Column
                             width="13%"
                             hAlign="Center">
-                        <Text text="Расч.размер зарплаты"/>
+                        <Text text="{i18n>rep.tab.salary}"/>
                     </Column>
                     <Column
                             hAlign="Center">
-                        <Text text="Проверить операцию"/>
+                        <Text text="{i18n>rep.tab.check}"/>
                     </Column>
                 </columns>
             </Table>
@@ -302,7 +302,7 @@
                                                     number="{
                                                         parts:[
                                                             {path:'techModel>amount'},
-                                                            {path:'techModel>/tech/currencyCode'}
+                                                            {path:'i18n>currencyCode'}
                                                         ],
                                                         type: 'sap.ui.model.type.Currency'}"/>
                                             <ObjectNumber
@@ -311,7 +311,7 @@
                                                             {path:'techModel>amount'},
                                                             {path:'techModel>tariff'},
                                                             {path:'techModel>comment'},
-                                                            {path:'techModel>/tech/currencyCode'}
+                                                            {path:'i18n>currencyCode'}
                                                         ],
                                                         formatter:'.formatter.formatAmountToSalary'}"/>
                                         </content>
@@ -321,7 +321,7 @@
                                     <layout:VerticalLayout
                                         class="verticalLayout-margin_left">
                                         <layout:HorizontalLayout>
-                                            <Label text="ID транзакции: ">
+                                            <Label text="{i18n>rep.tab.exp.transactionId}">
                                             </Label>
                                             <Link text="{techModel>transactionHash}"
                                                   press="onLinkPress"
@@ -330,14 +330,14 @@
                                         </layout:HorizontalLayout>
 
                                         <layout:HorizontalLayout>
-                                            <Label text="Отправитель: ">
+                                            <Label text="{i18n>rep.tab.exp.sender}">
                                             </Label>
-                                            <Text text="{techModel>npf}">
+                                            <Text text="{techModel>rep.tab.exp.npf}">
                                             </Text>
                                         </layout:HorizontalLayout>
 
                                         <layout:HorizontalLayout width="100%">
-                                            <Label text="Количество подтверждений: ">
+                                            <Label text="{i18n>rep.tab.exp.confirmationsNumber}">
                                             </Label>
                                             <Text text="{
                                                             path: 'techModel>isFinished',

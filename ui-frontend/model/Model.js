@@ -11,7 +11,7 @@ sap.ui.define([
         modelStructure:{
             //техническая модель приложения
             tech:{
-                currencyCode: "рублей",
+                //currencyCode: "RUB",
                 selectedKey: "",
                 profileTab: {
                     diagramData: []
@@ -39,7 +39,7 @@ sap.ui.define([
                     isSelectedNpfLabelVisible: false,
                     needConformation: true,
                     isNextNpfTableVisible: false,
-                    applyButtonText: "Сменить НПФ",
+                    applyButtonText: "",
                     isApplyButtonVisible: false,
                     changeNpfMessage: "",
                     changeNpfMessageType: "Error",

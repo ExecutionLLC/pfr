@@ -5,7 +5,8 @@
         xmlns:layout="sap.ui.layout"
         xmlns:core="sap.ui.core"
         xmlns:tnt="sap.tnt">
-
+<Page
+        showHeader="false">
     <tnt:ToolHeader>
         <core:Icon
                 src="sap-icon://home"
@@ -39,7 +40,7 @@
         <ToolbarSpacer/>
         <Button
                 type="Transparent"
-                text="Выход"
+                text="{i18n>toolbarIcon.logout}"
                 press="onLogout"/>
     </tnt:ToolHeader>
 
@@ -54,5 +55,23 @@
         <mvc:XMLView id="NPF" viewName="personal.account.view.TabBarViews.NPF"></mvc:XMLView>
 
     </NavContainer>
+    <footer>
+        <Toolbar>
+            <content>
+                <Image
+                        class="image-pointer sapUiSmallMarginBegin"
+                        height="4rem"
+                        src="./image/sap.png"/>
+                <ToolbarSpacer/>
+                <core:HTML
+                        content="{i18n>foter.copirate}"/>
+                <!--для отсупа справа(класс не добавляется почему то)-->
+                <Text></Text>
+            </content>
+        </Toolbar>
+    </footer>
+</Page>
+
+
 
 </mvc:View>

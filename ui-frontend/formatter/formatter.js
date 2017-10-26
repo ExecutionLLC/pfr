@@ -16,7 +16,12 @@ sap.ui.define([
         },
         // изменить название кнопки по щелчку на нее во вкладке "Получить выписку"
         formatButtonName: function (isShowHideButtonPressed) {
-            return isShowHideButtonPressed ? 'Спрятать' : 'Показать'
+            var oBundle = this.getOwnerComponent()
+                    .getModel("i18n")
+                    .getResourceBundle();
+            var sHide = oBundle.getText("hideButtonLabel");
+            var sShow = oBundle.getText("showButtonLabel");
+            return isShowHideButtonPressed ? sHide : sShow
         },
 
         formatNpfAddressToName: function (address) {

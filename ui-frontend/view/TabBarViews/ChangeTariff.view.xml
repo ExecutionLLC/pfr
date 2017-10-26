@@ -5,7 +5,7 @@
           xmlns:core="sap.ui.core">
     <Page showHeader="false">
         <layout:Grid width="100%">
-            <Label text="Ваш текущий тариф"
+            <Label text="{i18n>chgtar.currentTariff}"
                    class="label-margin-top"
             >
                 <layoutData>
@@ -33,7 +33,7 @@
                     <layout:GridData span="L5 M4 S4"/>
                 </layoutData>
             </Slider>
-            <Button text="Сменить тариф"
+            <Button text="{i18n>chgtar.changeTariff}"
                     press="onApplyChangeTariff"
                     enabled="{techModel>/tech/changeTariffTab/isButtonChangeTariffEnabled}"
             >
@@ -53,7 +53,7 @@
         </layout:Grid>
 
 
-        <Label text="История смены тарифа"
+        <Label text="{i18n>chgtar.tariffHistory}"
                class="sapUiLargeMarginBegin sapUiLargeMarginTop label-font_style"
         />
         <ScrollContainer vertical="false" horizontal="true">
@@ -61,17 +61,17 @@
                     showNoData="false">
                 <columns>
                     <Column hAlign="Center">
-                        <Text text="Дата операции"/>
+                        <Text text="{i18n>chgtar.tab.operationDate}"/>
                     </Column>
                     <Column hAlign="Center">
-                        <Text text="Тариф"/>
+                        <Text text="{i18n>chgtar.tab.tariff}"/>
                     </Column>
                     <Column
                             hAlign="Center">
-                        <Text text="Статус"/>
+                        <Text text="{i18n>chgtar.tab.status}"/>
                     </Column>
                     <Column hAlign="Center">
-                        <Text text="Проверить операцию"/>
+                        <Text text="{i18n>chgtar.tab.check}"/>
                     </Column>
                 </columns>
             </Table>
@@ -134,7 +134,7 @@
                                     <layout:VerticalLayout
                                         class="verticalLayout_tariff_npf-margin_left">
                                         <layout:HorizontalLayout>
-                                            <Label text="ID транзакции: ">
+                                            <Label text="{i18n>chgtar.tab.exp.transactionId}">
                                             </Label>
                                             <Link text="{techModel>transactionHash}"
                                                   press="onLinkPress"
@@ -143,14 +143,14 @@
                                         </layout:HorizontalLayout>
 
                                         <layout:HorizontalLayout>
-                                            <Label text="Отправитель: ">
+                                            <Label text="{i18n>chgtar.tab.exp.sender}">
                                             </Label>
                                             <Text text="{mainModel>/metadata/address}">
                                             </Text>
                                         </layout:HorizontalLayout>
 
                                         <layout:HorizontalLayout width="100%">
-                                            <Label text="Количество подтверждений: ">
+                                            <Label text="{i18n>chgtar.tab.exp.confirmationsNumber}">
                                             </Label>
                                             <Text text="{
                                                             path: 'techModel>isFinished',

@@ -215,6 +215,10 @@ sap.ui.define([
             return sImageSrc;
         },
         showMessageBoxHashInfo: function (transactionHashURL) {
+            var sErrorText = this.getOwnerComponent()
+                    .getModel("i18n")
+                    .getResourceBundle
+                    .getText("msg.box.error");
             $.ajax({
                 url: transactionHashURL,
                 dataType: "json"
@@ -229,7 +233,7 @@ sap.ui.define([
                 MessageBox.information(transactionInfo);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
-                MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
+                MessageBox.error(sErrorText);
             });
         }
     };

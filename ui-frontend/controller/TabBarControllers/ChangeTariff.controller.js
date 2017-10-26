@@ -27,6 +27,10 @@ sap.ui.define([
 
             var pendedTariffChanges = this.oMainModel.getProperty("/pendedTariffChanges");
             var tariffHistory = this.oMainModel.getProperty("/tariffHistory");
+            var sRequestOnPending = this.oComponent
+                    .getModel("i18n")
+                    .getResourceBundle()
+                    .getText("chgtar.requestOnPending");
 
             var tariffTableData = pendedTariffChanges.map(function (value) {
                 return {
@@ -54,7 +58,7 @@ sap.ui.define([
             } else {
                 this.oTechModel.setProperty("/tech/changeTariffTab/isButtonChangeTariffEnabled", false);
                 this.oTechModel.setProperty("/tech/changeTariffTab/isSliderChangeTariffEnabled", false);
-                this.oTechModel.setProperty("/tech/changeTariffTab/changeTariffMessage", "Заявка на рассмотрении");
+                this.oTechModel.setProperty("/tech/changeTariffTab/changeTariffMessage", sRequestOnPending);
             }
         },
 

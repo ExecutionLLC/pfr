@@ -32,7 +32,7 @@
                                     justifyContent = "SpaceAround"
                                     class = "sapUiSmallMarginEnd">
                                     <Text
-                                        text ="Мой НПФ:"
+                                        text ="{i18n>myNPF}"
                                         class = "H2"  />
                                     <core:Icon
                                         src="sap-icon://edit-outside"
@@ -72,7 +72,7 @@
                                         height = "4rem"
                                         />
                                     <Text
-                                        text = "Рейтинг надежности"
+                                        text = "{i18n>ratingOfReliability}"
                                         class="H2"/>
                                 </HBox>
                             </VBox>
@@ -99,7 +99,7 @@
                                         height = "4rem"
                                         class = "sapUiSmallMarginBeginEnd"/>
                                     <Text
-                                        text = "Доходность"
+                                        text = "{i18n>revenue}"
                                         class="H2"/>
                                 </HBox>
                             </VBox>
@@ -127,7 +127,7 @@
                                 justifyContent = "SpaceAround"
                                 class = "sapUiSmallMarginEnd">
                                 <Text
-                                    text ="Мой тариф:"
+                                    text ="{i18n>myTariff}"
                                     class = "H2"  />
                                 <core:Icon
                                     press="onNavigateChangeTariff"
@@ -158,7 +158,7 @@
                             justifyContent = "SpaceAround"
                             class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
                             <Text
-                                text ="Прогнозируемая пенсия:"
+                                text ="{i18n>pension}"
                                 class = "H2"
                                 textAlign = "Begin"
                                 width = "100%"/>
@@ -177,7 +177,7 @@
                                     height = "1rem"
                                     size= "1rem"/>
                                 <Link
-                                    text ="Узнать, как получить больше"
+                                    text ="{i18n>getMore}"
                                     textAlign = "End"
                                     width = "100%"
                                     class ="link"/>
@@ -196,7 +196,7 @@
                         </viz:Popover>
                         <suite:ChartContainer
                             autoAdjustHeight="false"
-                            title="График накоплений"
+                            title="{i18n>chartTitle}"
                             showLegend="false"
                             showZoom="false"
                             showLegendButton="false">
@@ -252,8 +252,8 @@
                                         change="onChangeSelect"
                                         selectedKey="all-time">
                                         <items>
-                                            <core:Item key="all-time" text="За все время"/>
-                                            <core:Item key="last-year" text="За последний год"/>
+                                            <core:Item key="all-time" text="{i18n>allTime}"/>
+                                            <core:Item key="last-year" text="{i18n>lastYear}"/>
                                         </items>
                                     </Select>
                                     <suite:ChartContainerToolbarPlaceholder></suite:ChartContainerToolbarPlaceholder>

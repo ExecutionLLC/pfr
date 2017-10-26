@@ -7,27 +7,27 @@ sap.ui.define([
 ], function (UIComponent, JSONModel, Model, MessageBox, Const) {
     "use strict";
     return UIComponent.extend("personal.account.Component", {
-        metadata : {
+        metadata: {
             manifest: "json"
         },
-        init : function () {
+        init                    : function () {
             var oMainModel = new JSONModel();
             this.setModel(oMainModel, "mainModel");
             var oTechModel = new JSONModel(Model.modelStructure);
             this.setModel(oTechModel, "techModel");
             var oListNpfModel = new JSONModel();
-            this.setModel(oListNpfModel,"npfModel");
+            this.setModel(oListNpfModel, "npfModel");
 
             UIComponent.prototype.init.apply(this, arguments);
             this.getRouter().initialize();
 
             var storage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
             var lastSnils = storage.get("LAST_SNILS");
-            if(lastSnils) {
+            if (lastSnils) {
                 this.initModels(lastSnils);
             }
         },
-        initModels: function(snils) {
+        initModels              : function (snils) {
             if (this.updateTimeoutId) {
                 clearTimeout(this.updateTimeoutId);
                 this.updateTimeoutId = null;
@@ -44,11 +44,11 @@ sap.ui.define([
             var scheduleNextUpdate = this.scheduleNextModelsUpdate.bind(this);
 
             $.ajax({
-                url: personInfoURL,
+                url     : personInfoURL,
                 dataType: "json"
             }).done(function (personInfoResult) {
                 $.ajax({
-                    url: npfsURL,
+                    url     : npfsURL,
                     dataType: "json"
                 }).done(function (npfsResult) {
                     oNpfModel.setData(npfsResult);
@@ -60,15 +60,15 @@ sap.ui.define([
 
                     scheduleNextUpdate();
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    console.error('Cannot update model data: textStatus = ', textStatus, ', error = ', errorThrown);
+                    console.error("Cannot update model data: textStatus = ", textStatus, ", error = ", errorThrown);
                     MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
                 });
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
+                console.error("Cannot update model data: textStatus = ", textStatus, "error = ", errorThrown);
                 MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
             });
         },
-        updateModels: function() {
+        updateModels            : function () {
             var oMainModel = this.getModel("mainModel");
 
             var snils = oMainModel.getProperty("/metadata/snils");
@@ -77,19 +77,19 @@ sap.ui.define([
 
             var onAlways = this.scheduleNextModelsUpdate;
             $.ajax({
-                url: personInfoURL,
+                url     : personInfoURL,
                 dataType: "json"
             }).done(function (result) {
                 oMainModel.setData(result);
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
+                console.error("Cannot update model data: textStatus = ", textStatus, "error = ", errorThrown);
             }).always(onAlways.bind(this));
         },
-        scheduleNextModelsUpdate: function() {
+        scheduleNextModelsUpdate: function () {
             if (this.updateTimeoutId) {
                 clearTimeout(this.updateTimeoutId);
             }
-            var timeout = Const.const.ASYNC_UPDATE_TIMEOUT || 60*1000;
+            var timeout = Const.const.ASYNC_UPDATE_TIMEOUT || 60 * 1000;
             this.updateTimeoutId = setTimeout(this.updateModels.bind(this), timeout);
         }
     });
