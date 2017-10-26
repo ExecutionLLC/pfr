@@ -10,7 +10,7 @@ sap.ui.define([
         metadata: {
             manifest: "json"
         },
-        init                    : function () {
+        init: function () {
             var oMainModel = new JSONModel();
             this.setModel(oMainModel, "mainModel");
             var oTechModel = new JSONModel(Model.modelStructure);
@@ -27,7 +27,7 @@ sap.ui.define([
                 this.initModels(lastSnils);
             }
         },
-        initModels              : function (snils) {
+        initModels: function (snils) {
             if (this.updateTimeoutId) {
                 clearTimeout(this.updateTimeoutId);
                 this.updateTimeoutId = null;
@@ -44,11 +44,11 @@ sap.ui.define([
             var scheduleNextUpdate = this.scheduleNextModelsUpdate.bind(this);
 
             $.ajax({
-                url     : personInfoURL,
+                url: personInfoURL,
                 dataType: "json"
             }).done(function (personInfoResult) {
                 $.ajax({
-                    url     : npfsURL,
+                    url: npfsURL,
                     dataType: "json"
                 }).done(function (npfsResult) {
                     oNpfModel.setData(npfsResult);
@@ -68,22 +68,22 @@ sap.ui.define([
                 MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
             });
         },
-        updateModels            : function () {
+        updateModels: function () {
             var oMainModel = this.getModel("mainModel");
 
             var snils = oMainModel.getProperty("/metadata/snils");
             var baseUrl = Const.const.BASE_URL;
             var personInfoURL = baseUrl + "/person/" + snils;
 
-            var onAlways = this.scheduleNextModelsUpdate;
+            var onAlways = this.scheduleNextModelsUpdate.bind(this);
             $.ajax({
-                url     : personInfoURL,
+                url: personInfoURL,
                 dataType: "json"
             }).done(function (result) {
                 oMainModel.setData(result);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error("Cannot update model data: textStatus = ", textStatus, "error = ", errorThrown);
-            }).always(onAlways.bind(this));
+            }).always(onAlways);
         },
         scheduleNextModelsUpdate: function () {
             if (this.updateTimeoutId) {
