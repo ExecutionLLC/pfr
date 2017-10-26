@@ -11,7 +11,7 @@ sap.ui.define([
             var oHistory, sPreviousHash;
             oHistory = History.getInstance();
             sPreviousHash = oHistory.getPreviousHash();
-            if (sPreviousHash !== undefined) {
+            if (sPreviousHash !== null) {
                 window.history.go(-1);
             } else {
                 this.getRouter().navTo("menuPage", {}, true /*no history*/);
