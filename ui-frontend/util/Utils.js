@@ -51,154 +51,109 @@ sap.ui.define([
         },
 
         conversionNpfRating: function (int) {
-            var oRating = {
+            var defaultRating = {
                 symbol: "?",
                 descrition: "Неизвестен"
             };
-            switch (int){
-                case 0:
-                    oRating = {
-                        symbol: "D",
-                        descrition: "В состоянии дефолта"
-                    };
-                    break;
-                case 1:
-                    oRating = {
-                        symbol: "C",
-                        descrition: "Близки к дефолту"
-                    };
-                    break;
-                case 2:
-                    oRating = {
-                        symbol: "CC",
-                        descrition: "Близки к дефолту"
-                    };
-                    break;
-                case 3:
-                    oRating = {
-                        symbol: "CCC-",
-                        descrition: "Близки к дефолту"
-                    };
-                    break;
-                case 4:
-                    oRating = {
-                        symbol: "CCC",
-                        descrition: "Крайне высокий кредитный риск"
-                    };
-                    break;
-                case 5:
-                    oRating = {
-                        symbol: "CCC+",
-                        descrition: "Очень высокий кредитный риск"
-                    };
-                    break;
-                case 6:
-                    oRating = {
-                        symbol: "B-",
-                        descrition: "Рискованные обязательства в высокой степени спекулятивные"
-                    };
-                    break;
-                case 7:
-                    oRating = {
-                        symbol: "B",
-                        descrition: "Рискованные обязательства в высокой степени спекулятивные"
-                    };
-                    break;
-                case 8:
-                    oRating = {
-                        symbol: "B+",
-                        descrition: "Рискованные обязательства в высокой степени спекулятивные"
-                    };
-                    break;
-                case 9:
-                    oRating = {
-                        symbol: "BB-",
-                        descrition: "Рискованные обязательства с чертами спекулятивных"
-                    };
-                    break;
-                case 10:
-                    oRating = {
-                        symbol: "BB",
-                        descrition: "Рискованные обязательства с чертами спекулятивных"
-                    };
-                    break;
-                case 11:
-                    oRating = {
-                        symbol: "BB+",
-                        descrition: "Рискованные обязательства с чертами спекулятивных"
-                    };
-                    break;
-                case 12:
-                    oRating = {
-                        symbol: "BBB-",
-                        descrition: "Надежность ниже среднего"
-                    };
-                    break;
-                case 13:
-                    oRating = {
-                        symbol: "BBB",
-                        descrition: "Надежность ниже среднего"
-                    };
-                    break;
-                case 14:
-                    oRating = {
-                        symbol: "BBB+",
-                        descrition: "Надежность ниже среднего"
-                    };
-                    break;
-                case 15:
-                    oRating = {
-                        symbol: "A-",
-                        descrition: "Надежность выше среднего"
-                    };
-                    break;
-                case 16:
-                    oRating = {
-                        symbol: "A",
-                        descrition: "Надежность выше среднего"
-                    };
-                    break;
-                case 17:
-                    oRating = {
-                        symbol: "A+",
-                        descrition: "Надежность выше среднего"
-                    };
-                    break;
-                case 18:
-                    oRating = {
-                        symbol: "AA-",
-                        descrition: "Высокая надежность"
-                    };
-                    break;
-                case 19:
-                    oRating = {
-                        symbol: "AA",
-                        descrition: "Высокая надежность"
-                    };
-                    break;
-                case 20:
-                    oRating = {
-                        symbol: "AA+",
-                        descrition: "Высокая надежность",
-                        imageSrc: "./image/AAplus.jpg"
-                    };
-                    break;
-                case 21:
-                    oRating = {
-                        symbol: "AAA",
-                        descrition: "Наивысшая надежность",
-                        imageSrc: "./image/AAA.jpg"
-                    };
-                    break;
-                case 22:
-                    oRating = {
-                        symbol: "AAA+",
-                        descrition: "Наивысшая надежность",
-                        imageSrc: "./image/AAAplus.jpg"
-                    };
-                    break;
-            }
-            return oRating;
+            var ratingForInt = {
+                0: {
+                    symbol    : "D",
+                    descrition: "В состоянии дефолта"
+                },
+                1: {
+                    symbol    : "C",
+                    descrition: "Близки к дефолту"
+                },
+                2: {
+                    symbol    : "CC",
+                    descrition: "Близки к дефолту"
+                },
+                3: {
+                    symbol    : "CCC-",
+                    descrition: "Близки к дефолту"
+                },
+                4: {
+                    symbol    : "CCC",
+                    descrition: "Крайне высокий кредитный риск"
+                },
+                5: {
+                    symbol    : "CCC+",
+                    descrition: "Очень высокий кредитный риск"
+                },
+                6: {
+                    symbol    : "B-",
+                    descrition: "Рискованные обязательства в высокой степени спекулятивные"
+                },
+                7: {
+                    symbol    : "B",
+                    descrition: "Рискованные обязательства в высокой степени спекулятивные"
+                },
+                8: {
+                    symbol    : "B+",
+                    descrition: "Рискованные обязательства в высокой степени спекулятивные"
+                },
+                9: {
+                    symbol    : "BB-",
+                    descrition: "Рискованные обязательства с чертами спекулятивных"
+                },
+                10: {
+                    symbol    : "BB",
+                    descrition: "Рискованные обязательства с чертами спекулятивных"
+                },
+                11: {
+                    symbol    : "BB+",
+                    descrition: "Рискованные обязательства с чертами спекулятивных"
+                },
+                12: {
+                    symbol    : "BBB-",
+                    descrition: "Надежность ниже среднего"
+                },
+                13: {
+                    symbol    : "BBB",
+                    descrition: "Надежность ниже среднего"
+                },
+                14: {
+                    symbol    : "BBB+",
+                    descrition: "Надежность ниже среднего"
+                },
+                15: {
+                    symbol    : "A-",
+                    descrition: "Надежность выше среднего"
+                },
+                16: {
+                    symbol    : "A",
+                    descrition: "Надежность выше среднего"
+                },
+                17: {
+                    symbol    : "A+",
+                    descrition: "Надежность выше среднего"
+                },
+                18: {
+                    symbol    : "AA-",
+                    descrition: "Высокая надежность"
+                },
+                19: {
+                    symbol    : "AA",
+                    descrition: "Высокая надежность"
+                },
+                20: {
+                    symbol    : "AA+",
+                    descrition: "Высокая надежность",
+                    imageSrc  : "./image/AAplus.jpg"
+                },
+                21: {
+                    symbol    : "AAA",
+                    descrition: "Наивысшая надежность",
+                    imageSrc  : "./image/AAA.jpg"
+                },
+                22: {
+                    symbol    : "AAA+",
+                    descrition: "Наивысшая надежность",
+                    imageSrc  : "./image/AAAplus.jpg"
+                }
+            };
+
+            return ratingForInt[int] || defaultRating;
         },
         conversionNpfIncomeRateToImage: function (incomeRate) {
             var sImageSrc;
