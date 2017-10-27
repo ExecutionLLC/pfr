@@ -24,23 +24,6 @@ sap.ui.define([
             mainModelBinding.attachChange(this.onMainModelChanges.bind(this));
         },
 
-        // FIXME
-        _returnNpfAdress: function (npfName) {
-            // Получили набор данных пользователя
-            var oListNPFModel = this.oComponent.getModel("npfModel");
-            // Текущий НПФ
-            var NPF = npfName;
-            // Получили массив НПФ
-            var aNpfs = oListNPFModel.getData();
-            // В каждом эл массива ищем объект в котором
-            var npfDesc = aNpfs.find(function (npfs) {
-                // имя совпадает с нашим текущим
-                return npfs.name === NPF;
-            });
-
-            return npfDesc.address;
-        },
-
         enableSelectButton: function(enable, nextMinTimeForChanges) {
             if (nextMinTimeForChanges) {
                 this.oTechModel.setProperty("/tech/changeNpfTab/isNextMinTimeForChangeLabelVisible", true);
@@ -110,7 +93,7 @@ sap.ui.define([
                 nextMinTimeForChanges = lastItem.timestamp + Const.TIME_NEXT_CHANGE_NPF;
             }
 
-            var currentTime = (new Date()).valueOf();
+            var currentTime = +new Date();
             if (nextMinTimeForChanges && currentTime < nextMinTimeForChanges) {
                 if (this.enableSelectButtonTimerId) {
                     clearTimeout(this.enableSelectButtonTimerId);
@@ -134,12 +117,14 @@ sap.ui.define([
 
         onSelectNpfTableItem: function (oEvent) {
             var oItem = oEvent.getSource();
-            var aCells = oItem.getAggregation("cells");
-            var selectedNpfName = aCells[0].getProperty("text");
+            var oSelectedObject = oItem.getBindingContext("npfModel").getObject();
+            var nSelectedNPFAdress = oSelectedObject.address;
+            var selectedNpfName = oSelectedObject.name;
             var sApplyButtonTextChange = this.oComponent
                     .getModel("i18n")
                     .getResourceBundle()
                     .getText("npf.men.exp.applyButtonTextChange");
+            this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpfAdress", nSelectedNPFAdress);
             this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpf", selectedNpfName);
             this.oTechModel.setProperty("/tech/changeNpfTab/isNextNpfTableVisible", false);
             this.oTechModel.setProperty("/tech/changeNpfTab/applyButtonText", sApplyButtonTextChange);
@@ -165,8 +150,7 @@ sap.ui.define([
                 var baseUrl = Const.BASE_URL;
                 var changeNpfURL = baseUrl + "/person/" + snils + "/npf";
 
-                var selectedNpfName = this.oTechModel.getProperty("/tech/changeNpfTab/selectedNpf");
-                var selectedNpfAddress = this._returnNpfAdress(selectedNpfName);
+                var selectedNpfAddress = this.oTechModel.getProperty("/tech/changeNpfTab/selectedNpfAdress");
 
                 $.ajax({
                     url: changeNpfURL,
@@ -176,7 +160,7 @@ sap.ui.define([
                     jsonp: false
                 });
 
-                var now = (new Date()).valueOf();
+                var now = +new Date();
                 var pendedNpfChanges = this.oMainModel.getProperty("/pendedNpfChanges");
                 // состояние кнопок/лейблов/... следует состоянию модели, все изменения состояния GUI произойдут в onMainModelChanges
                 this.oMainModel.setProperty("/pendedNpfChanges", pendedNpfChanges.concat([{

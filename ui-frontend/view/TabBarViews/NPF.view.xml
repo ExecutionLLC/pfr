@@ -228,6 +228,7 @@
                                             }"/>
                                             <Text
                                                     textAlign="Center"
+                                                    key="{techModel>npf}"
                                                     width="32%"
                                                     text="{
                                                 path:'techModel>npf',
