@@ -13,6 +13,7 @@ sap.ui.define([
             BASE_URL: "https://executiona4038b30e.hana.ondemand.com/PFR/pfr.xsjs",
             TIME_NEXT_CHANGE_NPF:120*1000,                                                    // время следующей смены НПФ
             LOGIN_URL: "https://executiona4038b30e.hana.ondemand.com/PFR/simple_login.xsjs"
+            DEFAULT_NUMBER_OF_CONFORMATIONS: 7
         }
     };
 

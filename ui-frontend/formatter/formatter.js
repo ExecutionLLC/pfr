@@ -167,7 +167,7 @@ sap.ui.define([
          * @return {number} - номер
          */
         formatNumberOfConformations: function(isFinished) {
-            return isFinished ? 7 : 0;
+            return isFinished ? Const.const.DEFAULT_NUMBER_OF_CONFORMATIONS : 0;
         }
     }
 
