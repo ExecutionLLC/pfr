@@ -10,7 +10,7 @@ sap.ui.define([
         },
 
         _onRouteMatched: function (oEvent) {
-            var oNavCon = this.getView().byId('navCon');
+            var oNavCon = this.getView().byId("navCon");
             var oComponent = this.getOwnerComponent();
             var oArgs = oEvent.getParameter("arguments");
             var oQuery = oArgs["?query"];

@@ -6,7 +6,7 @@ sap.ui.define([
     "use strict";
     return Controller.extend("personal.account.controller.Login", {
         onInit: function () {
-            var oLoginInput = this.byId('loginInput');
+            var oLoginInput = this.byId("loginInput");
             oLoginInput.onkeypress = function (event) {
                 if(event.key === "Enter") {
                     this.onEnter();
@@ -17,11 +17,11 @@ sap.ui.define([
         onEnter: function (oEvent) {
             var oComponent = this.getOwnerComponent();
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            var oLoginInput = this.getView().byId('loginInput');
-            var oPasswordInput = this.getView().byId('passwordInput');
+            var oLoginInput = this.getView().byId("loginInput");
+            var oPasswordInput = this.getView().byId("passwordInput");
 
             var authData = {
-                login: oLoginInput.getValue().replace(/[- ]/g, ''),
+                login: oLoginInput.getValue().replace(/[- ]/g, ""),
                 password: oPasswordInput.getValue()
             };
             oLoginInput.setEnabled(false);

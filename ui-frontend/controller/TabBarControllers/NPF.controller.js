@@ -84,7 +84,7 @@ sap.ui.define([
                 }
             });
             var totalnpfTableData = pendedNpfTableData.concat(historyNpfTableData);
-            this.oTechModel.setProperty('/tech/changeNpfTab/npfTableData', totalnpfTableData);
+            this.oTechModel.setProperty("/tech/changeNpfTab/npfTableData", totalnpfTableData);
 
             if (pendedNpfChanges.length !== 0) {
                 this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpf", "");

@@ -30,7 +30,7 @@ sap.ui.define([
 
             var result = oModule.dateObjToDateString(date);
             if (addTime) {
-                result = result + ' ' + oModule.dateObjToTimeString(date);
+                result = result + " " + oModule.dateObjToTimeString(date);
             }
 
             return result;
@@ -228,12 +228,12 @@ sap.ui.define([
                     delete hashInfo.input;
                 }
                 var transactionInfo = JSON.stringify(hashInfo, null, 4)
-                    .replace(/[" {},]/g, '')
-                    .replace(/[:]/g, ' = ');
+                    .replace(/[" {},]/g, "")
+                    .replace(/[:]/g, " = ");
 
                 MessageBox.information(transactionInfo);
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.error('Cannot update model data: textStatus = ', textStatus, 'error = ', errorThrown);
+                console.error("Cannot update model data: textStatus = ", textStatus, "error = ", errorThrown);
                 MessageBox.error(sErrorText);
             });
         },

@@ -35,7 +35,7 @@ sap.ui.define([
             var oModel = oComponent.getModel("npfModel");
             var item = Utils.getNpfObjectByAddress(npfAddress, oModel);
 
-            return item ? item.name : '?';
+            return item ? item.name : "?";
         },
         /**
          * @description Форматирование адреса НПФ в рейтинг надежности
@@ -47,7 +47,7 @@ sap.ui.define([
             var oModel = oComponent.getModel("npfModel");
             var item = Utils.getNpfObjectByAddress(npfAddress, oModel);
 
-            return item ? item.ratingOfReliability : '?';
+            return item ? item.ratingOfReliability : "?";
         },
 
         /**
@@ -60,7 +60,7 @@ sap.ui.define([
             var oModel = oComponent.getModel("npfModel");
             var item = Utils.getNpfObjectByAddress(npfAddress, oModel);
 
-            return item ? item.ratingOfIncomeRate : '?';
+            return item ? item.ratingOfIncomeRate : "?";
         },
 
         /**
@@ -70,7 +70,7 @@ sap.ui.define([
          */
         formatDate: function (timestamp) {
             var result = Utils.timestampToString(timestamp);
-            return result.split('.').slice(1).join('.');
+            return result.split(".").slice(1).join(".");
         },
 
         /**
