@@ -18,7 +18,10 @@ sap.ui.define([
             DEFAULT_NUMBER_OF_CONFORMATIONS: 7,
             // значения ключей селекта диаграммы
             SELECTED_LAST_YEAR : "last-year",
-            SELECTED_ALL_TIME : "all-time"
+            SELECTED_ALL_TIME : "all-time",
+            //цвета состояния выполнения запроса
+            REQUEST_DONE: "green",
+            REQUEST_PENDING: "#f4d742"
         }
     };
 

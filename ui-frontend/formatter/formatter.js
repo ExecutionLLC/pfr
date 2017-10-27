@@ -149,7 +149,7 @@ sap.ui.define([
          * @return {string} - цвет
          */
         formatTableItemStatus: function (isFinished) {
-            return isFinished ? "green" : "#f4d742";
+            return isFinished ? Const.const.REQUEST_DONE : Const.const.REQUEST_PENDING;
         },
 
         /**
