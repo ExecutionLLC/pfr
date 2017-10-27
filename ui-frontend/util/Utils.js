@@ -1,6 +1,7 @@
 sap.ui.define([
-    "sap/m/MessageBox"
-], function(MessageBox) {
+    "sap/m/MessageBox",
+    "personal/account/util/Const"
+], function(MessageBox, Const) {
     "use strict";
 
     var oModule = {
@@ -217,7 +218,7 @@ sap.ui.define([
         showMessageBoxHashInfo: function (transactionHashURL) {
             var sErrorText = this.getOwnerComponent()
                     .getModel("i18n")
-                    .getResourceBundle
+                    .getResourceBundle()
                     .getText("msg.box.error");
             $.ajax({
                 url: transactionHashURL,
@@ -243,6 +244,15 @@ sap.ui.define([
                     tab: tabName
                 }
             }, true);
+        },
+
+        /**
+         * @description Форматирование адреса хэша транзакции
+         * @param {string} transactionHash - хэш транзакции
+         * @return {string} - адрес
+         */
+        formatTransactionHashHref: function(transactionHash) {
+            return Const.const.BASE_URL + "/transaction/" + transactionHash;
         }
     };
 

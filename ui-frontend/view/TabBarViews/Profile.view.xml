@@ -252,8 +252,8 @@
                                         change="onChangeSelect"
                                         selectedKey="all-time">
                                         <items>
-                                            <core:Item key="all-time" text="{i18n>allTime}"/>
-                                            <core:Item key="last-year" text="{i18n>lastYear}"/>
+                                            <core:Item key="{techModel>/tech/keysOfSelectInChart/allTime}" text="{i18n>allTime}"/>
+                                            <core:Item key="{techModel>/tech/keysOfSelectInChart/lastYear}" text="{i18n>lastYear}"/>
                                         </items>
                                     </Select>
                                     <suite:ChartContainerToolbarPlaceholder></suite:ChartContainerToolbarPlaceholder>

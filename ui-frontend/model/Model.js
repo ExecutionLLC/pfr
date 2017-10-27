@@ -2,7 +2,8 @@
 	Модуль описывает элементы структуры моделей и константы для приложения
 */
 sap.ui.define([
-],function(){
+    "personal/account/util/Const"
+],function(Const){
 
     "use strict";
 
@@ -11,10 +12,13 @@ sap.ui.define([
         modelStructure:{
             //техническая модель приложения
             tech:{
-                //currencyCode: "RUB",
                 selectedKey: "",
                 profileTab: {
                     diagramData: []
+                },
+                keysOfSelectInChart:{
+                    allTime: Const.const.SELECTED_ALL_TIME,
+                    lastYear: Const.const.SELECTED_LAST_YEAR
                 },
                 getReportTab: {
                     isShowHideButtonPressed: false,

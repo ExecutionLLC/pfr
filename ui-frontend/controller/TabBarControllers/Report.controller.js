@@ -144,8 +144,8 @@ sap.ui.define([
         onLinkPress: function (oEvent) {
             var oLink = oEvent.getSource();
             var transactionHash = oLink.getProperty("text");
-            var transactionHashURL = Const.const.BASE_URL + "/transaction/" + transactionHash;
-            Utils.showMessageBoxHashInfo(transactionHashURL);
+            var transactionHashURL = Utils.formatTransactionHashHref(transactionHash);
+            Utils.showMessageBoxHashInfo.call(this, transactionHashURL);
         }
     });
 });

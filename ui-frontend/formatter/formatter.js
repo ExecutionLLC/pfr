@@ -153,15 +153,6 @@ sap.ui.define([
         },
 
         /**
-         * @description Форматирование адреса хэша транзакции
-         * @param {string} transactionHash - хэш транзакции
-         * @return {string} - адрес
-         */
-        formatTransactionHashHref: function(transactionHash) {
-            return Const.const.BASE_URL + "/transaction/" + transactionHash;
-        },
-
-        /**
          * @description Вывод числа подтверждений
          * @param {boolean} isFinished - выполнение запроса
          * @return {number} - номер
