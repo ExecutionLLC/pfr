@@ -53,22 +53,27 @@ sap.ui.define([
                 // Ось Х
                 valueAxis:{
                     title:{
-                        visible:false                                                       // Видимость заголовка оси Х
+                        // Видимость заголовка оси Х
+                        visible:false
                     },
                     axisLine:{
-                        visible:false                                                       // Видимость левой полосы
+                        // Видимость левой полосы
+                        visible:false
                     }
                 },
                 // Ось Y
                 categoryAxis:{
-                    title:{                                                                 // Видимость заголовка оси Y
+                    // Видимость заголовка оси Y
+                    title:{
                         visible:false
                     },
+                    // Видимость рисок
                     axisTick:{
-                        visible:false                                                       // Видимость рисок
+                        visible:false
                     }
                 },
-                title: {                                                                    // Видимость основного заголовка диаграммы
+                // Видимость основного заголовка диаграммы
+                title: {
                     visible: false
                 }
             }
