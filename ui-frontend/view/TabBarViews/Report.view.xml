@@ -129,7 +129,7 @@
                     </form:FormElement>
                     <form:FormElement>
                         <Label
-                                text="{i18n>rep.exp.balance.total}"
+                                text="${i18n>rep.exp.balance.income.}"
                                 class="label-margin-top">
                             <layoutData>
                                 <layout:GridData
@@ -332,7 +332,7 @@
                                         <layout:HorizontalLayout>
                                             <Label text="{i18n>rep.tab.exp.sender}">
                                             </Label>
-                                            <Text text="{techModel>rep.tab.exp.npf}">
+                                            <Text text="{techModel>npf}">
                                             </Text>
                                         </layout:HorizontalLayout>
 

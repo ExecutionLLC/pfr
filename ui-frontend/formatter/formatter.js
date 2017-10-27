@@ -149,7 +149,7 @@ sap.ui.define([
          * @return {string} - цвет
          */
         formatTableItemStatus: function (isFinished) {
-            return isFinished ? Const.const.REQUEST_DONE : Const.const.REQUEST_PENDING;
+            return isFinished ? Const.REQUEST_DONE : Const.REQUEST_PENDING;
         },
 
         /**
@@ -158,7 +158,7 @@ sap.ui.define([
          * @return {number} - номер
          */
         formatNumberOfConformations: function(isFinished) {
-            return isFinished ? Const.const.DEFAULT_NUMBER_OF_CONFORMATIONS : 0;
+            return isFinished ? Const.DEFAULT_NUMBER_OF_CONFORMATIONS : 0;
         }
     }
 

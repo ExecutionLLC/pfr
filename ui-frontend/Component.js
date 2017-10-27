@@ -33,7 +33,7 @@ sap.ui.define([
                 this.updateTimeoutId = null;
             }
 
-            var baseUrl = Const.const.BASE_URL;
+            var baseUrl = Const.BASE_URL;
             var personInfoURL = baseUrl + "/person/" + snils;
             var npfsURL = baseUrl + "/npfs";
 
@@ -72,7 +72,7 @@ sap.ui.define([
             var oMainModel = this.getModel("mainModel");
 
             var snils = oMainModel.getProperty("/metadata/snils");
-            var baseUrl = Const.const.BASE_URL;
+            var baseUrl = Const.BASE_URL;
             var personInfoURL = baseUrl + "/person/" + snils;
 
             var onAlways = this.scheduleNextModelsUpdate.bind(this);
@@ -89,7 +89,7 @@ sap.ui.define([
             if (this.updateTimeoutId) {
                 clearTimeout(this.updateTimeoutId);
             }
-            var timeout = Const.const.ASYNC_UPDATE_TIMEOUT || Const.const.ASYNC_UPDATE_TIMEOUT_DEFAULT;
+            var timeout = Const.ASYNC_UPDATE_TIMEOUT || Const.ASYNC_UPDATE_TIMEOUT_DEFAULT;
             this.updateTimeoutId = setTimeout(this.updateModels.bind(this), timeout);
         }
     });

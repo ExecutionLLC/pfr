@@ -252,7 +252,7 @@ sap.ui.define([
          * @return {string} - адрес
          */
         formatTransactionHashHref: function(transactionHash) {
-            return Const.const.BASE_URL + "/transaction/" + transactionHash;
+            return Const.BASE_URL + "/transaction/" + transactionHash;
         }
     };
 

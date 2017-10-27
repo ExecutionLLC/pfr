@@ -17,8 +17,8 @@ sap.ui.define([
                     diagramData: []
                 },
                 keysOfSelectInChart:{
-                    allTime: Const.const.SELECTED_ALL_TIME,
-                    lastYear: Const.const.SELECTED_LAST_YEAR
+                    allTime: Const.SELECTED_ALL_TIME,
+                    lastYear: Const.SELECTED_LAST_YEAR
                 },
                 getReportTab: {
                     isShowHideButtonPressed: false,

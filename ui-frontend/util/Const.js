@@ -6,8 +6,6 @@ sap.ui.define([
     "use strict";
 
     var oModule = {
-        //структура технической модели приложения
-        const:{
             // время, через которое обновляются данные
             ASYNC_UPDATE_TIMEOUT: 30 * 1000,
             ASYNC_UPDATE_TIMEOUT_DEFAULT: 60 * 1000,
@@ -22,7 +20,6 @@ sap.ui.define([
             //цвета состояния выполнения запроса
             REQUEST_DONE: "green",
             REQUEST_PENDING: "#f4d742"
-        }
     };
 
     return oModule;

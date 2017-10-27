@@ -68,7 +68,7 @@ sap.ui.define([
          */
         onApplyChangeTariff: function () {
             var snils = this.oMainModel.getProperty("/metadata/snils");
-            var baseUrl = Const.const.BASE_URL;
+            var baseUrl = Const.BASE_URL;
             var changeTariffUrl = baseUrl + "/person/" + snils + "/tariff";
 
             var selectedTariff = this.oTechModel.getProperty("/tech/changeTariffTab/selectedTariff");

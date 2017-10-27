@@ -104,10 +104,10 @@ sap.ui.define([
             var nextMinTimeForChanges = null;
             if (pendedNpfChanges.length !== 0) {
                 var lastItem = pendedNpfChanges[pendedNpfChanges.length - 1];
-                nextMinTimeForChanges = lastItem.timestamp + Const.const.TIME_NEXT_CHANGE_NPF;
+                nextMinTimeForChanges = lastItem.timestamp + Const.TIME_NEXT_CHANGE_NPF;
             } else if (npfHistory.length !== 0) {
                 var lastItem = npfHistory[npfHistory.length - 1];
-                nextMinTimeForChanges = lastItem.timestamp + Const.const.TIME_NEXT_CHANGE_NPF;
+                nextMinTimeForChanges = lastItem.timestamp + Const.TIME_NEXT_CHANGE_NPF;
             }
 
             var currentTime = (new Date()).valueOf();
@@ -162,7 +162,7 @@ sap.ui.define([
                 this.oTechModel.setProperty("/tech/changeNpfTab/needConformation", false);
             } else {
                 var snils = this.oMainModel.getProperty("/metadata/snils");
-                var baseUrl = Const.const.BASE_URL;
+                var baseUrl = Const.BASE_URL;
                 var changeNpfURL = baseUrl + "/person/" + snils + "/npf";
 
                 var selectedNpfName = this.oTechModel.getProperty("/tech/changeNpfTab/selectedNpf");
