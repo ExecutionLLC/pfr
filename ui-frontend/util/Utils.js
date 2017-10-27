@@ -186,14 +186,14 @@ sap.ui.define([
                 case 21:
                     oRating = {
                         symbol: "AAA",
-                        descrition: "Наивысша надежность",
+                        descrition: "Наивысшая надежность",
                         imageSrc: "./image/AAA.jpg"
                     };
                     break;
                 case 22:
                     oRating = {
                         symbol: "AAA+",
-                        descrition: "Наивысша надежность",
+                        descrition: "Наивысшая надежность",
                         imageSrc: "./image/AAAplus.jpg"
                     };
                     break;
