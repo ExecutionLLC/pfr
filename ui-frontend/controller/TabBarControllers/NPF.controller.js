@@ -96,7 +96,7 @@ sap.ui.define([
             } else {
                 var changeNpfMessage = this.oTechModel.getProperty("/tech/changeNpfTab/changeNpfMessage");
                 // FIXME
-                if (changeNpfMessage === "Заявка на рассмотрении") {
+                if (changeNpfMessage === sRequestPendingText) {
                     this.oTechModel.setProperty("/tech/changeNpfTab/changeNpfMessage", "");
                 }
             }
