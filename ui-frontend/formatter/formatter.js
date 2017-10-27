@@ -11,10 +11,11 @@ sap.ui.define([
          */
         oCurrencyFormat: NumberFormat.getCurrencyInstance(),
 
-        formatFooterString: function (text) {
-
-        },
-        // изменить название кнопки по щелчку на нее во вкладке "Получить выписку"
+        /**
+         * @description Форматирование названия кнопки по щелчку, во вкладке "Получить выписку"
+         * @param {boolean] isShowHideButtonPressed - нажата ли кнопка
+         * @return {string} Показать или Спрятать
+         */
         formatButtonName: function (isShowHideButtonPressed) {
             var oBundle = this.getOwnerComponent()
                     .getModel("i18n")
@@ -24,36 +25,48 @@ sap.ui.define([
             return isShowHideButtonPressed ? sHide : sShow
         },
 
-        formatNpfAddressToName: function (address) {
+        /**
+         * @description Форматирование адреса НПФ в имя
+         * @param {string} npfAddress - адрес нпф
+         * @return {string} - имя
+         */
+        formatNpfAddressToName: function (npfAddress) {
             var oComponent = this.getOwnerComponent();
             var oModel = oComponent.getModel("npfModel");
-
-            var item = Utils.getNpfObjectByAddress(address, oModel);
+            var item = Utils.getNpfObjectByAddress(npfAddress, oModel);
 
             return item ? item.name : '?';
         },
-
-        formatNpfAddressToReliability: function (address) {
+        /**
+         * @description Форматирование адреса НПФ в рейтинг надежности
+         * @param {string} npfAddress - адрес НПФ
+         * @return {string} - надежность
+         */
+        formatNpfAddressToReliability: function (npfAddress) {
             var oComponent = this.getOwnerComponent();
             var oModel = oComponent.getModel("npfModel");
+            var item = Utils.getNpfObjectByAddress(npfAddress, oModel);
 
-            var item = Utils.getNpfObjectByAddress(address, oModel);
-            // Возвращаем рейтинг надежности
             return item ? item.ratingOfReliability : '?';
         },
 
-        formatNpfAddressToIncomeRate: function (address) {
+        /**
+         * @description Форматирование НПФ адреса в рейтинг доходности
+         * @param {string} npfAddress - НПФ адрес
+         * @return {string} - рейтинг доходности
+         */
+        formatNpfAddressToIncomeRate: function (npfAddress) {
             var oComponent = this.getOwnerComponent();
             var oModel = oComponent.getModel("npfModel");
+            var item = Utils.getNpfObjectByAddress(npfAddress, oModel);
 
-            var item = Utils.getNpfObjectByAddress(address, oModel);
-            // Возвращаем рейтинг доходности
             return item ? item.ratingOfIncomeRate : '?';
         },
 
         /**
          * @description Форматирование входящего чисела миллисекнд в дату для использования в диаграмме
-         *
+         * @param {number} timestamp - число в миллисекундах
+         * @return {string} - строка в формате "мм.гггг"
          */
         formatDate: function (timestamp) {
             var result = Utils.timestampToString(timestamp);
@@ -62,7 +75,8 @@ sap.ui.define([
 
         /**
          * @description Форматирование входящих чисел в дату для использования в таблице
-          *
+         * @param {number} timestamp - число в миллисекундах
+         * @return {string} дата в формате "дд.мм.гггг"
          */
         formatDateForTable: function (timestamp) {
             return Utils.timestampToString(timestamp);
@@ -70,6 +84,11 @@ sap.ui.define([
 
         /**
          * @description Форматирование значения зарплаты
+         * @param {number} amount - значение выплат
+         * @param {number} tariff - тариф
+         * @param {string} comment - назначение выплат
+         * @param {string} currencyCode - код валюты
+         * @return {number} - искомая зарплата с кодом валюты
          */
         formatAmountToSalary: function (amount, tariff, comment, currencyCode) {
             if (/.*процент.*/.test(comment)) {
@@ -80,8 +99,9 @@ sap.ui.define([
         },
 
         /**
-         * @description Форматирование рядов в таблице возможных НПФ для вкладки "Смена НПФ"
-         * @param name
+         * @description Форматирование рядов в таблице возможных НПФ для вкладки "Смена НПФ" (не отображает текущий НПФ в таблице выбора)
+         * @param npfAddress - адреса НПФ
+         * @param currentNpfAddress - текущий адрес
          */
         formatColumnListItem: function (npfAddress, currentNpfAddress) {
             if (!npfAddress || !currentNpfAddress) {
@@ -91,32 +111,61 @@ sap.ui.define([
             return npfAddress.toUpperCase() !== currentNpfAddress.toUpperCase();
         },
 
+        /**
+         * @description Форматирование НПФ рейтинга в символ
+         * @param npfAddress - адрес НПФ
+         * @return oNpfRating.symbol - символ
+         */
         formatNpfRating: function (npfAddress) {
             var ratingOfReliability = this.formatter.formatNpfAddressToReliability.call(this,npfAddress);
             var oNpfRating = Utils.conversionNpfRating(ratingOfReliability);
             return oNpfRating.symbol;
         },
 
+        /**
+         * @description Форматирование НПФ рейтинга в соответствующую картинку
+         * @param {string} npfAddress - адрес НПФ
+         * @return {string} oNpfRating.imageSrc - картинка
+         */
         formatNpfRatingToImage: function (npfAddress) {
             var ratingOfReliability = this.formatter.formatNpfAddressToReliability.call(this,npfAddress);
             var oNpfRating = Utils.conversionNpfRating(ratingOfReliability);
             return oNpfRating.imageSrc;
         },
 
+        /**
+         * @description Форматирование ставки(тарифа) НПФ в картинку
+         * @param {string} npfAddress - фдресс НПФ
+         * @return {string} - картинка
+         */
         formatNPFIncomeRateToImage: function (npfAddress) {
             var incomeRate = this.formatter.formatNpfAddressToIncomeRate.call(this,npfAddress);
-            var oIncomeRateImg = Utils.conversionNpfIncomeRateToImage(incomeRate);
-            return oIncomeRateImg;
+            return Utils.conversionNpfIncomeRateToImage(incomeRate);
         },
 
+        /**
+         * @description Форматирование цвета статуса смены состояния
+         * @param {boolean} isFinished - закрончена ли операция
+         * @return {string} - цвет
+         */
         formatTableItemStatus: function (isFinished) {
             return isFinished ? "green" : "#f4d742";
         },
 
+        /**
+         * @description Форматирование адреса хэша транзакции
+         * @param {string} transactionHash - хэш транзакции
+         * @return {string} - адрес
+         */
         formatTransactionHashHref: function(transactionHash) {
             return Const.const.BASE_URL + "/transaction/" + transactionHash;
         },
 
+        /**
+         * @description Вывод числа подтверждений
+         * @param {boolean} isFinished - выполнение запроса
+         * @return {number} - номер
+         */
         formatNumberOfConformations: function(isFinished) {
             return isFinished ? 7 : 0;
         }
