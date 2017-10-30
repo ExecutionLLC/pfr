@@ -38,7 +38,7 @@ sap.ui.define([
                     tariffTableData: []
                 },
                 changeNpfTab: {
-                    selectedNpfAdress:"",
+                    selectedNpfAddress:"",
                     selectedNpf: "",
                     isSelectButtonEnabled: true,
                     isSelectedNpfLabelVisible: false,

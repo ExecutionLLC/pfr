@@ -116,10 +116,10 @@ sap.ui.define([
         onSelectNpfTableItem: function (oEvent) {
             var oItem = oEvent.getSource();
             var oSelectedObject = oItem.getBindingContext("npfModel").getObject();
-            var nSelectedNPFAdress = oSelectedObject.address;
+            var nSelectedNPFAddress = oSelectedObject.address;
             var selectedNpfName = oSelectedObject.name;
             var sApplyButtonTextChange = this.oResourceBundle.getText("npf.men.exp.applyButtonTextChange");
-            this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpfAdress", nSelectedNPFAdress);
+            this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpfAddress", nSelectedNPFAddress);
             this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpf", selectedNpfName);
             this.oTechModel.setProperty("/tech/changeNpfTab/isNextNpfTableVisible", false);
             this.oTechModel.setProperty("/tech/changeNpfTab/applyButtonText", sApplyButtonTextChange);
@@ -142,7 +142,7 @@ sap.ui.define([
                 var baseUrl = Const.BASE_URL;
                 var changeNpfURL = baseUrl + "/person/" + snils + "/npf";
 
-                var selectedNpfAddress = this.oTechModel.getProperty("/tech/changeNpfTab/selectedNpfAdress");
+                var selectedNpfAddress = this.oTechModel.getProperty("/tech/changeNpfTab/selectedNpfAddress");
 
                 $.ajax({
                     url: changeNpfURL,
