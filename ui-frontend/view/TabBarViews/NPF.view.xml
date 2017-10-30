@@ -39,7 +39,7 @@
                   }">
                 <layoutData>
                     <layout:GridData
-                            span="L1 M4 S4"/>
+                            span="L1 M4 S4" indent="L1 M1 S1"/>
                 </layoutData>
             </Text>
         </layout:Grid>
@@ -74,6 +74,8 @@
                     <layout:GridData span="L2 M4 S4"/>
                 </layoutData>
             </Text>
+        </layout:Grid>
+        <layout:Grid width="100%">
             <ObjectStatus
                     class="sapUiSmallMarginTop"
                     text="{techModel>/tech/changeNpfTab/changeNpfMessage}"
@@ -90,10 +92,11 @@
                     enabled="{techModel>/tech/changeNpfTab/isSelectButtonEnabled}"
             >
                 <layoutData>
-                    <layout:GridData span="L2 M3 S7" indent="L10 M1 S1"/>
+                    <layout:GridData span="L2 M3 S7" indent="L4 M1 S1"/>
                 </layoutData>
             </Button>
         </layout:Grid>
+
 
         <!--Таблица для выбора нового НПФ-->
         <Table visible="{techModel>/tech/changeNpfTab/isNextNpfTableVisible}"
