@@ -16,6 +16,7 @@ sap.ui.define([
             this.oTechModel = this.oComponent.getModel("techModel");
             this.oMainModel = this.oComponent.getModel("mainModel");
             this.enableSelectButtonTimerId = null;
+            this.oResourceBundle = this.oComponent.getModel("i18n").getResourceBundle();
 
 
             var mainModelBinding = new sap.ui.model.Binding(
@@ -43,10 +44,7 @@ sap.ui.define([
                 return;
             }
 
-            var sRequestPendingText = this.oComponent
-                    .getModel("i18n")
-                    .getResourceBundle()
-                    .getText("npf.men.exp.requestPendingText");
+            var sRequestPendingText =this.oResourceBundle.getText("npf.men.exp.requestPendingText");
             var npfHistory = this.oMainModel.getProperty("/npfHistory");
             var pendedNpfChanges = this.oMainModel.getProperty("/pendedNpfChanges");
 
@@ -120,10 +118,7 @@ sap.ui.define([
             var oSelectedObject = oItem.getBindingContext("npfModel").getObject();
             var nSelectedNPFAdress = oSelectedObject.address;
             var selectedNpfName = oSelectedObject.name;
-            var sApplyButtonTextChange = this.oComponent
-                    .getModel("i18n")
-                    .getResourceBundle()
-                    .getText("npf.men.exp.applyButtonTextChange");
+            var sApplyButtonTextChange = this.oResourceBundle.getText("npf.men.exp.applyButtonTextChange");
             this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpfAdress", nSelectedNPFAdress);
             this.oTechModel.setProperty("/tech/changeNpfTab/selectedNpf", selectedNpfName);
             this.oTechModel.setProperty("/tech/changeNpfTab/isNextNpfTableVisible", false);
@@ -134,11 +129,8 @@ sap.ui.define([
         },
 
         onApplyButton: function () {
-            var oBundle = this.oComponent
-                    .getModel("i18n")
-                    .getResourceBundle();
-            var sApplyButtonTextChangeConfirm = oBundle.getText("npf.men.exp.applyButtonTextChangeConfirm");
-            var sConfirmQuestion = oBundle.getText("npf.men.exp.confirmQuestion");
+            var sApplyButtonTextChangeConfirm = this.oResourceBundle.getText("npf.men.exp.applyButtonTextChangeConfirm");
+            var sConfirmQuestion = this.oResourceBundle.getText("npf.men.exp.confirmQuestion");
             var needConformation = this.oTechModel.getProperty("/tech/changeNpfTab/needConformation");
             if (needConformation) {
                 this.oTechModel.setProperty("/tech/changeNpfTab/applyButtonText", sApplyButtonTextChangeConfirm);
