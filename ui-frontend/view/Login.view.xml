@@ -123,14 +123,14 @@
                         <HBox>
                             <Image
                                     class="sapUiSmallMarginEnd image-pointer"
-                                    src="./image/vk.JPG"/>
+                                    src="./image/vk.jpg"/>
                             <Image
                                     class="sapUiSmallMarginEnd image-pointer"
-                                    src="./image/facebook.JPG"/>
+                                    src="./image/facebook.jpg"/>
                             <Image
                                     class="image-pointer
 "
-                                    src="./image/twitter.JPG"/>
+                                    src="./image/twitter.jpg"/>
                         </HBox>
                     </form:FormElement>
                 </form:FormContainer>

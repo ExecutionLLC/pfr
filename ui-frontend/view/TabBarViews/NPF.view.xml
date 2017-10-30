@@ -60,27 +60,36 @@
             </Text>
             <Label id="changeNpfLabel"
                    class="sapUiSmallMarginTop"
-                   text="Возможная дата смены НПФ:"
-                   visible="{techModel>/tech/changeNpfTab/isNextMinTimeForChangeLabelVisible}"
+                   text="{i18n>npf.possibleDate}"
             >
                 <layoutData>
-                    <layout:GridData span="L2 M4 S4"/>
+                    <layout:GridData span="L3 M4 S4"/>
                 </layoutData>
             </Label>
             <Text class="sapUiSmallMarginTop"
                   text="{techModel>/tech/changeNpfTab/nextMinTimeForChangeMessage}"
             >
                 <layoutData>
-                    <layout:GridData span="L1 M4 S4"/>
+                    <layout:GridData span="L2 M4 S4"/>
                 </layoutData>
             </Text>
+            <ObjectStatus
+                    class="sapUiSmallMarginTop"
+                    text="{techModel>/tech/changeNpfTab/changeNpfMessage}"
+                    state="{techModel>/tech/changeNpfTab/changeNpfMessageType}">
+                <layoutData>
+                    <layout:GridData
+                            span="L5 M3 S7"
+                            indent="L1 M8 S8"/>
+                </layoutData>
+            </ObjectStatus>
             <Button width="100%"
                     press="onSelectButton"
                     text="{i18n>npf.button.chooseNpf}"
                     enabled="{techModel>/tech/changeNpfTab/isSelectButtonEnabled}"
             >
                 <layoutData>
-                    <layout:GridData span="L2 M3 S7"/>
+                    <layout:GridData span="L2 M3 S7" indent="L4 M1 S1"/>
                 </layoutData>
             </Button>
         </layout:Grid>
@@ -139,16 +148,7 @@
 
         <!--доп контейнер подтверждения смены НПФ-->
         <layout:Grid>
-            <ObjectStatus
-                    class="sapUiSmallMarginTop"
-                    text="{techModel>/tech/changeNpfTab/changeNpfMessage}"
-                    state="{techModel>/tech/changeNpfTab/changeNpfMessageType}">
-                <layoutData>
-                    <layout:GridData
-                            span="L5 M3 S7"
-                            indent="L1 M8 S8"/>
-                </layoutData>
-            </ObjectStatus>
+
             <Button
                     width="100%"
                     press="onApplyButton"
@@ -157,7 +157,7 @@
                 <layoutData>
                     <layout:GridData
                             span="L2 M3 S7"
-                            indent="L4 M8 S8"/>
+                            indent="L10 M8 S8"/>
                 </layoutData>
             </Button>
         </layout:Grid>
