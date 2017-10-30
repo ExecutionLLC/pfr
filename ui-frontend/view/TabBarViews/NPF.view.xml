@@ -61,6 +61,7 @@
             <Label id="changeNpfLabel"
                    class="sapUiSmallMarginTop"
                    text="{i18n>npf.possibleDate}"
+                   visible="{techModel>/tech/changeNpfTab/isNextMinTimeForChangeLabelVisible}"
             >
                 <layoutData>
                     <layout:GridData span="L3 M4 S4"/>
@@ -89,7 +90,7 @@
                     enabled="{techModel>/tech/changeNpfTab/isSelectButtonEnabled}"
             >
                 <layoutData>
-                    <layout:GridData span="L2 M3 S7" indent="L4 M1 S1"/>
+                    <layout:GridData span="L2 M3 S7" indent="L10 M1 S1"/>
                 </layoutData>
             </Button>
         </layout:Grid>
