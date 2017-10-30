@@ -32,7 +32,9 @@ sap.ui.define([
                 clearTimeout(this.updateTimeoutId);
                 this.updateTimeoutId = null;
             }
-
+            var sErrorText = this.getModel("i18n")
+                    .getResourceBundle()
+                    .getText("msg.box.error");
             var baseUrl = Const.BASE_URL;
             var personInfoURL = baseUrl + "/person/" + snils;
             var npfsURL = baseUrl + "/npfs";
@@ -61,11 +63,11 @@ sap.ui.define([
                     scheduleNextUpdate();
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.error("Cannot update model data: textStatus = ", textStatus, ", error = ", errorThrown);
-                    MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
+                    MessageBox.error(sErrorText);
                 });
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error("Cannot update model data: textStatus = ", textStatus, "error = ", errorThrown);
-                MessageBox.error("Ошибка при загрузке данных. Повторите попытку позже");
+                MessageBox.error(sErrorText);
             });
         },
         updateModels: function () {

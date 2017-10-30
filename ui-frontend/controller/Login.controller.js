@@ -16,6 +16,9 @@ sap.ui.define([
 
         onEnter: function (oEvent) {
             var oComponent = this.getOwnerComponent();
+            var sErrorPassOrLog = oComponent.getModel("i18n")
+                    .getResourceBundle()
+                    .getText("msg.box.wrongLoginPass");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             var oLoginInput = this.getView().byId("loginInput");
             var oPasswordInput = this.getView().byId("passwordInput");
@@ -39,7 +42,7 @@ sap.ui.define([
                 oPasswordInput.setValue("");
                 oRouter.navTo("menuPage");
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                MessageBox.error("Неверный логин или пароль.");
+                MessageBox.error(sErrorPassOrLog);
             }).always(function () {
                 oLoginInput.setEnabled(true);
                 oPasswordInput.setEnabled(true);
