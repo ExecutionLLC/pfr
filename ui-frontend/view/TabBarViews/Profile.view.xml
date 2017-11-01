@@ -162,8 +162,14 @@
                                 class = "H2"
                                 textAlign = "Begin"
                                 width = "100%"/>
-                            <Text
-                                text ="{=${mainModel>/pensionForecast} + ' ' + ${i18n>currencyByMonth}}"
+                           <Text
+                                text ="{
+                                    parts:[
+                                        {path:'mainModel>/pensionForecast'},
+                                        {path:'i18n>currencyByMonth'}
+                                    ],
+                                    formatter: '.formatter.formatCurrencyByMonth'
+                                }"
                                 textAlign = "Center"
                                 width = "100%"
                                 class = "H1"/>
