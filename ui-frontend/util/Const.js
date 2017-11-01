@@ -19,7 +19,9 @@ sap.ui.define([
             SELECTED_ALL_TIME : "all-time",
             //цвета состояния выполнения запроса
             REQUEST_DONE: "green",
-            REQUEST_PENDING: "#f4d742"
+            REQUEST_PENDING: "#f4d742",
+            // язык приложения
+            LANG: "en_US"
     };
 
     return oModule;

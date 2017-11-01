@@ -18,6 +18,8 @@ sap.ui.define([
             var oListNpfModel = new JSONModel();
             this.setModel(oListNpfModel, "npfModel");
 
+            this.setLanguages();
+
             UIComponent.prototype.init.apply(this, arguments);
             this.getRouter().initialize();
 
@@ -93,6 +95,24 @@ sap.ui.define([
             }
             var timeout = Const.ASYNC_UPDATE_TIMEOUT || Const.ASYNC_UPDATE_TIMEOUT_DEFAULT;
             this.updateTimeoutId = setTimeout(this.updateModels.bind(this), timeout);
+        },
+
+        setLanguages: function () {
+            var lang = Const.LANG;
+
+
+            if(!lang){
+                var sText = this.getModel("i18n")
+                        .getResourceBundle().getText("title");
+                document.title = sText;
+            }else {
+                sap.ui.getCore().getConfiguration().setLanguage(lang);
+                var sText = this.getModel("i18n")
+                        .getResourceBundle().getText("title");
+                document.title = sText;
+
+            }
+
         }
     });
 });
