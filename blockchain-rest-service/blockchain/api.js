@@ -361,9 +361,9 @@ class BlockchainApi {
                 return reject(Error('comment can not be empty'));
             }
 
-            Promise.all([this.getPersonInfoByAddress(address), this.getPersonSnils(address)]).then(([info, snils]) => {
+            Promise.all([this.getPersonInfoByAddress(address), this.getPersonSnils(address)]).then(([info, snils_info]) => {
                 const contract = BlockchainApi._getSignedContract(npfPrivateKey, info.npf);
-                return contract.addOperationHistory(snils, timestamp, amount, contractor, comment);
+                return contract.addOperationHistory(snils_info.snils, timestamp, amount, contractor, comment);
             }).then((transaction) => {
                 const transactionHash = transaction.hash;
                 this._pendedOperations.push({
