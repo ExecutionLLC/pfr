@@ -100,18 +100,13 @@ sap.ui.define([
         setLanguages: function () {
             var lang = Const.LANG;
 
-
-            if(!lang){
-                var sText = this.getModel("i18n")
-                        .getResourceBundle().getText("title");
-                document.title = sText;
-            }else {
-                sap.ui.getCore().getConfiguration().setLanguage(lang);
-                var sText = this.getModel("i18n")
-                        .getResourceBundle().getText("title");
+                if(lang) {
+                    sap.ui.getCore().getConfiguration().setLanguage(lang);
+                }
+                var sText = this.getModel("i18n").getResourceBundle().getText("title");
                 document.title = sText;
 
-            }
+
 
         }
     });
