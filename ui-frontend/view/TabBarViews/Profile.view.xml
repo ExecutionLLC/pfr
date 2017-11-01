@@ -163,7 +163,7 @@
                                 textAlign = "Begin"
                                 width = "100%"/>
                             <Text
-                                text ="{mainModel>/pensionForecast} ₽/мес."
+                                text ="{=${mainModel>/pensionForecast} + ' ' + ${i18n>currencyByMonth}}"
                                 textAlign = "Center"
                                 width = "100%"
                                 class = "H1"/>

@@ -129,7 +129,7 @@
                     </form:FormElement>
                     <form:FormElement>
                         <Label
-                                text="{i18n>rep.exp.balance.income}"
+                                text="{i18n>rep.exp.balance.total}"
                                 class="label-margin-top">
                             <layoutData>
                                 <layout:GridData
