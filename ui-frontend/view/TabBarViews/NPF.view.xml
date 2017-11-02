@@ -254,16 +254,7 @@
                                         <layout:HorizontalLayout>
                                             <Label text="{i18n>npf.tab.exp.transactionId}">
                                             </Label>
-                                            <!--<Link text="{techModel>transactionHash}"
-                                                  href="{
-                                                            path: 'techModel>transactionHash',
-                                                            formatter: '.formatter.formatTransactionHashHref'
-                                                        }"
-                                                  target="_blank"
-                                            >
-                                            </Link>-->
-                                            <Link text="{techModel>transactionHash}"
-                                                press="onLinkPress">
+                                            <Link text="{techModel>transactionHash}" press="onLinkPress">
                                             </Link>
                                         </layout:HorizontalLayout>
 

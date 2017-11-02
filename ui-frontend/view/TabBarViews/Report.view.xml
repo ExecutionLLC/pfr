@@ -323,9 +323,7 @@
                                         <layout:HorizontalLayout>
                                             <Label text="{i18n>rep.tab.exp.transactionId}">
                                             </Label>
-                                            <Link text="{techModel>transactionHash}"
-                                                  press="onLinkPress"
-                                            >
+                                            <Link text="{techModel>transactionHash}" press="onLinkPress">
                                             </Link>
                                         </layout:HorizontalLayout>
 
