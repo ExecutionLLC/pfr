@@ -1,3 +1,5 @@
 .idea
-prototype/frontend/build/
-prototype/frontend/node_modules
+*/build/*
+*/*/build/*
+*/node_modules/*
+*/*/node_modules/*
