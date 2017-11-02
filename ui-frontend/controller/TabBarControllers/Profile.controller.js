@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "personal/account/formatter/formatter",
-    "personal/account/util/Utils"
-], function (Controller, formatter, Utils) {
+    "personal/account/util/Utils",
+    "personal/account/util/Const"
+], function (Controller, formatter, Utils, Const) {
     "use strict";
     return Controller.extend("personal.account.controller.TabBarControllers.Profile", {
         formatter: formatter,
@@ -50,7 +51,7 @@ sap.ui.define([
             var sSelectedKey = oItem.getKey();
 
             var oBinding = this.getView().byId("idVizFrame").getDataset().getBinding("data");
-            if(sSelectedKey === "last-year") {
+            if(sSelectedKey === Const.SELECTED_LAST_YEAR) {
                 var oneYearBeforeNow = new Date().setFullYear(new Date().getFullYear() - 1);
                 var filter = new sap.ui.model.Filter("timestamp", sap.ui.model.FilterOperator.GE, oneYearBeforeNow);
                 oBinding.filter([filter]);
