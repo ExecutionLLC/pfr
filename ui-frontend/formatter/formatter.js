@@ -91,7 +91,7 @@ sap.ui.define([
          * @return {number} - искомая зарплата с кодом валюты
          */
         formatAmountToSalary: function (amount, tariff, comment, currencyCode) {
-            if (/.*процент.*/.test(comment)) {
+            if (/.*(процент)|(Interest).*/.test(comment)) {
                 return "";
             }
             var salary = amount/tariff*100.0;
