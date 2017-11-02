@@ -142,10 +142,9 @@ sap.ui.define([
          * @param oEvent
          */
         onLinkPress: function (oEvent) {
-            var oLink = oEvent.getSource();
-            var transactionHash = oLink.getProperty("text");
-            var transactionHashURL = Utils.formatTransactionHashHref(transactionHash);
-            Utils.showMessageBoxHashInfo.call(this, transactionHashURL);
+            var transactionHash = oEvent.getSource().getProperty("text");
+            var langModel = this.getOwnerComponent().getModel("i18n");
+            Utils.showMessageBoxTransactionInfo(transactionHash, langModel);
         }
     });
 });

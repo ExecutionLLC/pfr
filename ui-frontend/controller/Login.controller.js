@@ -31,7 +31,7 @@ sap.ui.define([
             oPasswordInput.setEnabled(false);
 
             $.ajax({
-                url: Const.LOGIN_URL,
+                url: Utils.getLoginUrl(),
                 dataType: "json",
                 type: "POST",
                 jsonp: false,

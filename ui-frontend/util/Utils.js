@@ -170,13 +170,9 @@ sap.ui.define([
             }
             return sImageSrc;
         },
-        showMessageBoxHashInfo: function (transactionHashURL) {
-            var sErrorText = this.getOwnerComponent()
-                    .getModel("i18n")
-                    .getResourceBundle()
-                    .getText("msg.box.error");
+        showMessageBoxTransactionInfo: function (transactionHash, langModel) {
             $.ajax({
-                url: transactionHashURL,
+                url: oModule.getTransactionInfoUrl(transactionHash),
                 dataType: "json"
             }).done(function (hashInfo) {
                 if (hashInfo && hashInfo.input) {
@@ -188,25 +184,34 @@ sap.ui.define([
 
                 MessageBox.information(transactionInfo);
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.error("Cannot update model data: textStatus = ", textStatus, "error = ", errorThrown);
+                console.error("Cannot get transaction info: textStatus = ", textStatus, "error = ", errorThrown);
+                var sErrorText = langModel.getResourceBundle().getText("msg.box.error");
                 MessageBox.error(sErrorText);
             });
         },
-        onNavigateToTab: function (tabName) {
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("menuPage", {
+        onNavigateToTab: function (router, tabName) {
+            router.navTo("menuPage", {
                 query: {
                     tab: tabName
                 }
             }, true);
         },
-
-        /**
-         * @description Форматирование адреса хэша транзакции
-         * @param {string} transactionHash - хэш транзакции
-         * @return {string} - адрес
-         */
-        formatTransactionHashHref: function(transactionHash) {
+        getLoginUrl: function () {
+            return Const.LOGIN_URL;
+        },
+        getPersonInfoUrl: function (snils) {
+            return Const.BASE_URL + "/person/" + snils;
+        },
+        getNpfsUrl: function () {
+            return Const.BASE_URL + "/npfs";
+        },
+        getChangeNpfUrl: function (snils) {
+            return Const.BASE_URL + "/person/" + snils + "/npf";
+        },
+        getChangeTariffUrl: function (snils) {
+            return Const.BASE_URL + "/person/" + snils + "/tariff";
+        },
+        getTransactionInfoUrl: function(transactionHash) {
             return Const.BASE_URL + "/transaction/" + transactionHash;
         }
     };

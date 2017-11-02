@@ -139,13 +139,10 @@ sap.ui.define([
                 this.oTechModel.setProperty("/tech/changeNpfTab/needConformation", false);
             } else {
                 var snils = this.oMainModel.getProperty("/metadata/snils");
-                var baseUrl = Const.BASE_URL;
-                var changeNpfURL = baseUrl + "/person/" + snils + "/npf";
-
                 var selectedNpfAddress = this.oTechModel.getProperty("/tech/changeNpfTab/selectedNpfAddress");
 
                 $.ajax({
-                    url: changeNpfURL,
+                    url: Utils.getChangeNpfUrl(snils),
                     dataType: "json",
                     type: "PUT",
                     data: JSON.stringify({"npf": selectedNpfAddress}),
@@ -164,10 +161,9 @@ sap.ui.define([
         },
 
         onLinkPress: function (oEvent) {
-            var oLink = oEvent.getSource();
-            var transactionHash = oLink.getProperty("text");
-            var transactionHashURL = Utils.formatTransactionHashHref(transactionHash);
-            Utils.showMessageBoxHashInfo.call(this, transactionHashURL);
+            var transactionHash = oEvent.getSource().getProperty("text");
+            var langModel = this.getOwnerComponent().getModel("i18n");
+            Utils.showMessageBoxTransactionInfo(transactionHash, langModel);
         }
     });
 });

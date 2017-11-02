@@ -35,11 +35,13 @@ sap.ui.define([
         },
 
         onNavigateToNPF: function () {
-            Utils.onNavigateToTab.call(this,"NPF");
+            var router = sap.ui.core.UIComponent.getRouterFor(this);
+            Utils.onNavigateToTab(router, "NPF");
         },
 
         onNavigateChangeTariff: function () {
-            Utils.onNavigateToTab.call(this,"Rate");
+            var router = sap.ui.core.UIComponent.getRouterFor(this);
+            Utils.onNavigateToTab(router, "Rate");
         },
 
         onChangeSelect: function (oEvent) {

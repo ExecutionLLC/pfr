@@ -68,14 +68,11 @@ sap.ui.define([
          */
         onApplyChangeTariff: function () {
             var snils = this.oMainModel.getProperty("/metadata/snils");
-            var baseUrl = Const.BASE_URL;
-            var changeTariffUrl = baseUrl + "/person/" + snils + "/tariff";
-
             var selectedTariff = this.oTechModel.getProperty("/tech/changeTariffTab/selectedTariff");
             var pendedTariffChanges = this.oMainModel.getProperty("/pendedTariffChanges");
 
             $.ajax({
-                url: changeTariffUrl,
+                url: Utils.getChangeTariffUrl(snils),
                 dataType: "json",
                 type: "PUT",
                 data: JSON.stringify({ "tariff": selectedTariff }),
@@ -100,10 +97,9 @@ sap.ui.define([
         },
 
         onLinkPress: function (oEvent) {
-            var oLink = oEvent.getSource();
-            var transactionHash = oLink.getProperty("text");
-            var transactionHashURL = Utils.formatTransactionHashHref(transactionHash);
-            Utils.showMessageBoxHashInfo.call(this, transactionHashURL);
+            var transactionHash = oEvent.getSource().getProperty("text");
+            var langModel = this.getOwnerComponent().getModel("i18n");
+            Utils.showMessageBoxTransactionInfo(transactionHash, langModel);
         }
     });
 });

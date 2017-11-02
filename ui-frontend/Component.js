@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "personal/account/model/Model",
     "sap/m/MessageBox",
-    "personal/account/util/Const"
-], function (UIComponent, JSONModel, Model, MessageBox, Const) {
+    "personal/account/util/Const",
+    "personal/account/util/Utils"
+], function (UIComponent, JSONModel, Model, MessageBox, Const, Utils) {
     "use strict";
     return UIComponent.extend("personal.account.Component", {
         metadata: {
@@ -37,9 +38,6 @@ sap.ui.define([
             var sErrorText = this.getModel("i18n")
                     .getResourceBundle()
                     .getText("msg.box.error");
-            var baseUrl = Const.BASE_URL;
-            var personInfoURL = baseUrl + "/person/" + snils;
-            var npfsURL = baseUrl + "/npfs";
 
             var oMainModel = this.getModel("mainModel");
             var oTechModel = this.getModel("techModel");
@@ -48,11 +46,11 @@ sap.ui.define([
             var scheduleNextUpdate = this.scheduleNextModelsUpdate.bind(this);
 
             $.ajax({
-                url: personInfoURL,
+                url: Utils.getPersonInfoUrl(snils),
                 dataType: "json"
             }).done(function (personInfoResult) {
                 $.ajax({
-                    url: npfsURL,
+                    url: Utils.getNpfsUrl(),
                     dataType: "json"
                 }).done(function (npfsResult) {
                     oNpfModel.setData(npfsResult);
@@ -76,12 +74,10 @@ sap.ui.define([
             var oMainModel = this.getModel("mainModel");
 
             var snils = oMainModel.getProperty("/metadata/snils");
-            var baseUrl = Const.BASE_URL;
-            var personInfoURL = baseUrl + "/person/" + snils;
 
             var onAlways = this.scheduleNextModelsUpdate.bind(this);
             $.ajax({
-                url: personInfoURL,
+                url: Utils.getPersonInfoUrl(snils),
                 dataType: "json"
             }).done(function (result) {
                 oMainModel.setData(result);
@@ -96,19 +92,13 @@ sap.ui.define([
             var timeout = Const.ASYNC_UPDATE_TIMEOUT || Const.ASYNC_UPDATE_TIMEOUT_DEFAULT;
             this.updateTimeoutId = setTimeout(this.updateModels.bind(this), timeout);
         },
-
         setLanguages: function () {
             var lang = Const.LANG;
-
             if(lang) {
                 sap.ui.getCore().getConfiguration().setLanguage(lang);
             }
-
             var sText = this.getModel("i18n").getResourceBundle().getText("title");
             document.title = sText;
-
-
-
         }
     });
 });
