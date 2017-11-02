@@ -24,8 +24,7 @@ sap.ui.define([
             UIComponent.prototype.init.apply(this, arguments);
             this.getRouter().initialize();
 
-            var storage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
-            var lastSnils = storage.get("LAST_SNILS");
+            var lastSnils = Utils.getLastSnils();
             if (lastSnils) {
                 this.initModels(lastSnils);
             }
@@ -57,8 +56,7 @@ sap.ui.define([
                     oMainModel.setData(personInfoResult);
                     oTechModel.setProperty("/tech/changeTariffTab/selectedTariff", oMainModel.getData().tariff);
 
-                    var storage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
-                    storage.put("LAST_SNILS", snils);
+                    Utils.saveLastSnils(snils);
 
                     scheduleNextUpdate();
                 }).fail(function (jqXHR, textStatus, errorThrown) {

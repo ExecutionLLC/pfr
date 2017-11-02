@@ -220,7 +220,7 @@ sap.ui.define([
             var url = Const.BASE_URL + "/transaction/" + transactionHash;
             return oModule.addRegionParameter(url);
         },
-        addRegionParameter: function (url) {
+        getRegion: function () {
             var region = Const.LANG;
             if (!region) {
                 region = sap.ui.getCore().getConfiguration().getLanguage();
@@ -229,7 +229,28 @@ sap.ui.define([
                 region = region.slice(0, 2);
             }
 
+            return region.toLowerCase();
+        },
+        addRegionParameter: function (url) {
+            var region = oModule.getRegion();
+            if (!region) {
+                // server will use default region
+                return url;
+            }
+
             return url + "?region=" + region.toLowerCase();
+        },
+        getLastSnils: function () {
+            var storage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            if (storage.get("LAST_REGION") !== oModule.getRegion()) {
+                return;
+            }
+            return storage.get("LAST_SNILS");
+        },
+        saveLastSnils: function (snils) {
+            var storage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            storage.put("LAST_SNILS", snils);
+            storage.put("LAST_REGION", oModule.getRegion());
         }
     };
 
