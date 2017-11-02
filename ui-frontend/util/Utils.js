@@ -197,22 +197,39 @@ sap.ui.define([
             }, true);
         },
         getLoginUrl: function () {
-            return Const.LOGIN_URL;
+            var url = Const.LOGIN_URL;
+            return oModule.addRegionParameter(url);
         },
         getPersonInfoUrl: function (snils) {
-            return Const.BASE_URL + "/person/" + snils;
+            var url = Const.BASE_URL + "/person/" + snils;
+            return oModule.addRegionParameter(url);
         },
         getNpfsUrl: function () {
-            return Const.BASE_URL + "/npfs";
+            var url = Const.BASE_URL + "/npfs";
+            return oModule.addRegionParameter(url);
         },
         getChangeNpfUrl: function (snils) {
-            return Const.BASE_URL + "/person/" + snils + "/npf";
+            var url = Const.BASE_URL + "/person/" + snils + "/npf";
+            return oModule.addRegionParameter(url);
         },
         getChangeTariffUrl: function (snils) {
-            return Const.BASE_URL + "/person/" + snils + "/tariff";
+            var url = Const.BASE_URL + "/person/" + snils + "/tariff";
+            return oModule.addRegionParameter(url);
         },
         getTransactionInfoUrl: function(transactionHash) {
-            return Const.BASE_URL + "/transaction/" + transactionHash;
+            var url = Const.BASE_URL + "/transaction/" + transactionHash;
+            return oModule.addRegionParameter(url);
+        },
+        addRegionParameter: function (url) {
+            var region = Const.LANG;
+            if (!region) {
+                region = sap.ui.getCore().getConfiguration().getLanguage();
+            }
+            if (region.length > 2) {
+                region = region.slice(0, 2);
+            }
+
+            return url + "?region=" + region.toLowerCase();
         }
     };
 
