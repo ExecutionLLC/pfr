@@ -2,9 +2,8 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/Filter",
     "personal/account/formatter/formatter",
-    "personal/account/util/Utils",
-    "personal/account/util/Const"
-], function (Controller, Filter, formatter, Utils, Const) {
+    "personal/account/util/Utils"
+], function (Controller, Filter, formatter, Utils) {
     "use strict";
     return Controller.extend("personal.account.controller.TabBarControllers.Report", {
         formatter: formatter,

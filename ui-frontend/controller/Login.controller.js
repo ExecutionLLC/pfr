@@ -1,8 +1,8 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageBox",
-    "personal/account/util/Const"
-], function (Controller, MessageBox, Const) {
+    "personal/account/util/Utils"
+], function (Controller, MessageBox, Utils) {
     "use strict";
     return Controller.extend("personal.account.controller.Login", {
         onInit: function () {

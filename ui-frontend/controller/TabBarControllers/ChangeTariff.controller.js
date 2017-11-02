@@ -1,9 +1,8 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "personal/account/formatter/formatter",
-    "personal/account/util/Const",
     "personal/account/util/Utils"
-], function (Controller, formatter, Const, Utils) {
+], function (Controller, formatter, Utils) {
     "use strict";
     return Controller.extend("personal.account.controller.TabBarControllers.ChangeTariff", {
         formatter: formatter,
