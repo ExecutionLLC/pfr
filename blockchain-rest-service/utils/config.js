@@ -11,16 +11,16 @@ function transformEnvVariable(keyValueObj) {
     }
 
     return {
-        key: changeCase.camelCase(key.splice(8)),
+        key: changeCase.camelCase(key.slice(ENV_VARIABLES_PREFIX.length)),
         value
     };
 }
 
-nconf.file({
-    file: 'default-config.json'
-}).env({
+nconf.argv().env({
     transform: transformEnvVariable,
     parseValues: true
-}).argv();
+}).file({
+    file: 'default-config.json'
+});
 
 module.exports = nconf;
