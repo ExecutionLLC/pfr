@@ -53,8 +53,8 @@ sap.ui.define([
                     dataType: "json"
                 }).done(function (npfsResult) {
                     oNpfModel.setData(npfsResult);
+                    oTechModel.setProperty("/tech/changeTariffTab/selectedTariff", personInfoResult.tariff);
                     oMainModel.setData(personInfoResult);
-                    oTechModel.setProperty("/tech/changeTariffTab/selectedTariff", oMainModel.getData().tariff);
 
                     Utils.saveLastSnils(snils);
 
