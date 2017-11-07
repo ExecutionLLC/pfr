@@ -31,7 +31,7 @@ sap.ui.define([
                     operationsTableData: []
                 },
                 changeTariffTab: {
-                    selectedTariff: 6,
+                    selectedTariff: null,
                     changeTariffMessage: "",
                     isButtonChangeTariffEnabled: false,
                     isSliderChangeTariffEnabled: false,
