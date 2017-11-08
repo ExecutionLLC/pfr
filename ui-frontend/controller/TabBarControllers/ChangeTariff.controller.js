@@ -63,30 +63,6 @@ sap.ui.define([
         },
 
         /**
-         * @description Сбор информации о новом тарифе и отправка ее на сервер
-         */
-        onApplyChangeTariff: function () {
-            var snils = this.oMainModel.getProperty("/metadata/snils");
-            var selectedTariff = this.oTechModel.getProperty("/tech/changeTariffTab/selectedTariff");
-            var pendedTariffChanges = this.oMainModel.getProperty("/pendedTariffChanges");
-
-            $.ajax({
-                url: Utils.getChangeTariffUrl(snils),
-                dataType: "json",
-                type: "PUT",
-                data: JSON.stringify({ "tariff": selectedTariff }),
-                jsonp: false
-            });
-
-            var now = +new Date();
-            this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([{
-                tariff: selectedTariff,
-                timestamp: now,
-                isFinished: false
-            }]));
-        },
-
-        /**
          * @description Смена значения слайдера для выбора тарифа
          */
         onChangeTariff: function () {
