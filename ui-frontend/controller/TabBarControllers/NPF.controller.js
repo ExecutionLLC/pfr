@@ -1,9 +1,10 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "sap/m/MessageBox",
     "personal/account/formatter/formatter",
     "personal/account/util/Const",
     "personal/account/util/Utils"
-], function (Controller, formatter, Const, Utils) {
+], function (Controller, MessageBox, formatter, Const, Utils) {
     "use strict";
 
     return Controller.extend("personal.account.controller.TabBarControllers.NPF", {
@@ -130,6 +131,10 @@ sap.ui.define([
             var sApplyButtonTextChangeConfirm = this.oResourceBundle.getText("npf.men.exp.applyButtonTextChangeConfirm");
             var sConfirmQuestion = this.oResourceBundle.getText("npf.men.exp.confirmQuestion");
             var needConformation = this.oTechModel.getProperty("/tech/changeNpfTab/needConformation");
+            var sErrorText = this.getOwnerComponent()
+                    .getModel("i18n")
+                    .getResourceBundle()
+                    .getText("msg.box.err.sendData");
             if (needConformation) {
                 this.oTechModel.setProperty("/tech/changeNpfTab/applyButtonText", sApplyButtonTextChangeConfirm);
                 this.oTechModel.setProperty("/tech/changeNpfTab/changeNpfMessage", sConfirmQuestion);
@@ -145,16 +150,21 @@ sap.ui.define([
                     type: "PUT",
                     data: JSON.stringify({"npf": selectedNpfAddress}),
                     jsonp: false
+                }).done((function () {
+                    var now = +new Date();
+                    var pendedNpfChanges = this.oMainModel.getProperty("/pendedNpfChanges");
+                    // состояние кнопок/лейблов/... следует состоянию модели, все изменения состояния GUI произойдут в onMainModelChanges
+                    this.oMainModel.setProperty("/pendedNpfChanges", pendedNpfChanges.concat([{
+                        npf: selectedNpfAddress,
+                        timestamp: now,
+                        isFinished: false
+                    }]));
+                }).bind(this)).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.error("Cannot complete request : textStatus = ", textStatus, ", error = ", errorThrown);
+                        MessageBox.error(sErrorText);
                 });
 
-                var now = +new Date();
-                var pendedNpfChanges = this.oMainModel.getProperty("/pendedNpfChanges");
-                // состояние кнопок/лейблов/... следует состоянию модели, все изменения состояния GUI произойдут в onMainModelChanges
-                this.oMainModel.setProperty("/pendedNpfChanges", pendedNpfChanges.concat([{
-                    npf: selectedNpfAddress,
-                    timestamp: now,
-                    isFinished: false
-                }]));
+
             }
         },
 

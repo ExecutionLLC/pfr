@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "sap/m/MessageBox",
     "personal/account/formatter/formatter",
     "personal/account/util/Utils"
-], function (Controller, formatter, Utils) {
+], function (Controller, MessageBox, formatter, Utils) {
     "use strict";
     return Controller.extend("personal.account.controller.TabBarControllers.ChangeTariff", {
         formatter: formatter,
@@ -69,21 +70,29 @@ sap.ui.define([
             var snils = this.oMainModel.getProperty("/metadata/snils");
             var selectedTariff = this.oTechModel.getProperty("/tech/changeTariffTab/selectedTariff");
             var pendedTariffChanges = this.oMainModel.getProperty("/pendedTariffChanges");
-
+            var sErrorText = this.getOwnerComponent()
+                    .getModel("i18n")
+                    .getResourceBundle()
+                    .getText("msg.box.err.sendData");
             $.ajax({
                 url: Utils.getChangeTariffUrl(snils),
                 dataType: "json",
                 type: "PUT",
-                data: JSON.stringify({ "tariff": selectedTariff }),
+                data: JSON.stringify(111),
                 jsonp: false
+            }).done((function () {
+                var now = +new Date();
+                this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([{
+                    tariff: selectedTariff,
+                    timestamp: now,
+                    isFinished: false
+                }]));
+            }).bind(this)).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error("Cannot complete request : textStatus = ", textStatus, ", error = ", errorThrown);
+                MessageBox.error(sErrorText);
             });
 
-            var now = +new Date();
-            this.oMainModel.setProperty("/pendedTariffChanges", pendedTariffChanges.concat([{
-                tariff: selectedTariff,
-                timestamp: now,
-                isFinished: false
-            }]));
+
         },
 
         /**
